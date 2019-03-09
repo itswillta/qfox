@@ -1,0 +1,92 @@
+version: '3'
+services:
+  #PHP Service
+  app:
+    build:
+      context: ./backend
+      dockerfile: app.dockerfile
+    image: h3ba/php
+    container_name: qfox_app
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: laravel
+      DB_USERNAME: qfox
+      DB_PASSWORD: 1029384756aA
+    working_dir: /var/www
+    volumes:
+      - ./backend:/var/www
+      - ./backend/config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - app-network
+
+  #Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: qfox_webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./backend:/var/www
+      - ./backend/config/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+
+  #MySQL Service
+  db:
+    build:
+      context: ./backend
+      dockerfile: db.dockerfile
+    image: mysql:5.7
+    container_name: qfox_db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: 1029384756aA
+      MYSQL_USER: qfox
+      MYSQL_PASSWORD: 1029384756aA
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./backend/config/mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - app-network
+
+  #Frontend (React) Service
+  web:
+    container_name: qfox_frontend_web
+    build:
+      context: ./frontend
+      dockerfile: frontend.dockerfile
+    volumes:
+      - ./frontend:/opt/app
+    ports:
+      - '1234:1234'
+      - '1235:1235'
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=1
+    depends_on:
+      - app
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+
+#Volumes
+volumes:
+  dbdata:
+    driver: local
