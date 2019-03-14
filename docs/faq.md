@@ -17,7 +17,7 @@ Just navigate to the **backend** folder and run the following command:
 - For Linux:
 
 ```shell
-$ docker run --rm -v $(pwd):/app composer install
+$ docker container run --rm -v $(pwd):/app composer install
 ```
 
 - For Windows:
@@ -33,7 +33,7 @@ Just navigate to the **backend** folder and run the following command:
 - For Linux:
 
 ```shell
-$ docker run --rm -v $(pwd):/app composer require PACKAGE
+$ docker container run --rm -v $(pwd):/app composer require PACKAGE
 ```
 
 - For Windows:
@@ -75,6 +75,16 @@ $ docker container run --rm -v "/$(PWD)":/app node:11-alpine sh -c "cd /app && n
 ```
 
 ## Resolving Errors
+
+### How do I resolve errors related to the database container?
+
+Most of the errors from the database container are caused by an outdated databases volume. Therefore, they can be solved by removing the volume and re-run the service.
+
+To remove the database volume, run the following command:
+
+```shell
+$ docker volume rm qfox_dbdata
+```
 
 ### How do I resolve "Permission denied" errors?
 

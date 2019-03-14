@@ -4,7 +4,9 @@ This project was bootstrapped with [Parcel](https://parceljs.org/), [Composer](h
 
 ## Installation
 
-### Linux
+**Warning**: The following steps will do a clean install of the project, and all the existing data related to it will be erased.
+
+### ![Linux Logo](https://i.imgur.com/3iHIGaC.png) Linux
 
 #### Prerequisites
 
@@ -16,11 +18,11 @@ Your Linux system should have the following installed first:
 
 #### Steps to Install
 
-- First, fork [this repository](https://gitlab.com/h3ba/react-laravel-boilerplate) and clone it to your local machine (replace `YOUR_USERNAME` with your Gitlab account's username).
+- First, fork [this repository](https://gitlab.com/h3ba/qfox) and clone it to your local machine (replace `YOUR_USERNAME` with your Gitlab account's username).
 
 ```shell
-$ git clone https://gitlab.com/YOUR_USERNAME/react-laravel-boilerplate
-$ cd react-laravel-boilerplate
+$ git clone https://gitlab.com/YOUR_USERNAME/qfox
+$ cd qfox
 ```
 
 - Then, run the following command and go grab a cup of water 🥤 while waiting for it to finish (it will take a few minutes):
@@ -37,7 +39,7 @@ $ docker-compose up
 
 - Open your browser and head to [http://localhost:1234](http://localhost:1234). Enjoy coding 🎉!
 
-### Windows
+### ![Windows Logo](https://i.imgur.com/2HfZwb4.png) Windows
 
 #### Prerequisites
 
@@ -52,11 +54,19 @@ Your Windows system should have the following installed first:
 
 All of the following commands below must be run within GIT Bash or Cmder.
 
-- First, fork [this repository](https://gitlab.com/h3ba/react-laravel-boilerplate) and clone it to your local machine (replace `YOUR_USERNAME` with your Gitlab account's username).
+- First, fork [this repository](https://gitlab.com/h3ba/qfox) and clone it to your local machine (replace `YOUR_USERNAME` with your Gitlab account's username).
 
 ```shell
-$ git clone https://gitlab.com/YOUR_USERNAME/react-laravel-boilerplate
-$ cd react-laravel-boilerplate
+$ git clone https://gitlab.com/YOUR_USERNAME/qfox
+$ cd qfox
+```
+
+- _Optional step_: If you're using GIT Bash to install, you may have to run the following commands first:
+
+```shell
+$ echo "alias docker='winpty docker'" >> ~/.bash_profile
+$ echo "alias docker-compose='winpty docker-compose'" >> ~/.bash_profile
+$ source ~/.bash_profile
 ```
 
 - Then, run the following command and go grab a cup of water 🥤 while waiting for it to finish (it will take a few minutes):
@@ -73,4 +83,4 @@ $ docker-compose up
 
 - Open your browser and head to [http://localhost:1234](http://localhost:1234). Enjoy coding 🎉!
 
-**Notes**: Share your drive with Docker Desktop should it ask you to do so.
+**Note**: Share your drive with Docker Desktop should it ask you to do so.
