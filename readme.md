@@ -4,6 +4,8 @@ This project was bootstrapped with [Parcel](https://parceljs.org/), [Composer](h
 
 ## Installation
 
+**Warning**: The following steps will do a clean install of the project, and all the existing data related to it will be erased.
+
 ### ![Linux Logo](https://i.imgur.com/3iHIGaC.png) Linux
 
 #### Prerequisites
@@ -59,6 +61,14 @@ $ git clone https://gitlab.com/YOUR_USERNAME/qfox
 $ cd qfox
 ```
 
+- _Optional step_: If you're using GIT Bash to install, you may have to run the following commands first:
+
+```shell
+$ echo "alias docker='winpty docker'" >> ~/.bash_profile
+$ echo "alias docker-compose='winpty docker-compose'" >> ~/.bash_profile
+$ source ~/.bash_profile
+```
+
 - Then, run the following command and go grab a cup of water 🥤 while waiting for it to finish (it will take a few minutes):
 
 ```shell
@@ -73,4 +83,4 @@ $ docker-compose up
 
 - Open your browser and head to [http://localhost:1234](http://localhost:1234). Enjoy coding 🎉!
 
-**Notes**: Share your drive with Docker Desktop should it ask you to do so.
+**Note**: Share your drive with Docker Desktop should it ask you to do so.

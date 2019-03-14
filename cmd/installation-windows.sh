@@ -23,12 +23,24 @@ cd ..
 
 #WORKDIR: Project Root
 
+docker volume rm qfox_dbdata
+
 docker-compose up --build -d
 
 docker-compose exec app php artisan key:generate
 docker-compose exec app php artisan config:clear
 docker-compose exec app php artisan config:cache
 docker-compose exec app php artisan optimize
+
+cd backend
+
+#WORKDIR: backend
+
+docker container run --rm -v "/$(PWD)":/app composer dump-autoload
 docker-compose exec app php artisan migrate:refresh --seed
+
+cd ..
+
+#WORKDIR: Project Root
 
 docker-compose down
