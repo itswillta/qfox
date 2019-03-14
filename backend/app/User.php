@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -16,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'username', 'password', 'googleId', 'facebookId'
     ];
 
     /**
@@ -25,15 +24,47 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password'
     ];
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
+     * The study sets that this user currently has (including both study sets created by that user and study sets created
+     * by others).
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public function studySets()
+    {
+        return $this->belongsToMany('App\Term', 'user_study_sets');
+    }
+
+    /**
+     * The classes this user may be related to.
+     */
+    public function classes()
+    {
+        return $this->belongsToMany('App\StudyClass', 'user_classes');
+    }
+
+    /**
+     * The terms this user may be currently learning
+     */
+    public function learningTerms()
+    {
+        return $this->belongsToMany('App\Term', 'user_terms');
+    }
+
+    /**
+     * The live sessions this user may be the host
+     */
+    public function hostedLiveSessions()
+    {
+        return $this->hasMany('App\LiveSession');
+    }
+
+    /*
+     * The details of all live sessions this user is related to
+     */
+    public function liveSessionDetails()
+    {
+        return $this->hasMany('App\LiveSessionDetail');
+    }
 }
