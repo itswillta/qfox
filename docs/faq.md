@@ -17,7 +17,7 @@ Just navigate to the **backend** folder and run the following command:
 - For Linux:
 
 ```shell
-$ docker run --rm -v $(pwd):/app composer install
+$ docker container run --rm -v $(pwd):/app composer install
 ```
 
 - For Windows:
@@ -33,7 +33,7 @@ Just navigate to the **backend** folder and run the following command:
 - For Linux:
 
 ```shell
-$ docker run --rm -v $(pwd):/app composer require PACKAGE
+$ docker container run --rm -v $(pwd):/app composer require PACKAGE
 ```
 
 - For Windows:
