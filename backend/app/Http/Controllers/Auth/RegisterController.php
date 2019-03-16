@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class RegisterController extends Controller
 {
@@ -21,15 +21,6 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers;
-
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/home';
-
     /**
      * Create a new controller instance.
      *
@@ -40,33 +31,42 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
+    public function register(Request $request)
     {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-    }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\User
-     */
-    protected function create(array $data)
-    {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        $validator = Validator::make($request->all(),
+            ['username' => 'unique:users|required|max:15|min:6',
+                'name' => 'required|max:30|min:4',
+                'password' => 'required'
+            ],
+            [
+                'unique' => 'Username already exists.'
+            ]
+        );
+
+        if ($validator->fails()) {
+            $details = [];
+            foreach ($validator->errors()->toArray() as $field => $value) {
+                $details[$field] = $value[0];
+            }
+
+            return response()->json([
+                'error' => [
+                    "code" => Response::HTTP_BAD_REQUEST,
+                    "message" => 'Registration failed. Please check your registration information.',
+                    "details" => (object)$details
+                ]
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $user = new User();
+        $user->username = $request->username;
+        $user->name = $request->name;
+        $user->password = bcrypt($request->password);
+        $user->profile_picture_url = "";
+        $user->language = "en";
+        $user->save();
+
+        return response()->noContent(Response::HTTP_CREATED);
     }
 }
