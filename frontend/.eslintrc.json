@@ -8,6 +8,7 @@
     "Atomics": "readable",
     "SharedArrayBuffer": "readable"
   },
+  "parser": "babel-eslint",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -15,8 +16,25 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "plugins": ["react"],
+  "plugins": ["react", "import", "react-hooks"],
   "rules": {
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+    "arrow-parens": 0,
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "import/no-absolute-path": 0,
+    "comma-dangle": 0,
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "react/prop-types": 0,
+    "object-curly-newline": 0,
+    "implicit-arrow-linebreak": 0,
+    "no-confusing-arrow": 0,
+    "react/jsx-one-expression-per-line": 0
+  },
+  "settings": {
+    "import/resolver": {
+      "parcel": {
+        "rootDir": "public"
+      }
+    }
   }
 }

@@ -41,7 +41,14 @@ class LoginController extends Controller
             return response()->json($error, Response::HTTP_BAD_REQUEST);
         }
 
-        $token = auth()->login($user);
+        $userProfile = [
+            'id' => $user->id,
+            'name' => $user->name,
+            'language' => $user->language,
+            'profile_picture_url' => $user->profile_picture_url
+        ];
+
+        $token = auth()->claims(['userProfile' => $userProfile])->login($user);
         $ttl = auth()->factory()->getTTL() * 60;
 
         return response()->json([
