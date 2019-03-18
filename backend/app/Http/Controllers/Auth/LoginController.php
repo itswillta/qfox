@@ -2,38 +2,54 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\User;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
-    use AuthenticatesUsers;
-
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/home';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function login(Request $request)
     {
-        $this->middleware('guest')->except('logout');
+        $username = $request->input('username');
+        $password = $request->input('password');
+
+        $user = User::where('username', '=', $username)->first();
+
+        if (!$user) {
+            $error = [
+                "code" => 400, 
+                "message" => 'Authentication failed. Please check your credentials.', 
+                "details" => [
+                    "username" => "Username doesn't exist."
+                ]
+            ];
+
+            return response()->json($error,Response::HTTP_BAD_REQUEST);
+        }
+
+        if (!Hash::check($password, $user->password)) {
+            $error = [
+                "code" => 400, 
+                "message" => 'Authentication failed. Please check your credentials.', 
+                "details" => [
+                    "password" => "Password incorrect."
+                ]
+            ];
+
+            return response()->json($error,Response::HTTP_BAD_REQUEST);
+        }
+
+        // FIXME: Needs to fix this (using auth()) + get time to live + edit TTL
+        // JWTAuth::setTTL(60);
+        $token = JWTAuth::fromUser($user);
+
+        return response()->json(
+        [
+            'authToken' => $token, 
+            'expires' => 60
+        ], Response::HTTP_OK);
     }
 }
