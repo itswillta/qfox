@@ -24,6 +24,7 @@ Route::group([
     'prefix' => 'auth'
 ], function ($router) {
     Route::post('login', 'Auth\LoginController@login');
+    Route::post('register', 'Auth\RegisterController@register');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
