@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -20,36 +19,34 @@ class LoginController extends Controller
 
         if (!$user) {
             $error = [
-                "code" => 400, 
-                "message" => 'Authentication failed. Please check your credentials.', 
+                "code" => 400,
+                "message" => 'Authentication failed. Please check your credentials.',
                 "details" => [
                     "username" => "Username doesn't exist."
                 ]
             ];
 
-            return response()->json($error,Response::HTTP_BAD_REQUEST);
+            return response()->json($error, Response::HTTP_BAD_REQUEST);
         }
 
         if (!Hash::check($password, $user->password)) {
             $error = [
-                "code" => 400, 
-                "message" => 'Authentication failed. Please check your credentials.', 
+                "code" => 400,
+                "message" => 'Authentication failed. Please check your credentials.',
                 "details" => [
                     "password" => "Password incorrect."
                 ]
             ];
 
-            return response()->json($error,Response::HTTP_BAD_REQUEST);
+            return response()->json($error, Response::HTTP_BAD_REQUEST);
         }
 
-        // FIXME: Needs to fix this (using auth()) + get time to live + edit TTL
-        // JWTAuth::setTTL(60);
-        $token = JWTAuth::fromUser($user);
+        $token = auth()->login($user);
+        $ttl = auth()->factory()->getTTL() * 60;
 
-        return response()->json(
-        [
-            'authToken' => $token, 
-            'expires' => 60
+        return response()->json([
+            'authToken' => $token,
+            'expires' => $ttl
         ], Response::HTTP_OK);
     }
 }
