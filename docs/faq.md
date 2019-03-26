@@ -86,6 +86,13 @@ To remove the database volume, run the following command:
 $ docker volume rm qfox_dbdata
 ```
 
+If you have an issue related to incorrect password to connect to the database, try re-cache the Laravel environment variables by running this command:
+
+```shell
+$ docker-compose exec app php artisan config:clear
+$ docker-compose exec app php artisan config:cache
+```
+
 ### How do I resolve "Permission denied" errors?
 
 This is a common error on Linux systems. Just navigate to the project root and run the following command:
