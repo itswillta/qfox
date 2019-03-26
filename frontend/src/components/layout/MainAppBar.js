@@ -37,7 +37,11 @@ const MainAppBar = props => {
       <Button color="inherit" onClick={() => openDialog('login')}>
         {t('Log in')}
       </Button>
-      <Button className={clsx(classes.signUpButton, 'button-secondary')} variant="contained">
+      <Button
+        className={clsx(classes.signUpButton, 'button-secondary')}
+        variant="contained"
+        onClick={() => openDialog('register')}
+      >
         {t('Sign up')}
       </Button>
     </React.Fragment>
