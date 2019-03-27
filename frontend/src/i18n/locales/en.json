@@ -6,5 +6,9 @@
   "OVERVIEW": "OVERVIEW",
   "Close": "Close",
   "Username": "Username",
-  "Password": "Password"
+  "Password": "Password",
+  "Username is required.": "Username is required.",
+  "Password is required.": "Password is required.",
+  "Username doesn't exist.": "Username doesn't exist.",
+  "Password incorrect.": "Password incorrect."
 }

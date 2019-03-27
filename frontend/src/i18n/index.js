@@ -11,17 +11,18 @@ i18n
   .init({
     resources: {
       en: {
-        translation: enTranslation
+        translation: enTranslation,
       },
       vi: {
         translation: viTranslation
       }
     },
     fallbackLng: 'en',
-
     interpolation: {
       escapeValue: false
-    }
+    },
+    nsSeparator: ':::',
+    keySeparator: '::'
   });
 
 // This is just a test function, to be removed.

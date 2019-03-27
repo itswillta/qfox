@@ -14,23 +14,16 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const usePasswordField = initialValue => {
-  const [value, setValue] = useState(initialValue);
+const useTogglePasswordVisibility = () => {
   const [shouldShowPassword, setShouldShowPassword] = useState(false);
 
   const classes = useStyles();
-
-  const handleChange = e => {
-    setValue(e.target.value);
-  };
 
   const handleToggleShowPassword = () => {
     setShouldShowPassword(!shouldShowPassword);
   };
 
   return {
-    value,
-    onChange: handleChange,
     type: !shouldShowPassword ? 'password' : 'text',
     InputProps: {
       endAdornment: (
@@ -51,4 +44,4 @@ const usePasswordField = initialValue => {
   };
 };
 
-export default usePasswordField;
+export default useTogglePasswordVisibility;
