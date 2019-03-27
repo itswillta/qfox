@@ -27,6 +27,13 @@ Route::group([
     Route::post('register', 'Auth\RegisterController@register');
 });
 
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'users'
+], function ($router) {
+    Route::put('/{id}', 'UserController@update');
+});
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
