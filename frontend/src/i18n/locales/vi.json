@@ -6,5 +6,9 @@
   "OVERVIEW": "TỔNG QUAN",
   "Close": "Đóng",
   "Username": "Tài khoản",
-  "Password": "Mật khẩu"
+  "Password": "Mật khẩu",
+  "Username is required.": "Tài khoản không được bỏ trống.",
+  "Password is required.": "Mật khẩu không được bỏ trống.",
+  "Username doesn't exist.": "Tài khoản không tồn tại.",
+  "Password incorrect.": "Mật khẩu không đúng."
 }
