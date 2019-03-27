@@ -86,11 +86,22 @@ To remove the database volume, run the following command:
 $ docker volume rm qfox_dbdata
 ```
 
-If you have an issue related to incorrect password to connect to the database, try re-cache the Laravel environment variables by running this command:
+If you have an issue related to incorrect password to connect to the database, try re-caching the Laravel environment variables by running this command:
 
 ```shell
+$ docker-compose exec app php artisan route:clear
 $ docker-compose exec app php artisan config:clear
 $ docker-compose exec app php artisan config:cache
+```
+
+### How do I resolve errors related to JWT?
+
+Some weird errors may pop up if you haven't generated a secret key. You can easily solve them by running the following commands:
+
+```shell
+$ docker-compose exec app php artisan route:clear
+$ docker-compose exec app php artisan config:clear
+$ docker-compose exec app php artisan jwt:secret
 ```
 
 ### How do I resolve "Permission denied" errors?
