@@ -18,27 +18,27 @@ class LoginController extends Controller
         $user = User::where('username', '=', $username)->first();
 
         if (!$user) {
-            $error = [
-                "code" => 400,
-                "message" => 'Authentication failed. Please check your credentials.',
-                "details" => [
-                    "username" => "Username doesn't exist."
+            return response()->json([
+                "error" => [
+                    "code" => Response::HTTP_BAD_REQUEST,
+                    "message" => 'Authentication failed. Please check your credentials.',
+                    "details" => [
+                        "username" => "Username doesn't exist."
+                    ]
                 ]
-            ];
-
-            return response()->json($error, Response::HTTP_BAD_REQUEST);
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         if (!Hash::check($password, $user->password)) {
-            $error = [
-                "code" => 400,
-                "message" => 'Authentication failed. Please check your credentials.',
-                "details" => [
-                    "password" => "Password incorrect."
+            return response()->json([
+                "error" => [
+                    "code" => Response::HTTP_BAD_REQUEST,
+                    "message" => 'Authentication failed. Please check your credentials.',
+                    "details" => [
+                        "password" => "Password incorrect."
+                    ]
                 ]
-            ];
-
-            return response()->json($error, Response::HTTP_BAD_REQUEST);
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         $userProfile = [

@@ -10,5 +10,6 @@
   "Username is required.": "Username is required.",
   "Password is required.": "Password is required.",
   "Username doesn't exist.": "Username doesn't exist.",
-  "Password incorrect.": "Password incorrect."
+  "Password incorrect.": "Password incorrect.",
+  "Authentication failed. Please check your credentials.": "Authentication failed. Please check your credentials."
 }

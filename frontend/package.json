@@ -1,6 +1,6 @@
 {
-  "name": "react-boilerplate",
-  "description": "Boilerplate for React App",
+  "name": "qfox",
+  "description": "QFox - Terms learning application.",
   "version": "0.1.0",
   "dependencies": {
     "@date-io/moment": "^1.1.0",

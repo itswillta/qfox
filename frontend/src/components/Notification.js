@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import Snackbar from '@material-ui/core/Snackbar';
 
 let openSnackbarFn;
 
 const Notification = () => {
+  const { t } = useTranslation();
+
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -31,9 +35,9 @@ const Notification = () => {
       open={isOpen && message.length > 0}
       onClose={handleClose}
       ContentProps={{
-        'aria-describedby': 'message-id'
+        'aria-describedby': 'notification-message'
       }}
-      message={<span id="message-id">{message}</span>}
+      message={<span id="notification-message">{t(message)}</span>}
     />
   );
 };

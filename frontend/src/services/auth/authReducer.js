@@ -28,7 +28,10 @@ const authReducer = (state = initialState, action) => {
     case LOGIN_ASYNC.ERROR:
       return {
         ...state,
-        error: action.payload.response.data.details,
+        error: {
+          message: action.payload.response.data.error.message,
+          ...action.payload.response.data.error.details
+        },
         isLoading: false
       };
     case LOGIN_FORM.RESET:

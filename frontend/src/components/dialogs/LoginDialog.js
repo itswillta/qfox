@@ -13,6 +13,7 @@ import LoginForm from './loginDialog/LoginForm';
 import FormLoading from '../FormLoading';
 
 import { authActions } from '../../services/auth';
+import { openSnackbar } from '../Notification';
 
 const LoginDialog = props => {
   const { isOpen, toggleDialog, authState, requestLogin, resetLoginForm } = props;
@@ -23,24 +24,24 @@ const LoginDialog = props => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+  const closeDialog = () => {
+    resetLoginForm();
+    toggleDialog(false)();
+  };
+
   useEffect(() => {
     if (authState.isAuthenticated) {
       toggleDialog(false)();
+    } else if (authState.error.message) {
+      openSnackbar(authState.error.message);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authState.isAuthenticated]);
-
-  useEffect(() => {
-    if (isOpen) {
-      resetLoginForm();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen]);
+  }, [authState]);
 
   return (
     <Dialog
       open={isOpen}
-      onClose={toggleDialog(false)}
+      onClose={closeDialog}
       aria-labelledby="login-form-dialog-title"
       fullScreen={isMobile}
       PaperProps={{
@@ -48,11 +49,7 @@ const LoginDialog = props => {
       }}
     >
       <DialogTitle id="login-dialog-title">{t('Log in')}</DialogTitle>
-      <LoginForm
-        requestLogin={requestLogin}
-        authState={authState}
-        closeDialog={toggleDialog(false)}
-      />
+      <LoginForm requestLogin={requestLogin} authState={authState} closeDialog={closeDialog} />
       {authState.isLoading && <FormLoading />}
     </Dialog>
   );
