@@ -10,5 +10,6 @@
   "Username is required.": "Tài khoản không được bỏ trống.",
   "Password is required.": "Mật khẩu không được bỏ trống.",
   "Username doesn't exist.": "Tài khoản không tồn tại.",
-  "Password incorrect.": "Mật khẩu không đúng."
+  "Password incorrect.": "Mật khẩu không đúng.",
+  "Authentication failed. Please check your credentials.": "Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin."
 }
