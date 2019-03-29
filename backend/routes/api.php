@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/hello', function() {
+Route::get('/hello', function () {
     $helloObject = new stdClass();
     $helloObject->msg = "Hello world!";
     return json_encode($helloObject);
@@ -32,6 +32,13 @@ Route::group([
     'prefix' => 'users'
 ], function ($router) {
     Route::put('/{id}', 'UserController@update');
+});
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'class'
+], function ($router) {
+    Route::post('/{userId}', 'ClassController@create');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
