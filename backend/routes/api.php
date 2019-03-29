@@ -36,7 +36,7 @@ Route::group([
 
 Route::group([
     'middleware' => 'api',
-    'prefix' => 'class'
+    'prefix' => 'classes'
 ], function ($router) {
     Route::post('/{userId}', 'ClassController@create');
 });

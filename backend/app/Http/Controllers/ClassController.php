@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ClassPermission;
+use App\Enums\ClassRole;
+use App\Helpers\ResponseFormatter;
 use App\StudyClass;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ClassController extends Controller
 {
@@ -15,46 +18,36 @@ class ClassController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'description' => 'required|string',
-            'permission' => 'required'
+            'permission' => [
+                'required',
+                Rule::in(ClassPermission::$type)
+            ]
         ]);
 
         if ($validator->fails()) {
-            $details = [];
-            foreach ($validator->errors()->toArray() as $field => $value) {
-                $details[$field] = $value[0];
-            }
+            $details = ResponseFormatter::flattenValidatorErrors($validator);
 
             return response()->json([
                 'error' => [
                     'code' => Response::HTTP_BAD_REQUEST,
-                    'message' => 'Create class failed. Please check your class information.',
+                    'message' => 'Failed to create class. Please check your class information.',
                     'details' => (object)$details
                 ]
             ], Response::HTTP_BAD_REQUEST);
-        }
-
-        if (User::find($userId) == null) {
-            return response()->json([
-                'error' => [
-                    'code' => Response::HTTP_BAD_REQUEST,
-                    'message' => 'Create class failed.',
-                    'details' => 'User does not exist.'
-                ]
-            ]);
         }
 
         $class = new StudyClass();
 
         $class->name = $request->name;
         $class->description = $request->description;
-        $class->permission = $request->permission;
+        $class->permission = ClassPermission::getKey($request->permission);
         $class->save();
 
-        $class->users()->attach($request->user_id, ['role' => 'Owner']);
+        $class->users()->attach($userId, ['role' => ClassRole::OWNER]);
 
         return response()->json([
             'code' => Response::HTTP_CREATED,
-            'message' => 'Create class successful.',
+            'message' => 'Successfully created class.',
             'details' => $class
         ]);
     }
