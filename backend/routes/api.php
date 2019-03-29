@@ -41,6 +41,14 @@ Route::group([
     Route::post('/{userId}', 'ClassController@create');
 });
 
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'study-sets'
+], function ($router) {
+    Route::post('/{userId}', 'StudySetController@create');
+});
+
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
