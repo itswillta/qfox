@@ -7,9 +7,17 @@
   "Close": "Close",
   "Username": "Username",
   "Password": "Password",
+  "Name": "Name",
   "Username is required.": "Username is required.",
   "Password is required.": "Password is required.",
+  "Name is required.": "Name is required.",
   "Username doesn't exist.": "Username doesn't exist.",
+  "Username already exists.": "Username already exists.",
   "Password incorrect.": "Password incorrect.",
-  "Authentication failed. Please check your credentials.": "Authentication failed. Please check your credentials."
+  "Authentication failed. Please check your credentials.": "Authentication failed. Please check your credentials.",
+  "Registered successfully. Welcome to QFox.": "Registered successfully. Welcome to QFox.",
+  "Failed to register. Please check your information.": "Failed to register. Please check your information.",
+  "Name must be between 4 and 30 characters.": "Name must be between 4 and 30 characters.",
+  "Username must be between 6 and 15 characters.": "Username must be between 6 and 15 characters.",
+  "Password must be at least 6 characters.": "Password must be at least 6 characters."
 }

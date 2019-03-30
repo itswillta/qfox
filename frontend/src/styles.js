@@ -10,9 +10,11 @@ export default makeStyles({
         backgroundColor: theme.palette.secondary.main
       }
     },
-    '.cssjss-advanced-global-child': {
-      height: 8,
-      backgroundColor: 'red'
+    '.dialog-paper': {
+      width: '40%',
+      [theme.breakpoints.down('sm')]: {
+        width: '100%'
+      }
     }
   }
 });

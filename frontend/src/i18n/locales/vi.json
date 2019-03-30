@@ -7,9 +7,17 @@
   "Close": "Đóng",
   "Username": "Tài khoản",
   "Password": "Mật khẩu",
+  "Name": "Tên",
   "Username is required.": "Tài khoản không được bỏ trống.",
   "Password is required.": "Mật khẩu không được bỏ trống.",
+  "Name is required.": "Tên không được bỏ trống.",
   "Username doesn't exist.": "Tài khoản không tồn tại.",
+  "Username already exists.": "Tài khoản đã được sử dụng.",
   "Password incorrect.": "Mật khẩu không đúng.",
-  "Authentication failed. Please check your credentials.": "Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin."
+  "Authentication failed. Please check your credentials.": "Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.",
+  "Registered successfully. Welcome to QFox.": "Đăng ký thành công. Chào mừng đến với QFox.",
+  "Failed to register. Please check your information.": "Đăng ký thất bại. Vui lòng kiểm tra lại thông tin.",
+  "Name must be between 4 and 30 characters.": "Tên phải có từ 4 đến 30 ký tự.",
+  "Username must be between 6 and 15 characters.": "Tài khoản phải có từ 6 đến 15 ký tự.",
+  "Password must be at least 6 characters.": "Mật khẩu phải có ít nhất 6 ký tự."
 }

@@ -14,11 +14,12 @@ function* registerUser(action) {
     yield call(registerRequests.requestRegister, action.payload);
 
     yield put(registerActions.register.success());
-    openSnackbar('Registration successful!');
+    openSnackbar('Registered successfully. Welcome to QFox.');
 
     yield put(authActions.login.pending(action.payload));
   } catch (error) {
     console.error(error);
+    openSnackbar('Failed to register. Please check your information.');
     yield put(registerActions.register.error(error));
   }
 }
