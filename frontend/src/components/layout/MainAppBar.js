@@ -53,6 +53,11 @@ const MainAppBar = props => {
         <Button color="inherit" onClick={logout}>
           {t('Log out')}
         </Button>
+        <Hidden mdUp>
+          <IconButton color="inherit" onClick={openSidebar}>
+            <MenuIcon />
+          </IconButton>
+        </Hidden>
       </React.Fragment>
     );
   }
@@ -64,11 +69,6 @@ const MainAppBar = props => {
           <img src={logoAppbar} alt="QFox" height="36px" />
           <div className={classes.grow} />
           <RightGroup />
-          <Hidden mdUp>
-            <IconButton color="inherit" onClick={openSidebar}>
-              <MenuIcon />
-            </IconButton>
-          </Hidden>
         </Toolbar>
       </AppBar>
     </div>

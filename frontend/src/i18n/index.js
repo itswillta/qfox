@@ -7,11 +7,11 @@ import viTranslation from './locales/vi.json';
 
 i18n
   .use(LanguageDetector)
-  .use(initReactI18next) // passes i18n down to react-i18next
+  .use(initReactI18next)
   .init({
     resources: {
       en: {
-        translation: enTranslation,
+        translation: enTranslation
       },
       vi: {
         translation: viTranslation
@@ -26,8 +26,6 @@ i18n
   });
 
 // This is just a test function, to be removed.
-window.changeQFoxLanguage = lng => {
-  i18n.changeLanguage(lng);
-};
+window.i18n = i18n;
 
 export default i18n;

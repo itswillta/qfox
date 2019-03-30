@@ -10,34 +10,37 @@ import Form from '../../Form';
 import InputField from '../../InputField';
 
 import usePasswordField from '../../../hooks/usePasswordField';
-import loginFormSchema from './loginForm/loginFormSchema';
+import registerFormSchema from './registerForm/registerFormSchema';
 
-const LoginForm = props => {
-  const { authState, requestLogin, closeDialog } = props;
+const RegisterForm = props => {
+  const { registerState, requestRegister, closeDialog } = props;
   const { t } = useTranslation();
 
   const toggleVisiblityProps = usePasswordField();
 
   const handleSubmit = values => {
-    requestLogin(values);
+    requestRegister(values);
   };
 
   return (
     <Form
-      name="loginForm"
+      name="registerForm"
       noValidate
-      initialValues={{ username: '', password: '' }}
-      validationSchema={loginFormSchema}
+      initialValues={{ username: '', name: '', password: '' }}
+      validationSchema={registerFormSchema}
       onSubmit={handleSubmit}
     >
       <DialogContent>
         <Grid container direction="column">
           <Grid item xs={12}>
+            <InputField required label="Name" name="name" serverError={registerState.error.name} />
+          </Grid>
+          <Grid item xs={12}>
             <InputField
               required
               label="Username"
               name="username"
-              serverError={authState.error.username}
+              serverError={registerState.error.username}
             />
           </Grid>
           <Grid item xs={12}>
@@ -45,7 +48,7 @@ const LoginForm = props => {
               required
               label="Password"
               name="password"
-              serverError={authState.error.password}
+              serverError={registerState.error.password}
               {...toggleVisiblityProps}
             />
           </Grid>
@@ -55,12 +58,12 @@ const LoginForm = props => {
         <Button type="reset" color="primary" onClick={closeDialog}>
           {t('Close')}
         </Button>
-        <Button type="submit" color="primary" variant="contained" disabled={authState.isLoading}>
-          {t('Log in')}
+        <Button type="submit" color="primary" variant="contained">
+          {t('Sign up')}
         </Button>
       </DialogActions>
     </Form>
   );
 };
 
-export default LoginForm;
+export default RegisterForm;

@@ -1,10 +1,8 @@
 <?php
 
-
 namespace App\Helpers;
 
-
-use Illuminate\Validation\Validator;
+use Illuminate\Contracts\Validation\Validator;
 
 class ResponseFormatter
 {

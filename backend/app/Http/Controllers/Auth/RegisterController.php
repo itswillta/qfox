@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\ResponseFormatter;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -33,22 +34,19 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-
         $validator = Validator::make($request->all(),
-            ['username' => 'unique:users|required|max:15|min:6',
-                'name' => 'required|max:30|min:4',
-                'password' => 'required'
+            [
+                'username' => 'unique:users|required|string|between:6,15',
+                'name' => 'required|string|between:4,30',
+                'password' => 'required|string|min:6'
             ],
             [
-                'unique' => 'Username already exists.'
+                'username.unique' => 'Username already exists.'
             ]
         );
 
         if ($validator->fails()) {
-            $details = [];
-            foreach ($validator->errors()->toArray() as $field => $value) {
-                $details[$field] = $value[0];
-            }
+            $details = ResponseFormatter::flattenValidatorErrors($validator);
 
             return response()->json([
                 'error' => [
