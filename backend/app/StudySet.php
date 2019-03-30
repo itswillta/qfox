@@ -11,7 +11,8 @@ class StudySet extends Model
      */
     public function users()
     {
-        return $this->belongsToMany('App\User');
+        return $this->belongsToMany('App\User', 'user_study_sets',
+            'study_set_id', 'user_id');
     }
 
     /**
