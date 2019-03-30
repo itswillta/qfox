@@ -13,16 +13,14 @@ import { registerActions } from '../../services/register';
 import useResponsiveDialog from '../../hooks/useResponsiveDialog';
 import usePublicDialog from '../../hooks/usePublicDialog';
 
-const RegisterDialog = props => {
-  const {
-    isOpen,
-    toggleDialog,
-    authState,
-    resetRegisterForm,
-    registerState,
-    requestRegister
-  } = props;
-
+const RegisterDialog = ({
+  isOpen,
+  toggleDialog,
+  authState,
+  resetRegisterForm,
+  registerState,
+  requestRegister
+}) => {
   const { t } = useTranslation();
 
   const responsiveDialogProps = useResponsiveDialog();

@@ -6,16 +6,16 @@ import useStyles from './dashboard/Dashboard.styles';
 
 import logoWithBg from '/images/logo-with-bg.svg';
 
-const Dashboard = () => {
+const StudySets = () => {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      <Typography variant="h3">Dashboard Page</Typography>
+      <Typography variant="h3">Study Sets Page</Typography>
       <br />
       <img src={logoWithBg} alt="logo" width="30%" height="auto" />
     </div>
   );
 };
 
-export default Dashboard;
+export default StudySets;

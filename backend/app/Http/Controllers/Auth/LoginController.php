@@ -45,7 +45,7 @@ class LoginController extends Controller
             'id' => $user->id,
             'name' => $user->name,
             'language' => $user->language,
-            'profile_picture_url' => $user->profile_picture_url
+            'profilePictureUrl' => $user->profile_picture_url
         ];
 
         $token = auth()->claims(['userProfile' => $userProfile])->login($user);

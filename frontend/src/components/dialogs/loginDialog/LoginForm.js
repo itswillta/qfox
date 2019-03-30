@@ -12,8 +12,7 @@ import InputField from '../../InputField';
 import usePasswordField from '../../../hooks/usePasswordField';
 import loginFormSchema from './loginForm/loginFormSchema';
 
-const LoginForm = props => {
-  const { authState, requestLogin, closeDialog } = props;
+const LoginForm = ({ authState, requestLogin, closeDialog }) => {
   const { t } = useTranslation();
 
   const toggleVisiblityProps = usePasswordField();

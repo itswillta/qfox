@@ -12,8 +12,7 @@ import InputField from '../../InputField';
 import usePasswordField from '../../../hooks/usePasswordField';
 import registerFormSchema from './registerForm/registerFormSchema';
 
-const RegisterForm = props => {
-  const { registerState, requestRegister, closeDialog } = props;
+const RegisterForm = ({ registerState, requestRegister, closeDialog }) => {
   const { t } = useTranslation();
 
   const toggleVisiblityProps = usePasswordField();

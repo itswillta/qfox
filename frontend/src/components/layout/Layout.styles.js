@@ -1,14 +1,15 @@
 import { makeStyles } from '@material-ui/styles';
 
-export default makeStyles(theme => ({
+export default makeStyles({
   root: {
     display: 'flex',
     flexDirection: 'column'
   },
+  container: {
+    display: 'flex'
+  },
   content: {
     flexGrow: 1,
-    [theme.breakpoints.up('md')]: {
-      marginLeft: '250px'
-    }
+    minHeight: 'calc(100vh - 64px)'
   }
-}));
+});
