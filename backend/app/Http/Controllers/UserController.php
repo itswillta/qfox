@@ -37,17 +37,16 @@ class UserController extends Controller
         if ($request->get('profile_picture_data')) {
             $profile_picture_data = $request->get('profile_picture_data');
             $filename = time() . '.' . explode('/', explode(':', substr($profile_picture_data, 0, strpos($profile_picture_data, ';')))[1])[1];
-            $save_path = storage_path() . '/users/id/' . $id . '/images/picture/';
-            $image_path = $save_path . $filename;
+            $save_path = public_path() . '/images/';
 
             // Make the user a folder
             File::makeDirectory($save_path, $mode = 0075, true, true);
 
             // Save the file to the server
-            Image::make($profile_picture_data)->resize(300, 300)->save($image_path);
+            Image::make($profile_picture_data)->resize(300, 300)->save($save_path . $filename);
 
             // Save the public image path
-            $user->profile_picture_url = $image_path;
+            $user->profile_picture_url = 'http://localhost/images/' . $filename;
         }
 
         $user->name = $request->name;
