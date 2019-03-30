@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ResponseFormatter;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -22,15 +23,15 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            $error = [
-                "code" => 400,
-                "message" => 'Update failed. Please check your update information.',
-                "details" => [
-                    $validator->errors()
-                ]
-            ];
+            $details = ResponseFormatter::flattenValidatorErrors($validator);
 
-            return response()->json($error, Response::HTTP_BAD_REQUEST);
+            return response()->json([
+                'error' => [
+                    'code' => Response::HTTP_BAD_REQUEST,
+                    'message' => 'Failed to update profile user. Please check your user information.',
+                    'details' => (object)$details
+                ]
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         if ($request->get('profile_picture_data')) {
@@ -47,7 +48,6 @@ class UserController extends Controller
 
             // Save the public image path
             $user->profile_picture_url = $image_path;
-            $user->save();
         }
 
         $user->name = $request->name;
@@ -56,8 +56,8 @@ class UserController extends Controller
         $user->save();
 
         return response()->json([
-            "code" => 200,
-            "message" => 'Updated user profile successfully.',
+            "code" => Response::HTTP_OK,
+            "message" => 'Successfully updated profile user.',
             "details" => $user
         ], Response::HTTP_OK);
     }
