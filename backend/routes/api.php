@@ -31,14 +31,14 @@ Route::group([
     'middleware' => 'api',
     'prefix' => 'users'
 ], function ($router) {
-    Route::put('/{id}', 'UserController@update');
+    Route::put('/{user_id}', 'UserController@update');
 });
 
 Route::group([
     'middleware' => 'api',
-    'prefix' => 'classes'
+    'prefix' => 'users/{user_id}/classes'
 ], function ($router) {
-    Route::post('/{userId}', 'ClassController@create');
+    Route::post('', 'ClassController@create');
 });
 
 Route::group([

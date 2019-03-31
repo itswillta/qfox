@@ -15,7 +15,7 @@ class UsersTableSeeder extends Seeder
             'name' => 'John Doe',
             'username' => 'user1997',
             'profile_picture_url' => '',
-            'language' => 'EN',
+            'language' => 'en',
             'password' => bcrypt('secret'),
         ]);
     }

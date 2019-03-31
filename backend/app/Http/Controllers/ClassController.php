@@ -13,7 +13,7 @@ use Illuminate\Validation\Rule;
 
 class ClassController extends Controller
 {
-    public function create(Request $request, $userId)
+    public function create(Request $request, $user_id)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
@@ -37,13 +37,13 @@ class ClassController extends Controller
         }
 
         $class = new StudyClass();
-
         $class->name = $request->name;
         $class->description = $request->description;
         $class->permission = ClassPermission::getKey($request->permission);
+
         $class->save();
 
-        $class->users()->attach($userId, ['role' => ClassRole::OWNER]);
+        $class->users()->attach($user_id, ['role' => ClassRole::OWNER]);
 
         return response()->json([
             'code' => Response::HTTP_CREATED,
