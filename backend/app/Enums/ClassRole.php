@@ -6,6 +6,6 @@ use BenSampo\Enum\Enum;
 
 final class ClassRole extends Enum
 {
-    const OWNER = "Owner";
-    const MEMBER = "Member";
+    const OWNER = "owner";
+    const MEMBER = "member";
 }
