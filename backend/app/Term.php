@@ -11,7 +11,7 @@ class Term extends Model
      */
     public function studySet()
     {
-        return $this->belongsTo('App\StudySet', 'study_set_id', 'term_id'   );
+        return $this->belongsTo('App\StudySet', 'study_set_id');
     }
 
     /**
