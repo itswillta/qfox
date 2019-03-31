@@ -40,7 +40,7 @@ class ClassController extends Controller
         $class = new StudyClass();
         $class->name = $request->name;
         $class->description = $request->description;
-        $class->permission = ClassPermission::getKey($request->permission);
+        $class->permission = $request->permission;
 
         DB::transaction(function() use ($class, $user_id) {
             $class->save();

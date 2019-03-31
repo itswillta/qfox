@@ -11,20 +11,21 @@ use App\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use DB;
 
 class StudySetController extends Controller
 {
-    public function create(Request $request, $userId)
+    public function create(Request $request, $user_id)
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string',
             'viewPermission' => [
                 'required',
-                Rule::in(StudySetPermission::$viewPermission)
+                Rule::in(StudySetPermission::$view_permission)
             ],
             'editPermission' => [
                 'required',
-                Rule::in(StudySetPermission::$editPermission)
+                Rule::in(StudySetPermission::$edit_permission)
             ]
         ]);
 
@@ -40,19 +41,19 @@ class StudySetController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        $studySet = new StudySet();
+        $study_set = new StudySet();
+        $study_set->title = $request->title;
+        $study_set->view_permission = $request->viewPermission;
+        $study_set->edit_permission = $request->editPermission;
 
-        $studySet->title = $request->title;
-        $studySet->viewPermission = $request->viewPermission;
-        $studySet->editPermission = $request->editPermission;
-        $studySet->save();
-
-        $studySet->users()->attach($userId, ['role' => StudySetRole::OWNER]);
+        DB::transaction(function() use ($study_set, $user_id) {
+            $study_set->save();
+            $study_set->users()->attach($user_id, ['role' => StudySetRole::OWNER]);
+        });
 
         return response()->json([
-            'code' => Response::HTTP_CREATED,
             'message' => 'Successfully created study set.',
-            'details' => $studySet
-        ]);
+            'details' => $study_set
+        ], Response::HTTP_CREATED);
     }
 }

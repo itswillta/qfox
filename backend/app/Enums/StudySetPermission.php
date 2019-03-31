@@ -10,6 +10,6 @@ final class StudySetPermission extends Enum
     const USER_WITH_A_PASSWORD = "user_with_a_password";
     const JUST_ME = "just_me";
 
-    public static $viewPermission = [self::EVERYONE, self::USER_WITH_A_PASSWORD, self::JUST_ME];
-    public static $editPermission = [self::USER_WITH_A_PASSWORD, self::JUST_ME];
+    public static $view_permission = [self::EVERYONE, self::USER_WITH_A_PASSWORD, self::JUST_ME];
+    public static $edit_permission = [self::USER_WITH_A_PASSWORD, self::JUST_ME];
 }
