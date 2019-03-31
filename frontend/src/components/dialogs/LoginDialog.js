@@ -12,9 +12,7 @@ import { authActions } from '../../services/auth';
 import useResponsiveDialog from '../../hooks/useResponsiveDialog';
 import usePublicDialog from '../../hooks/usePublicDialog';
 
-const LoginDialog = props => {
-  const { isOpen, toggleDialog, authState, requestLogin, resetLoginForm } = props;
-
+const LoginDialog = ({ isOpen, toggleDialog, authState, requestLogin, resetLoginForm }) => {
   const { t } = useTranslation();
 
   const responsiveDialogProps = useResponsiveDialog();

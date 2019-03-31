@@ -9,5 +9,21 @@ export default makeStyles(theme => ({
   },
   signUpButton: {
     marginLeft: theme.spacing(1)
+  },
+  accountMenu: {
+    textTransform: 'none'
+  },
+  accountMenuExpand: {
+    height: theme.spacing(4),
+    paddingLeft: '0 !important'
+  },
+  accountMenuItemIcon: {
+    marginRight: '0 !important'
+  },
+  accountMenuItemText: {
+    padding: `0 ${theme.spacing(1)}px !important`
+  },
+  link: {
+    textDecoration: 'none'
   }
 }));

@@ -10,28 +10,43 @@ export default makeStyles(theme => ({
     background: 'white',
     border: 'none',
     color: theme.palette.grey[200],
-    position: 'fixed',
     width: '250px',
-    top: '64px',
+    height: '100%',
     [theme.breakpoints.down('sm')]: {
+      position: 'fixed',
       width: '100%',
       top: 0
     }
   },
-  list: {},
+  sidebarItemList: {
+    padding: `${theme.spacing(2)}px 0`,
+    '@media (min-height: 300px)': {
+      position: 'sticky',
+      top: 0,
+      bottom: 0,
+      height: '100vh',
+      overflowY: 'auto'
+    }
+  },
   listItem: {
-    color: theme.palette.grey[300]
+    color: theme.palette.grey[200]
   },
   selected: {
     background: `${theme.palette.secondary.light} !important`,
-    color: theme.palette.secondary.contrastText
+    color: theme.palette.secondary.contrastText,
+    '& $listItemText': {
+      color: 'inherit'
+    },
+    '& $listItemIcon': {
+      color: 'inherit'
+    }
   },
   listItemIcon: {
-    color: 'inherit',
+    color: theme.palette.primary.main,
     marginRight: 0
   },
   listItemText: {
-    color: 'inherit'
+    color: theme.palette.grey[800]
   },
   nested: {
     paddingLeft: 24 + theme.spacing(1)
@@ -49,5 +64,8 @@ export default makeStyles(theme => ({
   },
   grow: {
     flexGrow: 1
+  },
+  divider: {
+    margin: `${theme.spacing(1)}px 0`
   }
 }));
