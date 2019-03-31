@@ -22,7 +22,7 @@ Route::get('/hello', function () {
 Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'
-], function ($router) {
+], function () {
     Route::post('login', 'Auth\LoginController@login');
     Route::post('register', 'Auth\RegisterController@register');
 });
@@ -30,29 +30,29 @@ Route::group([
 Route::group([
     'middleware' => 'api',
     'prefix' => 'users'
-], function ($router) {
-    Route::put('/{id}', 'UserController@update');
+], function () {
+    Route::put('/{user_id}', 'UserController@update');
 });
 
 Route::group([
     'middleware' => 'api',
-    'prefix' => 'classes'
-], function ($router) {
-    Route::post('/{userId}', 'ClassController@create');
+    'prefix' => 'users/{user_id}/classes'
+], function () {
+    Route::post('', 'ClassController@create');
 });
 
 Route::group([
     'middleware' => 'api',
-    'prefix' => 'study-sets'
-], function ($router) {
-    Route::post('/{userId}', 'StudySetController@create');
+    'prefix' => 'users/{user_id}/study-sets'
+], function () {
+    Route::post('', 'StudySetController@create');
 });
 
 Route::group([
     'middleware' => 'api',
-    'prefix' => 'terms'
-], function ($router) {
-    Route::post('/{studySetId}', 'TermController@create');
+    'prefix' => 'study-sets/{study_set_id}/terms'
+], function () {
+    Route::post('', 'TermController@create');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

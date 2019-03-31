@@ -16,7 +16,7 @@ class CreateStudyClassesTable extends Migration
         Schema::create('study_classes', function (Blueprint $table) {
             $table->bigIncrements('id'); // id: bigint(20)
             $table->string('name'); // name: varchar(255)
-            $table->string('description'); // description: varchar(255)
+            $table->string('description')->nullable(); // description: varchar(255)
             $table->string('permission', 10); // permission: varchar(10)
             $table->timestamps(); // created_at & updated_at: nullable timestamp
         });

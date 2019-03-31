@@ -11,12 +11,16 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+        $date = new DateTime();
+
         DB::table('users')->insert([
             'name' => 'John Doe',
             'username' => 'user1997',
             'profile_picture_url' => '',
-            'language' => 'EN',
+            'language' => 'en',
             'password' => bcrypt('secret'),
+            'created_at' => $date->format('Y-m-d H:i:s'),
+            'updated_at' => $date->format('Y-m-d H:i:s')
         ]);
     }
 }

@@ -10,14 +10,15 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use DB;
 
 class ClassController extends Controller
 {
-    public function create(Request $request, $userId)
+    public function create(Request $request, $user_id)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
-            'description' => 'required|string',
+            'description' => 'string',
             'permission' => [
                 'required',
                 Rule::in(ClassPermission::$type)
@@ -37,18 +38,18 @@ class ClassController extends Controller
         }
 
         $class = new StudyClass();
-
         $class->name = $request->name;
         $class->description = $request->description;
-        $class->permission = ClassPermission::getKey($request->permission);
-        $class->save();
+        $class->permission = $request->permission;
 
-        $class->users()->attach($userId, ['role' => ClassRole::OWNER]);
+        DB::transaction(function() use ($class, $user_id) {
+            $class->save();
+            $class->users()->attach($user_id, ['role' => ClassRole::OWNER]);
+        });
 
         return response()->json([
-            'code' => Response::HTTP_CREATED,
             'message' => 'Successfully created class.',
             'details' => $class
-        ]);
+        ], Response::HTTP_CREATED);
     }
 }

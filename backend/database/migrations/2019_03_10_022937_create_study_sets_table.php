@@ -16,8 +16,8 @@ class CreateStudySetsTable extends Migration
         Schema::create('study_sets', function (Blueprint $table) {
             $table->bigIncrements('id'); // id: bigint(20)
             $table->string('title'); // title: varchar(255)
-            $table->string('viewPermission', 25); // permission: varchar(25)
-            $table->string('editPermission', 25); // permission: varchar(25)
+            $table->string('view_permission', 25); // permission: varchar(25)
+            $table->string('edit_permission', 25); // permission: varchar(25)
             $table->timestamps(); // created_at & updated_at: nullable timestamp
         });
     }
