@@ -43,16 +43,16 @@ Route::group([
 
 Route::group([
     'middleware' => 'api',
-    'prefix' => 'users/{user_id|/study-sets'
+    'prefix' => 'users/{user_id}/study-sets'
 ], function () {
     Route::post('', 'StudySetController@create');
 });
 
 Route::group([
     'middleware' => 'api',
-    'prefix' => 'terms'
+    'prefix' => 'study-sets/{study_set_id}/terms'
 ], function () {
-    Route::post('/{studySetId}', 'TermController@create');
+    Route::post('', 'TermController@create');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

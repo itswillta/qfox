@@ -16,8 +16,6 @@ class UserController extends Controller
 {
     public function update(Request $request, $user_id)
     {
-        $user = User::findOrFail($user_id);
-
         // FIXME: Need to confirm with frontend
         $validator = Validator::make($request->all(), [
             'profile_picture_data' => 'image|mimes:jpeg,png,jpg,gif,svg',
@@ -36,6 +34,8 @@ class UserController extends Controller
                 ]
             ], Response::HTTP_BAD_REQUEST);
         }
+
+        $user = User::findOrFail($user_id);
 
         $is_anything_updated = false;
 
