@@ -53,6 +53,8 @@ Route::group([
     'prefix' => 'study-sets/{study_set_id}/terms'
 ], function () {
     Route::post('', 'TermController@create');
+    Route::put('/{term_id}', 'TermController@update');
+
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
