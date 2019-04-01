@@ -8,8 +8,10 @@ import useStyles from './mainAppBar/MainAppBar.styles';
 
 import { authActions } from '../../services/auth';
 
-import logoAppbar from '/images/logo-appbar.svg';
-import ActionGroup from './mainAppBar/ActionGroup';
+import LogoAppBar from './mainAppBar/LogoAppBar';
+import UserActionGroup from './mainAppBar/UserActionGroup';
+import CreateButton from './mainAppBar/CreateButton';
+import SearchBox from './mainAppBar/SearchBox';
 
 const MainAppBar = ({ authState, requestLogout }) => {
   const classes = useStyles();
@@ -18,9 +20,12 @@ const MainAppBar = ({ authState, requestLogout }) => {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar className={classes.toolbar}>
-          <img src={logoAppbar} alt="QFox" height="36px" />
+          <LogoAppBar />
+          <CreateButton classes={classes} />
           <div className={classes.grow} />
-          <ActionGroup authState={authState} requestLogout={requestLogout} classes={classes} />
+          <SearchBox classes={classes} />
+          <div className={classes.grow} />
+          <UserActionGroup authState={authState} requestLogout={requestLogout} classes={classes} />
         </Toolbar>
       </AppBar>
     </div>
