@@ -21,7 +21,7 @@ class CreateLiveSessionsTable extends Migration
             $table->unsignedBigInteger('user_id'); // user_id: bigint(20)
             $table->timestamps(); // created_at & updated_at: nullable timestamp
 
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

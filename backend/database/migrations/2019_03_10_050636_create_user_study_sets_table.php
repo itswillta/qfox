@@ -20,8 +20,8 @@ class CreateUserStudySetsTable extends Migration
             $table->string('role'); // role: varchar(255)
             $table->integer('match_seconds')->nullable(); // match_seconds: int(11)
 
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('study_set_id')->references('id')->on('study_sets');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('study_set_id')->references('id')->on('study_sets')->onDelete('cascade');
         });
     }
 

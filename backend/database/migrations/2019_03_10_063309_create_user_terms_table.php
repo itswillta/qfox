@@ -20,8 +20,8 @@ class CreateUserTermsTable extends Migration
             $table->integer('correct')->nullable(); // correct: int(11)
             $table->integer('missed')->nullable(); // missed: int(11)
 
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('term_id')->references('id')->on('terms');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('term_id')->references('id')->on('terms')->onDelete('cascade');
         });
     }
 

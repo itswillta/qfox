@@ -6,7 +6,6 @@ use App\Enums\ClassPermission;
 use App\Enums\ClassRole;
 use App\Helpers\ResponseFormatter;
 use App\StudyClass;
-use App\StudySet;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -54,7 +53,7 @@ class ClassController extends Controller
         ], Response::HTTP_CREATED);
     }
 
-    public function update(Request $request, $class_id)
+    public function update(Request $request, $user_id, $class_id)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'string',
@@ -106,7 +105,7 @@ class ClassController extends Controller
     public function addStudySet(Request $request, $class_id)
     {
         $validator = Validator::make($request->all(), [
-            'study_set_id' => 'required|integer',
+            'studySetId' => 'required|integer',
         ]);
 
         if ($validator->fails()) {
@@ -131,6 +130,30 @@ class ClassController extends Controller
     {
         $class = StudyClass::findOrFail($class_id);
         $class->delete();
+
+        return response()->noContent(Response::HTTP_OK);
+    }
+
+    public function addMember(Request $request, $user_id, $class_id)
+    {
+        $validator = Validator::make($request->all(), [
+            'userId' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            $details = ResponseFormatter::flattenValidatorErrors($validator);
+
+            return response()->json([
+                'error' => [
+                    'code' => Response::HTTP_BAD_REQUEST,
+                    'message' => 'Failed to add study set to class. Please check your study set information.',
+                    'details' => (object)$details
+                ]
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $class = StudyClass::findOrFail($class_id);
+        $class->users()->attach($request->userId, ['role' => ClassRole::MEMBER]);
 
         return response()->noContent(Response::HTTP_OK);
     }
