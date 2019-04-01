@@ -21,7 +21,7 @@ class CreateTermsTable extends Migration
             $table->unsignedBigInteger('study_set_id'); // study_set_id: bigint(20)
             $table->timestamps(); // created_at & updated_at: nullable timestamp
 
-            $table->foreign('study_set_id')->references('id')->on('study_sets');
+            $table->foreign('study_set_id')->references('id')->on('study_sets')->onDelete('cascade');
         });
     }
 
