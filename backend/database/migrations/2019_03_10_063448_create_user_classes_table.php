@@ -19,8 +19,8 @@ class CreateUserClassesTable extends Migration
             $table->unsignedBigInteger('class_id'); // class_id: bigint(20)
             $table->string('role'); // role: varchar(255)
 
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('class_id')->references('id')->on('study_classes');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('class_id')->references('id')->on('study_classes')->onDelete('cascade');
         });
     }
 

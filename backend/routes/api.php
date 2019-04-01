@@ -41,6 +41,7 @@ Route::group([
     Route::post('', 'ClassController@create');
     Route::put('/{class_id}', 'ClassController@update');
     Route::post('/{class_id}/study-sets', 'ClassController@addStudySet');
+    Route::delete('/{class_id}', 'ClassController@delete');
 });
 
 Route::group([
