@@ -126,4 +126,12 @@ class ClassController extends Controller
 
         return response()->noContent(Response::HTTP_OK);
     }
+
+    public function delete($user_id, $class_id)
+    {
+        $class = StudyClass::findOrFail($class_id);
+        $class->delete();
+
+        return response()->noContent(Response::HTTP_OK);
+    }
 }
