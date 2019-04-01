@@ -39,6 +39,7 @@ Route::group([
     'prefix' => 'users/{user_id}/classes'
 ], function () {
     Route::post('', 'ClassController@create');
+    Route::put('/{class_id}', 'ClassController@update');
 });
 
 Route::group([
