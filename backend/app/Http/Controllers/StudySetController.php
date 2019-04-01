@@ -108,4 +108,12 @@ class StudySetController extends Controller
             "details" => $study_set
         ]);
     }
+
+    public function delete($user_id, $study_set_id)
+    {
+        $study_set = StudySet::findOrFail($study_set_id);
+        $study_set->delete();
+        
+        return response()->noContent(Response::HTTP_OK);
+    }
 }
