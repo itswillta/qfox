@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import LoadableRoute from '../hocs/LoadableRoute';
+import LoadableRoute from './LoadableRoute';
 
 const appRoutes = {
   Welcome: {
@@ -32,6 +32,14 @@ const appRoutes = {
       loader: () => import('../pages/StudySets')
     }),
     pageTitle: 'Study Sets | QFox',
+    private: true
+  },
+  CreateStudySet: {
+    url: '/study-sets/create',
+    component: LoadableRoute({
+      loader: () => import('../pages/CreateStudySet')
+    }),
+    pageTitle: 'Create a new study set | QFox',
     private: true
   },
   Settings: {
