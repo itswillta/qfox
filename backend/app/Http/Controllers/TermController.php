@@ -92,4 +92,12 @@ class TermController extends Controller
         ]);
 
     }
+
+    public function delete($study_set_id, $term_id)
+    {
+        $term = Term::findOrFail($term_id);
+        $term->delete();
+
+        return response()->noContent(Response::HTTP_OK);
+    }
 }

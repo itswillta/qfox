@@ -60,7 +60,7 @@ Route::group([
 ], function () {
     Route::post('', 'TermController@create');
     Route::put('/{term_id}', 'TermController@update');
-
+    Route::delete('/{term_id}', 'TermController@delete');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
