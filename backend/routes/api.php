@@ -44,6 +44,7 @@ Route::group([
     Route::delete('/{class_id}', 'ClassController@delete');
     Route::post('/{class_id}/members', 'ClassController@addMember');
     Route::delete('/{class_id}/members', 'ClassController@removeMembers');
+    Route::delete('/{class_id}/study-sets', 'ClassController@removeStudySets');
 });
 
 Route::group([
