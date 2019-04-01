@@ -19,6 +19,6 @@ class StudyClass extends Model
      */
     public function studySets()
     {
-        return $this->belongsToMany('App\StudySet');
+        return $this->belongsToMany('App\StudySet', 'study_set_classes', 'class_id', 'study_set_id');
     }
 }

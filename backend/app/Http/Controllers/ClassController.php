@@ -6,11 +6,12 @@ use App\Enums\ClassPermission;
 use App\Enums\ClassRole;
 use App\Helpers\ResponseFormatter;
 use App\StudyClass;
+use App\StudySet;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use DB;
 
 class ClassController extends Controller
 {
@@ -100,6 +101,29 @@ class ClassController extends Controller
             'message' => $is_anything_updated ? 'Successfully edited class.' : 'There is nothing to update.',
             "details" => $class
         ]);
+    }
 
+    public function addStudySet(Request $request, $class_id)
+    {
+        $validator = Validator::make($request->all(), [
+            'study_set_id' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            $details = ResponseFormatter::flattenValidatorErrors($validator);
+
+            return response()->json([
+                'error' => [
+                    'code' => Response::HTTP_BAD_REQUEST,
+                    'message' => 'Failed to add study set to class. Please check your study set information.',
+                    'details' => (object)$details
+                ]
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $class = StudyClass::findOrFail($class_id);
+        $class->studySets()->attach($request->study_set_id);
+
+        return response()->noContent(Response::HTTP_OK);
     }
 }
