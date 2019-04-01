@@ -47,6 +47,7 @@ Route::group([
     'prefix' => 'users/{user_id}/study-sets'
 ], function () {
     Route::post('', 'StudySetController@create');
+    Route::put('/{study_set_id}', 'StudySetController@update');
 });
 
 Route::group([
