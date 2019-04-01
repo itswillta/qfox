@@ -102,7 +102,7 @@ class ClassController extends Controller
         ]);
     }
 
-    public function addStudySet(Request $request, $class_id)
+    public function addStudySet(Request $request, $user_id, $class_id)
     {
         $validator = Validator::make($request->all(), [
             'studySetId' => 'required|integer',
@@ -121,7 +121,7 @@ class ClassController extends Controller
         }
 
         $class = StudyClass::findOrFail($class_id);
-        $class->studySets()->attach($request->study_set_id);
+        $class->studySets()->attach($request->studySetId);
 
         return response()->noContent(Response::HTTP_OK);
     }
@@ -171,7 +171,7 @@ class ClassController extends Controller
             return response()->json([
                 'error' => [
                     'code' => Response::HTTP_BAD_REQUEST,
-                    'message' => 'Failed to add study set to class. Please check your study set information.',
+                    'message' => 'Failed to remove members from class. Please check your member information.',
                     'details' => (object)$details
                 ]
             ], Response::HTTP_BAD_REQUEST);
@@ -200,6 +200,31 @@ class ClassController extends Controller
 
         $class = StudyClass::findOrFail($class_id);
         $class->users()->detach($request->userIds);
+
+        return response()->noContent(Response::HTTP_OK);
+    }
+
+    public function removeStudySets(Request $request, $user_id, $class_id)
+    {
+        $validator = Validator::make($request->all(), [
+            'studySetIds' => 'required|array',
+            'studySetIds.*' => 'integer'
+        ]);
+
+        if ($validator->fails()) {
+            $details = ResponseFormatter::flattenValidatorErrors($validator);
+
+            return response()->json([
+                'error' => [
+                    'code' => Response::HTTP_BAD_REQUEST,
+                    'message' => 'Failed to remove study sets from class. Please check your study set information.',
+                    'details' => (object)$details
+                ]
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $class = StudyClass::findOrFail($class_id);
+        $class->studySets()->detach($request->studySetIds);
 
         return response()->noContent(Response::HTTP_OK);
     }
