@@ -35,7 +35,7 @@ export default makeStyles(theme => ({
     background: `${theme.palette.secondary.light} !important`,
     color: theme.palette.secondary.contrastText,
     '& $listItemText': {
-      color: 'inherit'
+      color: 'inherit !important'
     },
     '& $listItemIcon': {
       color: 'inherit'
@@ -46,7 +46,10 @@ export default makeStyles(theme => ({
     marginRight: 0
   },
   listItemText: {
-    color: theme.palette.grey[800]
+    color: theme.palette.grey[800],
+    '&.primary-text': {
+      color: theme.palette.primary.main
+    }
   },
   nested: {
     paddingLeft: 24 + theme.spacing(1)

@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
@@ -24,7 +25,12 @@ const SidebarItem = ({ item, pathname, classes }) => {
       >
         <ListItemIcon className={classes.listItemIcon}>{item.icon()}</ListItemIcon>
         <ListItemText inset disableTypography>
-          <Typography className={classes.listItemText} variant="body2">
+          <Typography
+            className={
+              item.specialText ? clsx(classes.listItemText, 'primary-text') : classes.listItemText
+            }
+            variant="body2"
+          >
             {t(item.displayName)}
           </Typography>
         </ListItemText>

@@ -4,6 +4,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import ClassIcon from '@material-ui/icons/Group';
 import SettingsIcon from '@material-ui/icons/Settings';
 import StudySetsIcon from '@material-ui/icons/ViewAgenda';
+import CreateStudySetIcon from '@material-ui/icons/AddToPhotos';
 
 import appRoutes from '../../../routers/appRoutes';
 
@@ -19,16 +20,29 @@ export default [
         icon: () => <DashboardIcon />
       },
       {
+        path: appRoutes.Settings.url,
+        codeName: 'settings',
+        displayName: 'Settings',
+        icon: () => <SettingsIcon />
+      }
+    ]
+  },
+  {
+    sectionId: 'studySets',
+    sectionDisplayName: 'STUDY SETS',
+    items: [
+      {
         path: appRoutes.StudySets.url,
         codeName: 'studySets',
         displayName: 'Your Study Sets',
         icon: () => <StudySetsIcon />
       },
       {
-        path: appRoutes.Settings.url,
-        codeName: 'settings',
-        displayName: 'Settings',
-        icon: () => <SettingsIcon />
+        path: appRoutes.CreateStudySet.url,
+        codeName: 'createStudySets',
+        displayName: 'Create a new study set',
+        icon: () => <CreateStudySetIcon />,
+        specialText: true
       }
     ]
   },
