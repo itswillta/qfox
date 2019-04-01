@@ -157,4 +157,50 @@ class ClassController extends Controller
 
         return response()->noContent(Response::HTTP_OK);
     }
+
+    public function removeMembers(Request $request, $user_id, $class_id)
+    {
+        $validator = Validator::make($request->all(), [
+            'userIds' => 'required|array',
+            'userIds.*' => 'integer'
+        ]);
+
+        if ($validator->fails()) {
+            $details = ResponseFormatter::flattenValidatorErrors($validator);
+
+            return response()->json([
+                'error' => [
+                    'code' => Response::HTTP_BAD_REQUEST,
+                    'message' => 'Failed to add study set to class. Please check your study set information.',
+                    'details' => (object)$details
+                ]
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        // FIXME use first() instead of get()
+        $user_class = DB::table('user_classes')->where([
+            ['class_id', '=', $class_id],
+            ['role', '=', ClassRole::OWNER]
+        ])->get();
+        $owner_id = $user_class[0]->user_id;
+
+        foreach ($request->userIds as $userId) {
+            if ($owner_id === $userId) {
+                return response()->json([
+                    'error' => [
+                        'code' => Response::HTTP_BAD_REQUEST,
+                        'message' => 'Failed to remove members from class. Please check your member information.',
+                        'details' => [
+                            'userId' => 'User with id ' . $userId . ' is the owner.'
+                        ]
+                    ]
+                ], Response::HTTP_BAD_REQUEST);
+            }
+        }
+
+        $class = StudyClass::findOrFail($class_id);
+        $class->users()->detach($request->userIds);
+
+        return response()->noContent(Response::HTTP_OK);
+    }
 }
