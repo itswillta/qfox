@@ -21,7 +21,7 @@ Route::group([
     Route::post('register', 'Auth\RegisterController@register');
 });
 
-Route::group(['middleware' => ['api', 'jwt.verify']], function () {
+Route::group(['middleware' => ['api', 'jwt.auth']], function () {
     Route::group(['prefix' => 'users'], function () {
         Route::put('/{user_id}', 'UserController@update');
     });

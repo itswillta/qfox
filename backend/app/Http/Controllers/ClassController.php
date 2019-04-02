@@ -35,10 +35,7 @@ class ClassController extends Controller
             $class->users()->attach($user_id, ['role' => ClassRole::OWNER]);
         });
 
-        return response()->json([
-            'message' => 'Successfully created class.',
-            'details' => $class
-        ], Response::HTTP_CREATED);
+        return response()->noContent(Response::HTTP_CREATED);
     }
 
     public function update(Request $request, $user_id, $class_id)
@@ -51,12 +48,9 @@ class ClassController extends Controller
 
         $class = StudyClass::findOrFail($class_id);
 
-        $is_anything_updated = ResourceUpdater::update($request, $class);
+        $is_anything_updated = ResourceUpdater::update($request->all(), $class);
 
-        return response()->json([
-            'message' => $is_anything_updated ? 'Successfully updated class.' : 'There is nothing to update.',
-            "details" => $class
-        ]);
+        return response()->noContent($is_anything_updated ? Response::HTTP_OK : Response::HTTP_NOT_MODIFIED);
     }
 
     public function addStudySet(Request $request, $user_id, $class_id)
@@ -68,7 +62,7 @@ class ClassController extends Controller
         $class = StudyClass::findOrFail($class_id);
         $class->studySets()->attach($request->studySetId);
 
-        return response()->noContent(Response::HTTP_OK);
+        return response()->noContent(Response::HTTP_CREATED);
     }
 
     public function delete($user_id, $class_id)
@@ -88,7 +82,7 @@ class ClassController extends Controller
         $class = StudyClass::findOrFail($class_id);
         $class->users()->attach($request->userId, ['role' => ClassRole::MEMBER]);
 
-        return response()->noContent(Response::HTTP_OK);
+        return response()->noContent(Response::HTTP_CREATED);
     }
 
     public function removeMembers(Request $request, $user_id, $class_id)
@@ -99,20 +93,19 @@ class ClassController extends Controller
         ]);
 
         // FIXME use first() instead of get()
-        $user_class = DB::table('user_classes')->where([
+        $owner_id = DB::table('user_classes')->where([
             ['class_id', '=', $class_id],
             ['role', '=', ClassRole::OWNER]
-        ])->get();
-        $owner_id = $user_class[0]->user_id;
+        ])->get()[0]->user_id;
 
-        foreach ($request->userIds as $userId) {
-            if ($owner_id === $userId) {
+        foreach ($request->userIds as $user_id_to_delete) {
+            if ($owner_id === $user_id_to_delete) {
                 return response()->json([
                     'error' => [
                         'code' => Response::HTTP_BAD_REQUEST,
                         'message' => 'Failed to remove members from class. Please check your member information.',
                         'details' => [
-                            'userId' => 'User with id ' . $userId . ' is the owner.'
+                            'userId' => 'User with id ' . $user_id_to_delete . ' is the owner.'
                         ]
                     ]
                 ], Response::HTTP_BAD_REQUEST);

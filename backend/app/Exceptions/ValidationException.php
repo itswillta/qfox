@@ -38,12 +38,10 @@ class ValidationException extends Exception
      */
     public function render()
     {
-        return response()->json(
-            ApiErrorResponse::generate(
-                Response::HTTP_BAD_REQUEST,
-                $this->getMessage(),
-                ResponseFormatter::flattenValidationErrors(($this->errors))
-            ), Response::HTTP_BAD_REQUEST
-        );
+        return response()->json(ApiErrorResponse::generate(
+            Response::HTTP_BAD_REQUEST,
+            $this->getMessage(),
+            ResponseFormatter::flattenValidationErrors(($this->errors))
+        ), Response::HTTP_BAD_REQUEST);
     }
 }
