@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\ApiErrorResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -11,6 +12,8 @@ use App\Services\RequestValidator;
 
 class LoginController extends Controller
 {
+    const TIME_TO_LIVE = 1440; // 1440 minutes = 1 day
+
     public function login(Request $request)
     {
         RequestValidator::validateOrFail($request->all(), [
@@ -24,42 +27,32 @@ class LoginController extends Controller
         $user = User::where('username', '=', $username)->first();
 
         if (!$user) {
-            return response()->json([
-                "error" => [
-                    "code" => Response::HTTP_BAD_REQUEST,
-                    "message" => 'Authentication failed. Please check your credentials.',
-                    "details" => [
-                        "username" => "Username doesn't exist."
-                    ]
-                ]
-            ], Response::HTTP_BAD_REQUEST);
+            return response()->json(
+                ApiErrorResponse::generate(
+                    Response::HTTP_BAD_REQUEST,
+                    'Authentication failed. Please check your credentials.',
+                    ['username' => "Username doesn't exist."]
+                ), Response::HTTP_BAD_REQUEST
+            );
         }
 
         if (!Hash::check($password, $user->password)) {
-            return response()->json([
-                "error" => [
-                    "code" => Response::HTTP_BAD_REQUEST,
-                    "message" => 'Authentication failed. Please check your credentials.',
-                    "details" => [
-                        "password" => "Password incorrect."
-                    ]
-                ]
-            ], Response::HTTP_BAD_REQUEST);
+            return response()->json(
+                ApiErrorResponse::generate(
+                    Response::HTTP_BAD_REQUEST,
+                    'Authentication failed. Please check your credentials.',
+                    ['password' => 'Password incorrect.']
+                ), Response::HTTP_BAD_REQUEST
+            );
         }
 
-        $userProfile = [
-            'id' => $user->id,
-            'name' => $user->name,
-            'language' => $user->language,
-            'profilePictureUrl' => $user->profile_picture_url
-        ];
-
-        $token = auth()->claims(['userProfile' => $userProfile])->login($user);
+        $token = auth()->login($user);
+        auth()->factory()->setTTL(self::TIME_TO_LIVE);
         $ttl = auth()->factory()->getTTL() * 60;
 
         return response()->json([
             'authToken' => $token,
-            'expires' => $ttl
+            'expiresIn' => $ttl
         ], Response::HTTP_OK);
     }
 }
