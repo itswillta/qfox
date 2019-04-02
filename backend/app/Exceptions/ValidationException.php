@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Http\ApiErrorResponse;
 use Exception;
 use App\Helpers\ResponseFormatter;
 use Illuminate\Support\Facades\Log;
@@ -37,14 +38,12 @@ class ValidationException extends Exception
      */
     public function render()
     {
-        ResponseFormatter::flattenValidationErrors($this->errors);
-
-        return response()->json([
-            'error' => [
-                'code' => Response::HTTP_BAD_REQUEST,
-                'message' => $this->getMessage(),
-                'details' => (object)ResponseFormatter::flattenValidationErrors($this->errors)
-            ]
-        ], Response::HTTP_BAD_REQUEST);
+        return response()->json(
+            ApiErrorResponse::generate(
+                Response::HTTP_BAD_REQUEST,
+                $this->getMessage(),
+                ResponseFormatter::flattenValidationErrors(($this->errors))
+            ), Response::HTTP_BAD_REQUEST
+        );
     }
 }

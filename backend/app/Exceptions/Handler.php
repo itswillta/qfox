@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Http\ApiErrorResponse;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
@@ -32,8 +33,9 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Exception $exception
+     * @param Exception $exception
      * @return void
+     * @throws Exception
      */
     public function report(Exception $exception)
     {
@@ -43,8 +45,8 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Exception $exception
+     * @param \Illuminate\Http\Request $request
+     * @param Exception $exception
      * @return \Illuminate\Http\JsonResponse
      */
     public function render($request, Exception $exception)
@@ -54,47 +56,47 @@ class Handler extends ExceptionHandler
         }
 
         if ($exception instanceof ModelNotFoundException) {
-            return response()->json([
-                'error' => [
-                    'code' => Response::HTTP_NOT_FOUND,
-                    'message' => 'We could not find the requested resource(s).',
-                    'details' => [
+            return response()->json(
+                ApiErrorResponse::generate(
+                    Response::HTTP_NOT_FOUND,
+                    'We could not find the requested resource(s).',
+                    [
                         'code' => $exception->getMessage(),
                         'model' => $exception->getModel(),
                         'id' => $exception->getIds()[0]
                     ]
-                ]
-            ], Response::HTTP_NOT_FOUND);
+                ), Response::HTTP_NOT_FOUND
+            );
         }
 
         if ($exception instanceof QueryException) {
             if (strpos($exception->getMessage(), 'Integrity constraint violation: 1452')) {
-                return response()->json([
-                    'error' => [
-                        'code' => Response::HTTP_NOT_FOUND,
-                        'message' => $exception->getMessage(),
-                        'details' => [
+                return response()->json(
+                    ApiErrorResponse::generate(
+                        Response::HTTP_NOT_FOUND,
+                        $exception->getMessage(),
+                        [
                             'code' => $exception->getCode(),
                             'sql' => $exception->getSql(),
                             'bindings' => $exception->getBindings()
                         ]
-                    ]
-                ], Response::HTTP_NOT_FOUND);
+                    ), Response::HTTP_NOT_FOUND
+                );
             }
         }
 
-        return response()->json([
-            'error' => [
-                'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => 'Something went wrong on our side unexpectedly.',
-                'details' => [
+        return response()->json(
+            ApiErrorResponse::generate(
+                Response::HTTP_INTERNAL_SERVER_ERROR,
+                'Something went wrong on our side unexpectedly.',
+                [
                     'code' => $exception->getCode(),
                     'message' => $exception->getMessage(),
                     'type' => get_class($exception),
                     'file' => $exception->getFile(),
                     'trace' => $exception->getTraceAsString()
                 ]
-            ]
-        ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            ), Response::HTTP_INTERNAL_SERVER_ERROR
+        );
     }
 }

@@ -6,6 +6,16 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+/**
+ * Class User
+ * @package App
+ * @property int $id
+ * @property string $username
+ * @property string $name
+ * @property string $password
+ * @property string $profile_picture_url
+ * @property \App\Enums\SupportedLanguages $language
+ */
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
@@ -86,6 +96,13 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getJWTCustomClaims()
     {
-        return [];
+        $userProfile = [
+            'id' => $this->id,
+            'name' => $this->name,
+            'language' => $this->language,
+            'profilePictureUrl' => $this->profile_picture_url
+        ];
+
+        return ['userProfile' => $userProfile];
     }
 }
