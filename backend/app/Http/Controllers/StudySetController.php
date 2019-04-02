@@ -6,18 +6,16 @@ use App\Enums\StudySetRole;
 use App\StudySet;
 use App\Enums\StudySetPermission;
 use Illuminate\Http\Request;
-use App\Helpers\ResponseFormatter;
-use App\User;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use App\Helpers\RequestValidator;
 use DB;
 
 class StudySetController extends Controller
 {
     public function create(Request $request, $user_id)
     {
-        $validator = Validator::make($request->all(), [
+        RequestValidator::validate($request->all(), [
             'title' => 'required|string',
             'viewPermission' => [
                 'required',
@@ -28,18 +26,6 @@ class StudySetController extends Controller
                 Rule::in(StudySetPermission::$edit_permission)
             ]
         ]);
-
-        if ($validator->fails()) {
-            $details = ResponseFormatter::flattenValidatorErrors($validator);
-
-            return response()->json([
-                'error' => [
-                    'code' => Response::HTTP_BAD_REQUEST,
-                    'message' => 'Failed to create study set. Please check your study set information.',
-                    'details' => (object)$details
-                ]
-            ], Response::HTTP_BAD_REQUEST);
-        }
 
         $study_set = new StudySet();
         $study_set->title = $request->title;
@@ -59,7 +45,7 @@ class StudySetController extends Controller
 
     public function update(Request $request, $study_set_id)
     {
-        $validator = Validator::make($request->all(), [
+        RequestValidator::validate($request->all(), [
             'title' => 'string',
             'viewPermission' => [
                 Rule::in(StudySetPermission::$view_permission)
@@ -68,18 +54,6 @@ class StudySetController extends Controller
                 Rule::in(StudySetPermission::$edit_permission)
             ]
         ]);
-
-        if ($validator->fails()) {
-            $details = ResponseFormatter::flattenValidatorErrors($validator);
-
-            return response()->json([
-                'error' => [
-                    'code' => Response::HTTP_BAD_REQUEST,
-                    'message' => 'Failed to update study set. Please check your study set information.',
-                    'details' => (object)$details
-                ]
-            ], Response::HTTP_BAD_REQUEST);
-        }
 
         $study_set = StudySet::findOrFail($study_set_id);
         $is_anything_updated = false;

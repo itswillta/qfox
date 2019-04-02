@@ -2,34 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\ResponseFormatter;
 use App\StudySet;
 use App\Term;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Validator;
+use App\Helpers\RequestValidator;
 use DB;
 
 class TermController extends Controller
 {
     public function create(Request $request, $study_set_id)
     {
-        $validator = Validator::make($request->all(), [
+        RequestValidator::validate($request->all(), [
             'term' => 'required|string',
             'definition' => 'required|string'
         ]);
-
-        if ($validator->fails()) {
-            $details = ResponseFormatter::flattenValidatorErrors($validator);
-
-            return response()->json([
-                'error' => [
-                    'code' => Response::HTTP_BAD_REQUEST,
-                    'message' => 'Failed to create term. Please check your term information.',
-                    'details' => (object)$details
-                ]
-            ], Response::HTTP_BAD_REQUEST);
-        }
 
         $term = new Term();
 
@@ -51,23 +38,11 @@ class TermController extends Controller
 
     public function update(Request $request, $term_id)
     {
-        $validator = Validator::make($request->all(), [
+        RequestValidator::validate($request->all(), [
             'term' => 'string',
             'definition' => 'string',
             'is_starred' => 'boolean'
         ]);
-
-        if ($validator->fails()) {
-            $details = ResponseFormatter::flattenValidatorErrors($validator);
-
-            return response()->json([
-                'error' => [
-                    'code' => Response::HTTP_BAD_REQUEST,
-                    'message' => 'Failed to update term. Please check your term information.',
-                    'details' => (object)$details
-                ]
-            ], Response::HTTP_BAD_REQUEST);
-        }
 
         $term = Term::findOrFail($term_id);
 

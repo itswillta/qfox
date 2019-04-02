@@ -2,14 +2,12 @@
 
 namespace App\Helpers;
 
-use Illuminate\Contracts\Validation\Validator;
-
 class ResponseFormatter
 {
-    public static function flattenValidatorErrors(Validator $validator)
+    public static function flattenValidationErrors($errors)
     {
         $details = [];
-        foreach ($validator->errors()->toArray() as $field => $value) {
+        foreach ($errors->toArray() as $field => $value) {
             $details[$field] = $value[0];
         }
 

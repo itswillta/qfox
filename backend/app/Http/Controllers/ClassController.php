@@ -4,19 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Enums\ClassPermission;
 use App\Enums\ClassRole;
-use App\Helpers\ResponseFormatter;
+use App\Helpers\RequestValidator;
 use App\StudyClass;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class ClassController extends Controller
 {
     public function create(Request $request, $user_id)
     {
-        $validator = Validator::make($request->all(), [
+        RequestValidator::validate($request->all(), [
             'name' => 'required|string',
             'description' => 'string',
             'permission' => [
@@ -24,18 +23,6 @@ class ClassController extends Controller
                 Rule::in(ClassPermission::$type)
             ]
         ]);
-
-        if ($validator->fails()) {
-            $details = ResponseFormatter::flattenValidatorErrors($validator);
-
-            return response()->json([
-                'error' => [
-                    'code' => Response::HTTP_BAD_REQUEST,
-                    'message' => 'Failed to create class. Please check your class information.',
-                    'details' => (object)$details
-                ]
-            ], Response::HTTP_BAD_REQUEST);
-        }
 
         $class = new StudyClass();
         $class->name = $request->name;
@@ -55,23 +42,11 @@ class ClassController extends Controller
 
     public function update(Request $request, $user_id, $class_id)
     {
-        $validator = Validator::make($request->all(), [
+        RequestValidator::validate($request->all(), [
             'name' => 'string',
             'description' => 'string',
             'permission' => Rule::in(ClassPermission::$type)
         ]);
-
-        if ($validator->fails()) {
-            $details = ResponseFormatter::flattenValidatorErrors($validator);
-
-            return response()->json([
-                'error' => [
-                    'code' => Response::HTTP_BAD_REQUEST,
-                    'message' => 'Failed to edit class. Please check your class information.',
-                    'details' => (object)$details
-                ]
-            ], Response::HTTP_BAD_REQUEST);
-        }
 
         $class = StudyClass::findOrFail($class_id);
 
@@ -104,21 +79,9 @@ class ClassController extends Controller
 
     public function addStudySet(Request $request, $user_id, $class_id)
     {
-        $validator = Validator::make($request->all(), [
+        RequestValidator::validate($request->all(), [
             'studySetId' => 'required|integer',
         ]);
-
-        if ($validator->fails()) {
-            $details = ResponseFormatter::flattenValidatorErrors($validator);
-
-            return response()->json([
-                'error' => [
-                    'code' => Response::HTTP_BAD_REQUEST,
-                    'message' => 'Failed to add study set to class. Please check your study set information.',
-                    'details' => (object)$details
-                ]
-            ], Response::HTTP_BAD_REQUEST);
-        }
 
         $class = StudyClass::findOrFail($class_id);
         $class->studySets()->attach($request->studySetId);
@@ -136,21 +99,9 @@ class ClassController extends Controller
 
     public function addMember(Request $request, $user_id, $class_id)
     {
-        $validator = Validator::make($request->all(), [
+        RequestValidator::validate($request->all(), [
             'userId' => 'required|integer',
         ]);
-
-        if ($validator->fails()) {
-            $details = ResponseFormatter::flattenValidatorErrors($validator);
-
-            return response()->json([
-                'error' => [
-                    'code' => Response::HTTP_BAD_REQUEST,
-                    'message' => 'Failed to add study set to class. Please check your study set information.',
-                    'details' => (object)$details
-                ]
-            ], Response::HTTP_BAD_REQUEST);
-        }
 
         $class = StudyClass::findOrFail($class_id);
         $class->users()->attach($request->userId, ['role' => ClassRole::MEMBER]);
@@ -160,22 +111,10 @@ class ClassController extends Controller
 
     public function removeMembers(Request $request, $user_id, $class_id)
     {
-        $validator = Validator::make($request->all(), [
+        RequestValidator::validate($request->all(), [
             'userIds' => 'required|array',
             'userIds.*' => 'integer'
         ]);
-
-        if ($validator->fails()) {
-            $details = ResponseFormatter::flattenValidatorErrors($validator);
-
-            return response()->json([
-                'error' => [
-                    'code' => Response::HTTP_BAD_REQUEST,
-                    'message' => 'Failed to remove members from class. Please check your member information.',
-                    'details' => (object)$details
-                ]
-            ], Response::HTTP_BAD_REQUEST);
-        }
 
         // FIXME use first() instead of get()
         $user_class = DB::table('user_classes')->where([
@@ -206,22 +145,10 @@ class ClassController extends Controller
 
     public function removeStudySets(Request $request, $user_id, $class_id)
     {
-        $validator = Validator::make($request->all(), [
+        RequestValidator::validate($request->all(), [
             'studySetIds' => 'required|array',
             'studySetIds.*' => 'integer'
         ]);
-
-        if ($validator->fails()) {
-            $details = ResponseFormatter::flattenValidatorErrors($validator);
-
-            return response()->json([
-                'error' => [
-                    'code' => Response::HTTP_BAD_REQUEST,
-                    'message' => 'Failed to remove study sets from class. Please check your study set information.',
-                    'details' => (object)$details
-                ]
-            ], Response::HTTP_BAD_REQUEST);
-        }
 
         $class = StudyClass::findOrFail($class_id);
         $class->studySets()->detach($request->studySetIds);
