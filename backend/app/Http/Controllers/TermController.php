@@ -6,14 +6,15 @@ use App\StudySet;
 use App\Term;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Helpers\RequestValidator;
+use App\Services\RequestValidator;
+use App\Services\ResourceUpdater;
 use DB;
 
 class TermController extends Controller
 {
     public function create(Request $request, $study_set_id)
     {
-        RequestValidator::validate($request->all(), [
+        RequestValidator::validateOrFail($request->all(), [
             'term' => 'required|string',
             'definition' => 'required|string'
         ]);
@@ -38,7 +39,7 @@ class TermController extends Controller
 
     public function update(Request $request, $term_id)
     {
-        RequestValidator::validate($request->all(), [
+        RequestValidator::validateOrFail($request->all(), [
             'term' => 'string',
             'definition' => 'string',
             'is_starred' => 'boolean'
@@ -46,23 +47,11 @@ class TermController extends Controller
 
         $term = Term::findOrFail($term_id);
 
-        if ($request->term) {
-            $term->term = $request->term;
-        }
-
-        if ($request->definition) {
-            $term->definition = $request->definition;
-        }
-
-        if ($request->is_starred) {
-            $term->is_starred = $request->is_starred;
-        }
-
-        $term->save();
+        $is_anything_updated = ResourceUpdater::update($request, $term);
 
         return response()->json([
             'code' => Response::HTTP_OK,
-            'message' => 'Successfully updated term.',
+            'message' => $is_anything_updated ? 'Successfully updated term.' : 'There is nothing to update.',
             'details' => $term
         ]);
 

@@ -9,14 +9,14 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Http\Response;
 use Intervention\Image\Facades\Image;
 use Illuminate\Validation\Rule;
-use App\Helpers\RequestValidator;
+use App\Services\RequestValidator;
 
 class UserController extends Controller
 {
     public function update(Request $request, $user_id)
     {
         // FIXME: Need to confirm with frontend
-        RequestValidator::validate($request->all(), [
+        RequestValidator::validateOrFail($request->all(), [
             'profile_picture_data' => 'image|mimes:jpeg,png,jpg,gif,svg',
             'name' => 'between:4,30',
             'language' => Rule::in(SupportedLanguages::$type)

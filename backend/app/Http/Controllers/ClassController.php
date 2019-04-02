@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Enums\ClassPermission;
 use App\Enums\ClassRole;
-use App\Helpers\RequestValidator;
+use App\Services\RequestValidator;
+use App\Services\ResourceUpdater;
 use App\StudyClass;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -15,7 +16,7 @@ class ClassController extends Controller
 {
     public function create(Request $request, $user_id)
     {
-        RequestValidator::validate($request->all(), [
+        RequestValidator::validateOrFail($request->all(), [
             'name' => 'required|string',
             'description' => 'string',
             'permission' => [
@@ -42,7 +43,7 @@ class ClassController extends Controller
 
     public function update(Request $request, $user_id, $class_id)
     {
-        RequestValidator::validate($request->all(), [
+        RequestValidator::validateOrFail($request->all(), [
             'name' => 'string',
             'description' => 'string',
             'permission' => Rule::in(ClassPermission::$type)
@@ -50,36 +51,17 @@ class ClassController extends Controller
 
         $class = StudyClass::findOrFail($class_id);
 
-        $is_anything_updated = false;
-
-        if ($request->name) {
-            $is_anything_updated = true;
-            $class->name = $request->name;
-        }
-
-        if ($request->description) {
-            $is_anything_updated = true;
-            $class->description = $request->description;
-        }
-
-        if ($request->permission) {
-            $is_anything_updated = true;
-            $class->permission = $request->permission;
-        }
-
-        if ($is_anything_updated) {
-            $class->save();
-        }
+        $is_anything_updated = ResourceUpdater::update($request, $class);
 
         return response()->json([
-            'message' => $is_anything_updated ? 'Successfully edited class.' : 'There is nothing to update.',
+            'message' => $is_anything_updated ? 'Successfully updated class.' : 'There is nothing to update.',
             "details" => $class
         ]);
     }
 
     public function addStudySet(Request $request, $user_id, $class_id)
     {
-        RequestValidator::validate($request->all(), [
+        RequestValidator::validateOrFail($request->all(), [
             'studySetId' => 'required|integer',
         ]);
 
@@ -99,7 +81,7 @@ class ClassController extends Controller
 
     public function addMember(Request $request, $user_id, $class_id)
     {
-        RequestValidator::validate($request->all(), [
+        RequestValidator::validateOrFail($request->all(), [
             'userId' => 'required|integer',
         ]);
 
@@ -111,7 +93,7 @@ class ClassController extends Controller
 
     public function removeMembers(Request $request, $user_id, $class_id)
     {
-        RequestValidator::validate($request->all(), [
+        RequestValidator::validateOrFail($request->all(), [
             'userIds' => 'required|array',
             'userIds.*' => 'integer'
         ]);
@@ -145,7 +127,7 @@ class ClassController extends Controller
 
     public function removeStudySets(Request $request, $user_id, $class_id)
     {
-        RequestValidator::validate($request->all(), [
+        RequestValidator::validateOrFail($request->all(), [
             'studySetIds' => 'required|array',
             'studySetIds.*' => 'integer'
         ]);

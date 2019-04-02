@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Helpers\ResponseFormatter;
+use App\Services\ResponseFormatter;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Helpers\RequestValidator;
+use App\Services\RequestValidator;
 
 class RegisterController extends Controller
 {
@@ -35,7 +35,7 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-        RequestValidator::validate($request->all(),
+        RequestValidator::validateOrFail($request->all(),
             [
                 'username' => 'unique:users|required|string|between:6,15',
                 'name' => 'required|string|between:4,30',
