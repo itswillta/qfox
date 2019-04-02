@@ -8,14 +8,15 @@ use App\Enums\StudySetPermission;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
-use App\Helpers\RequestValidator;
+use App\Services\RequestValidator;
+use App\Services\ResourceUpdater;
 use DB;
 
 class StudySetController extends Controller
 {
     public function create(Request $request, $user_id)
     {
-        RequestValidator::validate($request->all(), [
+        RequestValidator::validateOrFail($request->all(), [
             'title' => 'required|string',
             'viewPermission' => [
                 'required',
@@ -45,7 +46,7 @@ class StudySetController extends Controller
 
     public function update(Request $request, $study_set_id)
     {
-        RequestValidator::validate($request->all(), [
+        RequestValidator::validateOrFail($request->all(), [
             'title' => 'string',
             'viewPermission' => [
                 Rule::in(StudySetPermission::$view_permission)
@@ -56,29 +57,11 @@ class StudySetController extends Controller
         ]);
 
         $study_set = StudySet::findOrFail($study_set_id);
-        $is_anything_updated = false;
 
-        if ($request->title && $study_set->title !== $request->title) {
-            $is_anything_updated = true;
-            $study_set->title = $request->title;
-        }
-
-        if ($request->viewPermission && $study_set->view_permission !== $request->viewPermission) {
-            $is_anything_updated = true;
-            $study_set->view_permission = $request->viewPermission;
-        }
-
-        if ($request->editPermission && $study_set->edit_permission !== $request->editPermission) {
-            $is_anything_updated = true;
-            $study_set->edit_permission = $request->editPermission;
-        }
-
-        if ($is_anything_updated) {
-            $study_set->save();
-        }
+        $is_anything_updated = ResourceUpdater::update($request, $study_set);
 
         return response()->json([
-            'message' => $is_anything_updated ? 'Successfully update study set.' : 'There is nothing to update.',
+            'message' => $is_anything_updated ? 'Successfully updated study set.' : 'There is nothing to update.',
             "details" => $study_set
         ]);
     }
