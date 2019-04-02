@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\SupportedLanguages;
+use App\Services\ResourceUpdater;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -40,23 +41,8 @@ class UserController extends Controller
             $user->profile_picture_url = 'http://localhost/images/' . $filename;
         }
 
-        if ($request->name) {
-            $is_anything_updated = true;
-            $user->name = $request->name;
-        }
+        $is_anything_updated = ResourceUpdater::update($request->only('name', 'language'), $user) || $is_anything_updated;
 
-        if ($request->language) {
-            $is_anything_updated = true;
-            $user->language = $request->language;
-        }
-
-        if ($is_anything_updated) {
-            $user->save();
-        }
-
-        return response()->json([
-            "message" => $is_anything_updated ? 'Successfully updated user profile.' : 'There is nothing to update.',
-            "details" => $user
-        ], Response::HTTP_OK);
+        return response()->noContent($is_anything_updated ? Response::HTTP_OK : Response::HTTP_NOT_MODIFIED);
     }
 }

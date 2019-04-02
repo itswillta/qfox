@@ -31,10 +31,7 @@ class TermController extends Controller
             $term->save();
         });
 
-        return response()->json([
-            'message' => 'Successfully created term.',
-            'details' => $term
-        ], Response::HTTP_CREATED);
+        return response()->noContent(Response::HTTP_CREATED);
     }
 
     public function update(Request $request, $term_id)
@@ -47,14 +44,9 @@ class TermController extends Controller
 
         $term = Term::findOrFail($term_id);
 
-        $is_anything_updated = ResourceUpdater::update($request, $term);
+        $is_anything_updated = ResourceUpdater::update($request->all(), $term);
 
-        return response()->json([
-            'code' => Response::HTTP_OK,
-            'message' => $is_anything_updated ? 'Successfully updated term.' : 'There is nothing to update.',
-            'details' => $term
-        ]);
-
+        return response()->noContent($is_anything_updated ? Response::HTTP_OK : Response::HTTP_NOT_MODIFIED);
     }
 
     public function delete($study_set_id, $term_id)

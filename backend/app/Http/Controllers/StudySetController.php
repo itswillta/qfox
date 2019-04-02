@@ -38,10 +38,7 @@ class StudySetController extends Controller
             $study_set->users()->attach($user_id, ['role' => StudySetRole::OWNER]);
         });
 
-        return response()->json([
-            'message' => 'Successfully created study set.',
-            'details' => $study_set
-        ], Response::HTTP_CREATED);
+        return response()->noContent(Response::HTTP_CREATED);
     }
 
     public function update(Request $request, $study_set_id)
@@ -58,12 +55,9 @@ class StudySetController extends Controller
 
         $study_set = StudySet::findOrFail($study_set_id);
 
-        $is_anything_updated = ResourceUpdater::update($request, $study_set);
+        $is_anything_updated = ResourceUpdater::update($request->all(), $study_set);
 
-        return response()->json([
-            'message' => $is_anything_updated ? 'Successfully updated study set.' : 'There is nothing to update.',
-            "details" => $study_set
-        ]);
+        return response()->noContent($is_anything_updated ? Response::HTTP_OK : Response::HTTP_NOT_MODIFIED);
     }
 
     public function delete($user_id, $study_set_id)

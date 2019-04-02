@@ -4,6 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class StudyClass
+ * @package App
+ * @property int $id
+ * @property string $name
+ * @property string $description
+ * @property \App\Enums\ClassPermission $permission
+ */
 class StudyClass extends Model
 {
     /**
