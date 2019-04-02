@@ -7,13 +7,19 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Helpers\RequestValidator;
 
 class LoginController extends Controller
 {
     public function login(Request $request)
     {
-        $username = $request->input('username');
-        $password = $request->input('password');
+        RequestValidator::validate($request->all(), [
+            'username' => 'required|string',
+            'password' => 'required|string'
+        ]);
+
+        $username = $request->username;
+        $password = $request->password;
 
         $user = User::where('username', '=', $username)->first();
 

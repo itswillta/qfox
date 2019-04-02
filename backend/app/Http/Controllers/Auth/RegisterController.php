@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Helpers\RequestValidator;
 
 class RegisterController extends Controller
 {
@@ -34,7 +35,7 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(),
+        RequestValidator::validate($request->all(),
             [
                 'username' => 'unique:users|required|string|between:6,15',
                 'name' => 'required|string|between:4,30',
@@ -44,18 +45,6 @@ class RegisterController extends Controller
                 'username.unique' => 'Username already exists.'
             ]
         );
-
-        if ($validator->fails()) {
-            $details = ResponseFormatter::flattenValidatorErrors($validator);
-
-            return response()->json([
-                'error' => [
-                    "code" => Response::HTTP_BAD_REQUEST,
-                    "message" => 'Registration failed. Please check your registration information.',
-                    "details" => (object)$details
-                ]
-            ], Response::HTTP_BAD_REQUEST);
-        }
 
         $user = new User();
         $user->username = $request->username;

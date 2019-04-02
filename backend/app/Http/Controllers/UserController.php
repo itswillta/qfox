@@ -3,37 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Enums\SupportedLanguages;
-use App\Helpers\ResponseFormatter;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response;
 use Intervention\Image\Facades\Image;
 use Illuminate\Validation\Rule;
+use App\Helpers\RequestValidator;
 
 class UserController extends Controller
 {
     public function update(Request $request, $user_id)
     {
         // FIXME: Need to confirm with frontend
-        $validator = Validator::make($request->all(), [
+        RequestValidator::validate($request->all(), [
             'profile_picture_data' => 'image|mimes:jpeg,png,jpg,gif,svg',
             'name' => 'between:4,30',
             'language' => Rule::in(SupportedLanguages::$type)
         ]);
-
-        if ($validator->fails()) {
-            $details = ResponseFormatter::flattenValidatorErrors($validator);
-
-            return response()->json([
-                'error' => [
-                    'code' => Response::HTTP_BAD_REQUEST,
-                    'message' => 'Failed to update user profile. Please check your user information.',
-                    'details' => (object)$details
-                ]
-            ], Response::HTTP_BAD_REQUEST);
-        }
 
         $user = User::findOrFail($user_id);
 
