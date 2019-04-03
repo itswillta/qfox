@@ -42,8 +42,8 @@ class LoginController extends Controller
             ), Response::HTTP_BAD_REQUEST);
         }
 
-        $token = auth()->login($user);
         auth()->factory()->setTTL(self::TIME_TO_LIVE);
+        $token = auth()->login($user);
         $ttl = auth()->factory()->getTTL() * 60;
 
         return response()->json([

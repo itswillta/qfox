@@ -83,6 +83,10 @@ class Handler extends ExceptionHandler
             ), Response::HTTP_UNAUTHORIZED);
         }
 
+        if ($exception instanceof WrongUserPermissionException) {
+            return $exception->render();
+        }
+
         if ($exception instanceof ValidationException) {
             return $exception->render();
         }
