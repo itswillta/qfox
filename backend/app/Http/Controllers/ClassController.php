@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Enums\ClassPermission;
 use App\Enums\ClassRole;
+use App\Http\ApiErrorResponse;
 use App\Services\RequestValidator;
 use App\Services\ResourceUpdater;
+use App\Services\StudyClass\ClassOwnerService;
 use App\StudyClass;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -60,6 +62,7 @@ class ClassController extends Controller
         ]);
 
         $class = StudyClass::findOrFail($class_id);
+
         $class->studySets()->attach($request->studySetId);
 
         return response()->noContent(Response::HTTP_CREATED);
@@ -68,6 +71,7 @@ class ClassController extends Controller
     public function delete($user_id, $class_id)
     {
         $class = StudyClass::findOrFail($class_id);
+
         $class->delete();
 
         return response()->noContent(Response::HTTP_OK);
@@ -80,6 +84,7 @@ class ClassController extends Controller
         ]);
 
         $class = StudyClass::findOrFail($class_id);
+
         $class->users()->attach($request->userId, ['role' => ClassRole::MEMBER]);
 
         return response()->noContent(Response::HTTP_CREATED);
@@ -92,23 +97,17 @@ class ClassController extends Controller
             'userIds.*' => 'integer'
         ]);
 
-        // FIXME use first() instead of get()
-        $owner_id = DB::table('user_classes')->where([
-            ['class_id', '=', $class_id],
-            ['role', '=', ClassRole::OWNER]
-        ])->get()[0]->user_id;
+        $class_owner_id = ClassOwnerService::getOwnerId($class_id);
 
         foreach ($request->userIds as $user_id_to_delete) {
-            if ($owner_id === $user_id_to_delete) {
-                return response()->json([
-                    'error' => [
-                        'code' => Response::HTTP_BAD_REQUEST,
-                        'message' => 'Failed to remove members from class. Please check your member information.',
-                        'details' => [
-                            'userId' => 'User with id ' . $user_id_to_delete . ' is the owner.'
-                        ]
+            if ($class_owner_id === $user_id_to_delete) {
+                return response()->json(ApiErrorResponse::generate(
+                    Response::HTTP_BAD_REQUEST,
+                    'Failed to remove members from class. Please check your member information.',
+                    [
+                        'userId' => 'User with id ' . $user_id_to_delete . ' is the owner.'
                     ]
-                ], Response::HTTP_BAD_REQUEST);
+                ), Response::HTTP_BAD_REQUEST);
             }
         }
 

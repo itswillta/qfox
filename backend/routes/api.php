@@ -22,11 +22,11 @@ Route::group([
 });
 
 Route::group(['middleware' => ['api', 'jwt.auth']], function () {
-    Route::group(['prefix' => 'users'], function () {
+    Route::group(['middleware' => 'user_permission', 'prefix' => 'users'], function () {
         Route::put('/{user_id}', 'UserController@update');
     });
 
-    Route::group(['prefix' => 'users/{user_id}/classes'], function () {
+    Route::group(['middleware' => 'user_permission', 'prefix' => 'users/{user_id}/classes'], function () {
         Route::post('', 'ClassController@create');
         Route::put('/{class_id}', 'ClassController@update');
         Route::post('/{class_id}/study-sets', 'ClassController@addStudySet');
@@ -36,7 +36,7 @@ Route::group(['middleware' => ['api', 'jwt.auth']], function () {
         Route::delete('/{class_id}/study-sets', 'ClassController@removeStudySets');
     });
 
-    Route::group(['prefix' => 'users/{user_id}/study-sets'], function () {
+    Route::group(['middleware' => 'user_permission', 'prefix' => 'users/{user_id}/study-sets'], function () {
         Route::post('', 'StudySetController@create');
         Route::put('/{study_set_id}', 'StudySetController@update');
         Route::delete('/{study_set_id}', 'StudySetController@delete');
