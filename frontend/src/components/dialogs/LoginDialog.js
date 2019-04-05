@@ -8,7 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import LoginForm from './loginDialog/LoginForm';
 import FormLoading from '../FormLoading';
 
-import { authActions } from '../../services/auth';
+import { authActions } from '../../states/auth';
 import useResponsiveDialog from '../../hooks/useResponsiveDialog';
 import usePublicDialog from '../../hooks/usePublicDialog';
 

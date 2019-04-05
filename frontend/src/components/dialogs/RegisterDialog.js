@@ -9,7 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import RegisterForm from './registerDialog/RegisterForm';
 import FormLoading from '../FormLoading';
 
-import { registerActions } from '../../services/register';
+import { registerActions } from '../../states/register';
 import useResponsiveDialog from '../../hooks/useResponsiveDialog';
 import usePublicDialog from '../../hooks/usePublicDialog';
 

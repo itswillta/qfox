@@ -4,7 +4,7 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 import { LOGIN_ASYNC } from './authActionTypes';
 import authActions from './authActions';
 import authRequests from './authRequests';
-import authHelpers from './authHelpers';
+import { getUserProfileFromToken, setUpToken } from '../../services/auth';
 
 import { openSnackbar } from '../../components/Notification';
 
@@ -12,8 +12,8 @@ function* loginUser(action) {
   try {
     const authResponse = yield call(authRequests.requestLogin, action.payload);
 
-    const userProfile = authHelpers.getUserProfileFromToken(authResponse.data.authToken);
-    authHelpers.setUpToken(authResponse.data.authToken);
+    const userProfile = getUserProfileFromToken(authResponse.data.authToken);
+    setUpToken(authResponse.data.authToken);
 
     yield put(authActions.login.success(userProfile));
   } catch (error) {
