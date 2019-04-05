@@ -12,7 +12,7 @@ use DB;
 
 class TermController extends Controller
 {
-    public function create(Request $request, $study_set_id)
+    public function create(Request $request, $user_id, $study_set_id)
     {
         RequestValidator::validateOrFail($request->all(), [
             'term' => 'required|string',
@@ -34,7 +34,7 @@ class TermController extends Controller
         return response()->noContent(Response::HTTP_CREATED);
     }
 
-    public function update(Request $request, $term_id)
+    public function update(Request $request, $user_id, $study_set_id, $term_id)
     {
         RequestValidator::validateOrFail($request->all(), [
             'term' => 'string',
@@ -49,7 +49,7 @@ class TermController extends Controller
         return response()->noContent($is_anything_updated ? Response::HTTP_OK : Response::HTTP_NOT_MODIFIED);
     }
 
-    public function delete($study_set_id, $term_id)
+    public function delete($user_id, $study_set_id, $term_id)
     {
         $term = Term::findOrFail($term_id);
         $term->delete();

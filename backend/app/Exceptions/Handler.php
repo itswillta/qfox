@@ -87,6 +87,10 @@ class Handler extends ExceptionHandler
             return $exception->render();
         }
 
+        if ($exception instanceof RestResourceNotFoundException) {
+            return $exception->render();
+        }
+
         if ($exception instanceof ValidationException) {
             return $exception->render();
         }

@@ -6,7 +6,7 @@ use App\Exceptions\WrongUserPermissionException;
 use Illuminate\Http\Request;
 use Closure;
 
-class UserPermission
+class ValidateUserPermission
 {
     /**
      * Handle an incoming request.

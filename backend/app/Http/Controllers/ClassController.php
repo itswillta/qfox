@@ -7,7 +7,7 @@ use App\Enums\ClassRole;
 use App\Http\ApiErrorResponse;
 use App\Services\RequestValidator;
 use App\Services\ResourceUpdater;
-use App\Services\StudyClass\ClassOwnerService;
+use App\Services\StudyClass\ClassParticipantService;
 use App\StudyClass;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -97,7 +97,7 @@ class ClassController extends Controller
             'userIds.*' => 'integer'
         ]);
 
-        $class_owner_id = ClassOwnerService::getOwnerId($class_id);
+        $class_owner_id = ClassParticipantService::getOwnerId($class_id);
 
         foreach ($request->userIds as $user_id_to_delete) {
             if ($class_owner_id === $user_id_to_delete) {
