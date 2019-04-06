@@ -1,4 +1,4 @@
-import createAsyncTypes from '../../utils/redux/createAsyncTypes';
+import { createAsyncTypes } from '../../utils/redux/utilityFunctions';
 
 const LOGIN_ASYNC = createAsyncTypes('LOGIN');
 const LOGIN_FORM = { RESET: 'LOGIN_FORM_RESET' };

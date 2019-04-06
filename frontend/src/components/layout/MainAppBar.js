@@ -6,7 +6,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 
 import useStyles from './mainAppBar/MainAppBar.styles';
 
-import { authActions } from '../../services/auth';
+import { authActions } from '../../states/auth';
 
 import LogoAppBar from './mainAppBar/LogoAppBar';
 import UserActionGroup from './mainAppBar/UserActionGroup';

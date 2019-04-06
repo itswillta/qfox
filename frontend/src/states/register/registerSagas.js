@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { call, put, takeLatest } from 'redux-saga/effects';
 
 import { REGISTER_ASYNC } from './registerActionTypes';
@@ -8,24 +7,25 @@ import registerRequests from './registerRequests';
 import authActions from '../auth/authActions';
 
 import { openSnackbar } from '../../components/Notification';
+import restApiWorkerSaga from '../../utils/redux/restApiWorkerSaga';
 
 function* registerUser(action) {
-  try {
-    yield call(registerRequests.requestRegister, action.payload);
-
-    yield put(registerActions.register.success());
-    openSnackbar('Registered successfully. Welcome to QFox.');
-
-    yield put(authActions.login.pending(action.payload));
-  } catch (error) {
-    console.error(error);
-    openSnackbar('Failed to register. Please check your information.');
-    yield put(registerActions.register.error(error));
-  }
+  yield call(
+    restApiWorkerSaga,
+    registerRequests.requestRegister,
+    action.payload,
+    registerActions.register,
+    {
+      afterSuccess: function* afterSuccess() {
+        openSnackbar('Registered successfully. Welcome to QFox.');
+        yield put(authActions.login.pending(action.payload));
+      }
+    }
+  );
 }
 
-function* watchRegisterUser() {
+function* registerWatcherSaga() {
   yield takeLatest(REGISTER_ASYNC.PENDING, registerUser);
 }
 
-export default watchRegisterUser;
+export default registerWatcherSaga;

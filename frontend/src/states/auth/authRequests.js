@@ -1,7 +1,5 @@
-import axios from 'axios';
+import api from '../../services/restClient';
 
-import API_ENDPOINTS from '../../config/endpoints';
-
-const requestLogin = loginData => axios.post(API_ENDPOINTS.LOGIN, loginData);
+const requestLogin = loginData => api.custom('auth/login').post(loginData);
 
 export default { requestLogin };
