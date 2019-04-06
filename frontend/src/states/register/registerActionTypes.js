@@ -1,4 +1,4 @@
-import createAsyncTypes from '../../utils/redux/createAsyncTypes';
+import { createAsyncTypes } from '../../utils/redux/utilityFunctions';
 
 const REGISTER_ASYNC = createAsyncTypes('REGISTER');
 const REGISTER_FORM = { RESET: 'REGISTER_FORM_RESET' };

@@ -1,30 +1,34 @@
 /* eslint-disable no-console */
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { all, call, takeLatest } from 'redux-saga/effects';
 
-import { LOGIN_ASYNC } from './authActionTypes';
+import { LOGIN_ASYNC, CURRENT_USER } from './authActionTypes';
 import authActions from './authActions';
 import authRequests from './authRequests';
-import { getUserProfileFromToken, setUpToken } from '../../services/auth';
-
-import { openSnackbar } from '../../components/Notification';
+import { getUserProfileFromToken, setUpToken, cleanUpToken } from '../../services/auth';
+import restApiWorkerSaga from '../../utils/redux/restApiWorkerSaga';
 
 function* loginUser(action) {
+  yield call(restApiWorkerSaga, authRequests.requestLogin, action.payload, authActions.login, {
+    handleResponse: responseBody => {
+      setUpToken(responseBody.authToken);
+      return getUserProfileFromToken(responseBody.authToken);
+    }
+  });
+}
+
+function* logoutUser() {
   try {
-    const authResponse = yield call(authRequests.requestLogin, action.payload);
-
-    const userProfile = getUserProfileFromToken(authResponse.data.authToken);
-    setUpToken(authResponse.data.authToken);
-
-    yield put(authActions.login.success(userProfile));
+    yield call(cleanUpToken);
   } catch (error) {
     console.error(error);
-    openSnackbar(error.response.data.error.message);
-    yield put(authActions.login.error(error));
   }
 }
 
-function* watchLoginUser() {
-  yield takeLatest(LOGIN_ASYNC.PENDING, loginUser);
+function* authWatcherSaga() {
+  yield all([
+    takeLatest(LOGIN_ASYNC.PENDING, loginUser),
+    takeLatest(CURRENT_USER.LOGOUT, logoutUser)
+  ]);
 }
 
-export default watchLoginUser;
+export default authWatcherSaga;

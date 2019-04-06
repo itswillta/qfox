@@ -1,8 +1,5 @@
-import axios from 'axios';
+import api from '../../services/restClient';
 
-import API_ENDPOINTS from '../../config/endpoints';
-
-const requestRegister = registerData =>
-  axios.post(API_ENDPOINTS.REGISTER, registerData);
+const requestRegister = registerData => api.custom('auth/register').post(registerData);
 
 export default { requestRegister };

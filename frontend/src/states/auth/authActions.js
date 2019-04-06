@@ -1,11 +1,7 @@
-import createAction from '../../utils/redux/createAction';
+import { createAsyncActions, createAction } from '../../utils/redux/utilityFunctions';
 import { LOGIN_ASYNC, LOGIN_FORM, CURRENT_USER } from './authActionTypes';
 
-const login = {
-  pending: loginData => createAction(LOGIN_ASYNC.PENDING, loginData),
-  success: userProfile => createAction(LOGIN_ASYNC.SUCCESS, userProfile),
-  error: error => createAction(LOGIN_ASYNC.ERROR, error)
-};
+const login = createAsyncActions(LOGIN_ASYNC);
 
 const loginForm = {
   reset: () => createAction(LOGIN_FORM.RESET)

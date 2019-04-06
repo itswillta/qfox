@@ -19,7 +19,6 @@ import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import SettingsIcon from '@material-ui/icons/Settings';
 import LogoutIcon from '@material-ui/icons/PowerSettingsNew';
 
-import { cleanUpToken } from '../../../../../services/auth';
 import appRoutes from '../../../../../routers/appRoutes';
 
 import defaultProfilePicture from '/images/profile-default.jpg';
@@ -43,8 +42,6 @@ const MenuListComposition = ({ authState, requestLogout, classes }) => {
   };
 
   const logout = () => {
-    // TODO: Create a redux saga for this
-    cleanUpToken();
     requestLogout();
   };
 
