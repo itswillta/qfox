@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import Hidden from '@material-ui/core/Hidden';
 
 import useStyles from './mainAppBar/MainAppBar.styles';
 
@@ -21,9 +22,11 @@ const MainAppBar = ({ authState, requestLogout }) => {
       <AppBar position="static">
         <Toolbar className={classes.toolbar}>
           <LogoAppBar />
-          <CreateButton classes={classes} />
-          <div className={classes.grow} />
-          <SearchBox classes={classes} />
+          <Hidden smDown>
+            {authState.isAuthenticated && <CreateButton classes={classes} />}
+            <div className={classes.grow} />
+            <SearchBox classes={classes} />
+          </Hidden>
           <div className={classes.grow} />
           <UserActionGroup authState={authState} requestLogout={requestLogout} classes={classes} />
         </Toolbar>
