@@ -11,6 +11,7 @@ use Illuminate\Http\Response;
 use Intervention\Image\Facades\Image;
 use Illuminate\Validation\Rule;
 use App\Services\RequestValidator;
+use DB;
 
 class UserController extends Controller
 {
@@ -48,10 +49,24 @@ class UserController extends Controller
 
     public function getStudySets(Request $request, $user_id)
     {
-        $user = User::findOrFail($user_id);
+        $type = $request->type;
+
+        if ($type === 'my') {
+            $user = User::findOrFail($user_id);
+
+            return response()->json([
+                'studySets' => $user->studySets
+            ]);
+        }
+
+        // FIXME: Need to normalize the response results
+        $study_sets = DB::table('user_study_sets')
+            ->select('id', 'role', 'title', 'view_permission', 'edit_permission', 'created_at', 'updated_at')
+            ->join('study_sets', 'study_set_id', '=', 'id')
+            ->where('user_id', '=', $user_id)->get()->toArray();
 
         return response()->json([
-            'studySets' => $user->studySets
+            'studySets' => $study_sets
         ]);
     }
 }
