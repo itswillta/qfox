@@ -11,6 +11,7 @@ use App\Services\StudyClass\ClassParticipantService;
 use App\StudyClass;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
@@ -36,6 +37,8 @@ class ClassController extends Controller
             $class->save();
             $class->users()->attach($user_id, ['role' => ClassRole::OWNER]);
         });
+
+        Cache::forget(ClassParticipantService::getOwnerIdCacheKey($class->id));
 
         return response()->noContent(Response::HTTP_CREATED);
     }

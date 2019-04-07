@@ -36,6 +36,6 @@ class StudySet extends Model
      */
     public function terms()
     {
-        return $this->hasMany('App\Term', 'study_set_terms');
+        return $this->hasMany('App\Term');
     }
 }

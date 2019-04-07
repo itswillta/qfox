@@ -4,6 +4,7 @@ use App\Http\Middleware\ValidateUserPermission;
 use App\Http\Middleware\StudyClass\ValidateClassEditPermission;
 use App\Http\Middleware\StudySet\ValidateSetEditPermission;
 use App\Http\Middleware\Term\ValidateTermEditPermission;
+use App\Http\Middleware\StudySet\ValidateSetViewPermission;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,11 +50,15 @@ Route::group(['middleware' => ['api', 'jwt.auth']], function () {
         });
     });
 
-    Route::group(['middleware' => [ValidateSetEditPermission::class], 'prefix' => 'users/{user_id}/study-sets/{study_set_id}/terms'], function () {
+    Route::group(['middleware' => ValidateSetEditPermission::class, 'prefix' => 'users/{user_id}/study-sets/{study_set_id}/terms'], function () {
         Route::post('', 'TermController@create');
         Route::group(['middleware' => ValidateTermEditPermission::class], function () {
             Route::put('/{term_id}', 'TermController@update');
             Route::delete('/{term_id}', 'TermController@delete');
         });
     });
+});
+
+Route::group(['middleware' => ValidateSetViewPermission::class, 'prefix' => 'users/{user_id}/study-sets/{study_set_id}/terms'], function() {
+    Route::get('', 'StudySetController@getAllTerms');
 });

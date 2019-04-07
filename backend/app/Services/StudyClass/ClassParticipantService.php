@@ -10,13 +10,24 @@ class ClassParticipantService
 {
     private const CACHE_TTL = 3600; // seconds
 
+    public static function getOwnerIdCacheKey($class_id)
+    {
+        return 'class_' . $class_id . '_owner_id';
+    }
+
     public static function getOwnerId($class_id)
     {
-        return Cache::rememberForever('class_' . $class_id . '_owner_id', function () use ($class_id) {
-            return DB::table('user_classes')->where([
+        return Cache::rememberForever(self::getOwnerIdCacheKey($class_id), function () use ($class_id) {
+            $user_class_owner = DB::table('user_classes')->where([
                 ['class_id', '=', $class_id],
                 ['role', '=', ClassRole::OWNER]
-            ])->first()->user_id;
+            ])->first();
+
+            if ($user_class_owner) {
+                return $user_class_owner->user_id;
+            }
+
+            return 0;
         });
     }
 

@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Enums\StudySetRole;
+use App\Services\StudyClass\ClassParticipantService;
+use App\Services\StudySet\StudySetParticipantService;
 use App\StudySet;
 use App\Enums\StudySetPermission;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\Rule;
 use App\Services\RequestValidator;
 use App\Services\ResourceUpdater;
@@ -38,6 +41,8 @@ class StudySetController extends Controller
             $study_set->users()->attach($user_id, ['role' => StudySetRole::OWNER]);
         });
 
+        Cache::forget(StudySetParticipantService::getOwnerIdCacheKey($study_set->id));
+
         return response()->noContent(Response::HTTP_CREATED);
     }
 
@@ -66,5 +71,16 @@ class StudySetController extends Controller
         $study_set->delete();
         
         return response()->noContent(Response::HTTP_OK);
+    }
+
+    public function getAllTerms($user_id, $study_set_id)
+    {
+        $study_set = StudySet::findOrFail($study_set_id);
+
+        $terms = $study_set->terms;
+
+        return response()->json([
+            'terms' => $terms
+        ]);
     }
 }
