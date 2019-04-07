@@ -28,6 +28,7 @@ Route::group([
 Route::group(['middleware' => ['api', 'jwt.auth']], function () {
     Route::group(['middleware' => ValidateUserPermission::class, 'prefix' => 'users'], function () {
         Route::put('/{user_id}', 'UserController@update');
+        Route::get('/{user_id}/study-sets', 'UserController@getStudySets');
     });
 
     Route::group(['middleware' => ValidateUserPermission::class, 'prefix' => 'users/{user_id}/classes'], function () {
