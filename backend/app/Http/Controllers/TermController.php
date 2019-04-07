@@ -8,29 +8,14 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Services\RequestValidator;
 use App\Services\ResourceUpdater;
+use App\Services\Term\TermManagementService;
 use DB;
 
 class TermController extends Controller
 {
     public function create(Request $request, $user_id, $study_set_id)
     {
-        RequestValidator::validateOrFail($request->all(), [
-            'term' => 'required|string',
-            'definition' => 'required|string'
-        ]);
-
-        $term = new Term();
-
-        $term->term = $request->term;
-        $term->definition = $request->definition;
-        $term->is_starred = false;
-
-        DB::transaction(function () use ($term, $study_set_id) {
-            $study_set = StudySet::findOrFail($study_set_id);
-            $term->study_set_id = $study_set->id;
-            $term->save();
-        });
-
+        TermManagementService::create($request->all(), $study_set_id);
         return response()->noContent(Response::HTTP_CREATED);
     }
 
