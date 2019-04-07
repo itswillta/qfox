@@ -45,4 +45,13 @@ class UserController extends Controller
 
         return response()->noContent($is_anything_updated ? Response::HTTP_OK : Response::HTTP_NOT_MODIFIED);
     }
+
+    public function getStudySets(Request $request, $user_id)
+    {
+        $user = User::findOrFail($user_id);
+
+        return response()->json([
+            'studySets' => $user->studySets
+        ]);
+    }
 }

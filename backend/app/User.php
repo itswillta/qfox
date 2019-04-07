@@ -44,7 +44,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function studySets()
     {
-        return $this->belongsToMany('App\Term', 'user_study_sets');
+        return $this->belongsToMany('App\StudySet', 'user_study_sets');
     }
 
     /**

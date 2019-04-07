@@ -16,6 +16,7 @@ class TermController extends Controller
     public function create(Request $request, $user_id, $study_set_id)
     {
         TermManagementService::create($request->all(), $study_set_id);
+
         return response()->noContent(Response::HTTP_CREATED);
     }
 
