@@ -6,6 +6,7 @@ use App\Enums\StudySetRole;
 use App\Services\StudySet\StudySetParticipantService;
 use App\StudySet;
 use App\Enums\StudySetPermission;
+use App\Term;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
@@ -55,8 +56,9 @@ class StudySetController extends Controller
         return response()->noContent(Response::HTTP_CREATED);
     }
 
-    public function update(Request $request, $study_set_id)
+    public function update(Request $request, $user_id, $study_set_id)
     {
+
         RequestValidator::validateOrFail($request->all(), [
             'title' => 'string',
             'viewPermission' => [
@@ -64,12 +66,30 @@ class StudySetController extends Controller
             ],
             'editPermission' => [
                 Rule::in(StudySetPermission::$edit_permission)
-            ]
+            ],
+            'termList' => 'array|min:0',
         ]);
 
         $study_set = StudySet::findOrFail($study_set_id);
+        $termList = $request->termList;
+        $is_anything_updated = ResourceUpdater::update([
+            'title' => $request->title,
+            'view_permission' => $request->viewPermission,
+            'edit_permission' => $request->editPermission
+        ], $study_set);
 
-        $is_anything_updated = ResourceUpdater::update($request->all(), $study_set);
+        foreach ($termList as $term) {
+            if (array_key_exists('id', $term)) {
+                $term_in_database = Term::findOrFail($term['id']);
+                if (array_key_exists('willBeDeleted', $term) && $term['willBeDeleted']) {
+                    $term_in_database->delete();
+                } else {
+                    $is_anything_updated = ResourceUpdater::update($term, $term_in_database) || $is_anything_updated;
+                }
+            } else {
+                TermManagementService::create($term, $study_set_id);
+            }
+        }
 
         return response()->noContent($is_anything_updated ? Response::HTTP_OK : Response::HTTP_NOT_MODIFIED);
     }
