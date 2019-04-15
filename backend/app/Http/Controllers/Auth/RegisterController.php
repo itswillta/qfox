@@ -53,6 +53,7 @@ class RegisterController extends Controller
         $user->profile_picture_url = "";
         $user->language = "en";
         $user->save();
+        $user->addToIndex();
 
         return response()->noContent(Response::HTTP_CREATED);
     }
