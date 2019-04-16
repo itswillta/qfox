@@ -5,6 +5,7 @@ namespace App;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Elasticquent\ElasticquentTrait;
 
 /**
  * Class User
@@ -19,6 +20,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
+    use ElasticquentTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -28,6 +30,22 @@ class User extends Authenticatable implements JWTSubject
     protected $fillable = [
         'name', 'username', 'password', 'googleId', 'facebookId'
     ];
+
+    /**
+     * Set a mappingProperties property for mapping in Elasticsearch/Eloquent
+     *
+     *
+     */
+    protected $mappingProperties = array(
+        'name' => [
+            'type' => 'string',
+            "analyzer" => "standard"
+        ],
+        'username' => [
+            'type' => 'string',
+            "analyzer" => "standard"
+        ],
+    );
 
     /**
      * The attributes that should be hidden for arrays.

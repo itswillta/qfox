@@ -44,6 +44,10 @@ class UserController extends Controller
 
         $is_anything_updated = ResourceUpdater::update($request->only('name', 'language'), $user) || $is_anything_updated;
 
+        if ($is_anything_updated) {
+            $user->reindex();
+        }
+
         return response()->noContent($is_anything_updated ? Response::HTTP_OK : Response::HTTP_NOT_MODIFIED);
     }
 
@@ -67,6 +71,24 @@ class UserController extends Controller
 
         return response()->json([
             'studySets' => $study_sets
+        ]);
+    }
+
+    public function search(Request $request)
+    {
+        $user = User::complexSearch([
+            'body' => [
+                'query' => [
+                    'query_string' => [
+                        'fields' => ['name', 'username'],
+                        'quote_field_suffix' => '.exact',
+                        'query' => $request->query('query')]
+                ],
+            ],
+        ]);
+
+        return response()->json([
+            'users' => $user
         ]);
     }
 }
