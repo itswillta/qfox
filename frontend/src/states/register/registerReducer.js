@@ -15,7 +15,7 @@ const handleRegisterSuccess = () => ({
 
 const handleRegisterError = (state, action) =>
   updateObject(state, {
-    error: action.payload.response.data.error.details,
+    error: action.payload,
     isLoading: false
   });
 
@@ -29,13 +29,11 @@ const initialState = {
   error: {}
 };
 
-const actionHandlers = {};
-
-actionHandlers[REGISTER_ASYNC.PENDING] = handleRegisterRequest;
-actionHandlers[REGISTER_ASYNC.SUCCESS] = handleRegisterSuccess;
-actionHandlers[REGISTER_ASYNC.ERROR] = handleRegisterError;
-actionHandlers[REGISTER_FORM.RESET] = resetRegisterForm;
-
-const registerReducer = createReducer(initialState, actionHandlers);
+const registerReducer = createReducer(initialState, {
+  [REGISTER_ASYNC.PENDING]: handleRegisterRequest,
+  [REGISTER_ASYNC.SUCCESS]: handleRegisterSuccess,
+  [REGISTER_ASYNC.ERROR]: handleRegisterError,
+  [REGISTER_FORM.RESET]: resetRegisterForm
+});
 
 export default registerReducer;

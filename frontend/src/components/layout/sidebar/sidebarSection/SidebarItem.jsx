@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -8,8 +9,10 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 
-const SidebarItem = ({ item, pathname, classes }) => {
+const SidebarItem = ({ item, location: { pathname }, classes }) => {
   const { t } = useTranslation();
+
+  const ItemIcon = item.icon;
 
   return (
     <React.Fragment>
@@ -23,7 +26,9 @@ const SidebarItem = ({ item, pathname, classes }) => {
         to={item.path}
         selected={item.path === pathname}
       >
-        <ListItemIcon className={classes.listItemIcon}>{item.icon()}</ListItemIcon>
+        <ListItemIcon className={classes.listItemIcon}>
+          <ItemIcon />
+        </ListItemIcon>
         <ListItemText inset disableTypography>
           <Typography
             className={
@@ -39,4 +44,4 @@ const SidebarItem = ({ item, pathname, classes }) => {
   );
 };
 
-export default SidebarItem;
+export default withRouter(SidebarItem);

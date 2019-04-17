@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\FetchOptions;
 use App\Enums\SupportedLanguages;
 use App\Services\ResourceUpdater;
 use App\User;
@@ -53,21 +54,18 @@ class UserController extends Controller
 
     public function getStudySets(Request $request, $user_id)
     {
-        $type = $request->type;
+        $order_by = $request->query('order_by') ?: FetchOptions::DEFAULT_ORDER_BY;
+        $order_direction = $request->query('order_direction') ?: FetchOptions::DEFAULT_ORDER_DIRECTION;
 
-        if ($type === 'my') {
-            $user = User::findOrFail($user_id);
-
-            return response()->json([
-                'studySets' => $user->studySets
-            ]);
-        }
-
-        // FIXME: Need to normalize the response results
         $study_sets = DB::table('user_study_sets')
-            ->select('id', 'role', 'title', 'view_permission', 'edit_permission', 'created_at', 'updated_at')
-            ->join('study_sets', 'study_set_id', '=', 'id')
-            ->where('user_id', '=', $user_id)->get()->toArray();
+            ->select('study_sets.id', 'role', 'title', 'view_permission', 'edit_permission', 'study_sets.created_at', 'study_sets.updated_at', DB::raw('count(terms.id) as total_terms'),
+                'user_id')
+            ->join('study_sets', 'study_sets.id', '=', 'user_study_sets.study_set_id')
+            ->leftJoin('terms', 'terms.study_set_id', '=', 'study_sets.id')
+            ->where('user_id', '=', $user_id)
+            ->groupBy('study_sets.id', 'user_id')
+            ->orderBy($order_by, $order_direction)
+            ->get();
 
         return response()->json([
             'studySets' => $study_sets
@@ -76,7 +74,7 @@ class UserController extends Controller
 
     public function search(Request $request)
     {
-        $user = User::complexSearch([
+        $users = User::complexSearch([
             'body' => [
                 'query' => [
                     'query_string' => [
@@ -88,7 +86,16 @@ class UserController extends Controller
         ]);
 
         return response()->json([
-            'users' => $user
+            'users' => $users
+        ]);
+    }
+
+    public function getStudyClasses($user_id)
+    {
+        $user = User::findOrFail($user_id);
+
+        return response()->json([
+            'studyClasses' => $user->classes
         ]);
     }
 }

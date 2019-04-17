@@ -35,8 +35,8 @@ class WrongUserPermissionException extends Exception
     public function render()
     {
         return response()->json(ApiErrorResponse::generate(
-            Response::HTTP_UNAUTHORIZED,
+            Response::HTTP_FORBIDDEN,
             $this->getMessage()
-        ), Response::HTTP_UNAUTHORIZED);
+        ), Response::HTTP_FORBIDDEN);
     }
 }

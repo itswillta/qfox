@@ -15,6 +15,9 @@ export default makeStyles({
       [theme.breakpoints.down('sm')]: {
         width: '100%'
       }
+    },
+    '.bold-text': {
+      fontWeight: theme.typography.fontWeightMedium
     }
   }
 });

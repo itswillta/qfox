@@ -27,7 +27,7 @@ const appRoutes = {
     private: true
   },
   StudySets: {
-    url: '/study-sets',
+    url: '/:userId/study-sets',
     component: LoadableRoute({
       loader: () => import('../pages/StudySets')
     }),
