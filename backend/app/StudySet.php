@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Elasticquent\ElasticquentTrait;
 
 /**
  * Class StudySet
@@ -14,6 +15,29 @@ use Illuminate\Database\Eloquent\Model;
  */
 class StudySet extends Model
 {
+    use ElasticquentTrait;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'title', 'view_permission', 'edit_permission'
+    ];
+
+    /**
+     * Set a mappingProperties property for mapping in Elasticsearch/Eloquent
+     *
+     *
+     */
+    protected $mappingProperties = array(
+        'title' => [
+            'type' => 'string',
+            "analyzer" => "standard"
+        ]
+    );
+
     /**
      * The users that have access to this study set.
      */

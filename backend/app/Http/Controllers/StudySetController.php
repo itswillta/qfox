@@ -42,6 +42,7 @@ class StudySetController extends Controller
 
         DB::transaction(function () use ($termList, $study_set, $user_id) {
             $study_set->save();
+            $study_set->addToIndex();
             $study_set->users()->attach($user_id, ['role' => StudySetRole::OWNER]);
             if ($termList) {
                 $study_set_id = $study_set->id;
@@ -89,6 +90,10 @@ class StudySetController extends Controller
             }
         }
 
+        if ($is_anything_updated) {
+            $study_set->reindex();
+        }
+
         return response()->noContent($is_anything_updated ? Response::HTTP_OK : Response::HTTP_NOT_MODIFIED);
     }
 
@@ -96,6 +101,7 @@ class StudySetController extends Controller
     {
         $study_set = StudySet::findOrFail($study_set_id);
         $study_set->delete();
+        $study_set->removeFromIndex();
 
         return response()->noContent(Response::HTTP_OK);
     }
@@ -111,4 +117,19 @@ class StudySetController extends Controller
         ]);
     }
 
+    public function search(Request $request)
+    {
+        $study_sets = StudySet::searchByQuery([
+            'match' => [
+                'title' => [
+                    'query' => $request->query('query'),
+                    'fuzziness' => 'AUTO',
+                ]
+            ]
+        ]);
+
+        return response()->json([
+            'study_sets' => $study_sets
+        ]);
+    }
 }
