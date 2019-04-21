@@ -35,6 +35,7 @@ class ClassController extends Controller
 
         DB::transaction(function () use ($class, $user_id) {
             $class->save();
+            $class->addToIndex();
             $class->users()->attach($user_id, ['role' => ClassRole::OWNER]);
         });
 
@@ -54,6 +55,10 @@ class ClassController extends Controller
         $class = StudyClass::findOrFail($class_id);
 
         $is_anything_updated = ResourceUpdater::update($request->all(), $class);
+
+        if ($is_anything_updated) {
+            $class->reindex();
+        }
 
         return response()->noContent($is_anything_updated ? Response::HTTP_OK : Response::HTTP_NOT_MODIFIED);
     }
@@ -76,6 +81,7 @@ class ClassController extends Controller
         $class = StudyClass::findOrFail($class_id);
 
         $class->delete();
+        $class->removeFromIndex();
 
         return response()->noContent(Response::HTTP_OK);
     }
@@ -131,5 +137,28 @@ class ClassController extends Controller
         $class->studySets()->detach($request->studySetIds);
 
         return response()->noContent(Response::HTTP_OK);
+    }
+
+    public function search(Request $request)
+    {
+        $classes = StudyClass::complexSearch([
+            'body' => [
+                'query' => [
+                    'bool' => [
+                        'must' => [
+                            'multi_match' => [
+                                'query' => $request->query('query'),
+                                'fields' => ['name', 'description'],
+                                'fuzziness' => 'AUTO',
+                            ]
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        return response()->json([
+            'classes' => $classes
+        ]);
     }
 }

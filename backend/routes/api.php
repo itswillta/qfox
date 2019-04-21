@@ -6,6 +6,7 @@ use App\Http\Middleware\StudySet\ValidateSetEditPermission;
 use App\Http\Middleware\Term\ValidateTermEditPermission;
 use App\Http\Middleware\StudySet\ValidateSetViewPermission;
 use App\User;
+use App\StudyClass;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,8 +28,7 @@ Route::group([
 });
 
 Route::group(['middleware' => ['api', 'jwt.auth']], function () {
-    Route::group(['prefix' => 'users'], function ()
-    {
+    Route::group(['prefix' => 'users'], function () {
         Route::get('/search', 'UserController@search');
         Route::group(['middleware' => ValidateUserPermission::class], function () {
             Route::put('/{user_id}', 'UserController@update');
@@ -38,6 +38,7 @@ Route::group(['middleware' => ['api', 'jwt.auth']], function () {
 
     Route::group(['middleware' => ValidateUserPermission::class, 'prefix' => 'users/{user_id}/classes'], function () {
         Route::post('', 'ClassController@create');
+        Route::get('/search', 'ClassController@search');
         Route::group(['middleware' => ValidateClassEditPermission::class], function () {
             Route::put('/{class_id}', 'ClassController@update');
             Route::post('/{class_id}/study-sets', 'ClassController@addStudySet');
@@ -65,6 +66,6 @@ Route::group(['middleware' => ['api', 'jwt.auth']], function () {
     });
 });
 
-Route::group(['middleware' => ValidateSetViewPermission::class, 'prefix' => 'users/{user_id}/study-sets/{study_set_id}/terms'], function() {
+Route::group(['middleware' => ValidateSetViewPermission::class, 'prefix' => 'users/{user_id}/study-sets/{study_set_id}/terms'], function () {
     Route::get('', 'StudySetController@getAllTerms');
 });

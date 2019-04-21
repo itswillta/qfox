@@ -81,14 +81,16 @@ services:
     depends_on:
       - app
 
-  #Elasticsearch
-  elasticsearch: # Elasticsearch Instance
-    container_name: elasticsearch
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.7.0
-    volumes: # Persist ES data in seperate "els-data" volume
+  elasticsearch:
+    container_name: qfox_elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.13
+    volumes:
       - els-data:/usr/share/elasticsearch/data
-    ports: # Expose Elasticsearch ports
+    ports:
       - '9200:9200'
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
     networks:
       - app-network
 

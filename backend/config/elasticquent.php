@@ -14,8 +14,8 @@ return array(
     */
 
     'config' => [
-        'hosts'     => ['172.24.0.5:9200'],
-        'retries'   => 1,
+        'hosts' => ['qfox_elasticsearch:9200'],
+        'retries' => 1,
     ],
 
     /*
