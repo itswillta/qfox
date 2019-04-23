@@ -1,21 +1,26 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
-import Typography from '@material-ui/core/Typography';
+import useStyles from './settings/Settings.styles';
 
-import useStyles from './dashboard/Dashboard.styles';
+import UpdateProfilePicture from './settings/UpdateProfilePicture';
+import UpdateName from './settings/UpdateName';
+import UpdateLanguage from './settings/UpdateLanguage';
 
-import logoWithBg from '/images/logo-with-bg.svg';
-
-const Settings = () => {
+const Settings = ({ authState }) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
-      <Typography variant="h3">Settings Page</Typography>
-      <br />
-      <img src={logoWithBg} alt="logo" width="30%" height="auto" />
-    </div>
+    <React.Fragment>
+      <UpdateProfilePicture authState={authState} classes={classes} />
+      <UpdateName authState={authState} classes={classes} />
+      <UpdateLanguage authState={authState} classes={classes} />
+    </React.Fragment>
   );
 };
 
-export default Settings;
+const mapStateToProps = state => ({
+  authState: state.auth
+});
+
+export default connect(mapStateToProps)(Settings);
