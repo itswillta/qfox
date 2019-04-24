@@ -3,7 +3,8 @@ import { makeStyles } from '@material-ui/styles';
 export default makeStyles(theme => ({
   drawer: {
     width: '250px',
-    flexShrink: 0
+    flexShrink: 0,
+    zIndex: 2
   },
   drawerPaper: {
     boxShadow: theme.shadows[6],

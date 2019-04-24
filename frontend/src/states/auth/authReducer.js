@@ -19,13 +19,14 @@ const handleLoginSuccess = (state, action) => ({
 
 const handleLoginError = (state, action) =>
   updateObject(state, {
-    error: action.payload.response.data.error.details,
+    error: action.payload,
     isLoading: false
   });
 
 const resetLoginForm = state =>
   updateObject(state, {
-    error: {}
+    error: {},
+    isLoading: false
   });
 
 const setCurrentUser = (state, action) =>
@@ -49,15 +50,13 @@ const initialState = {
   error: {}
 };
 
-const actionHandlers = {};
-
-actionHandlers[LOGIN_ASYNC.PENDING] = handleLoginRequest;
-actionHandlers[LOGIN_ASYNC.SUCCESS] = handleLoginSuccess;
-actionHandlers[LOGIN_ASYNC.ERROR] = handleLoginError;
-actionHandlers[LOGIN_FORM.RESET] = resetLoginForm;
-actionHandlers[CURRENT_USER.SET] = setCurrentUser;
-actionHandlers[CURRENT_USER.LOGOUT] = logout;
-
-const authReducer = createReducer(initialState, actionHandlers);
+const authReducer = createReducer(initialState, {
+  [LOGIN_ASYNC.PENDING]: handleLoginRequest,
+  [LOGIN_ASYNC.SUCCESS]: handleLoginSuccess,
+  [LOGIN_ASYNC.ERROR]: handleLoginError,
+  [LOGIN_FORM.RESET]: resetLoginForm,
+  [CURRENT_USER.SET]: setCurrentUser,
+  [CURRENT_USER.LOGOUT]: logout
+});
 
 export default authReducer;

@@ -7,8 +7,10 @@ import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 
 import SidebarItem from './sidebarSection/SidebarItem';
+import SidebarDynamicUserItem from './sidebarSection/SidebarDynamicUserItem';
+import { DYNAMIC_ITEM_TYPES } from './dynamicItemTypes';
 
-const SidebarSection = ({ classes, sidebarSection, pathname, shouldHaveDivider }) => {
+const SidebarSection = ({ classes, sidebarSection, shouldHaveDivider }) => {
   const { t } = useTranslation();
 
   return (
@@ -21,9 +23,19 @@ const SidebarSection = ({ classes, sidebarSection, pathname, shouldHaveDivider }
         </div>
       )}
       <List className={classnames(classes.list, classes.verticalCompact)}>
-        {sidebarSection.items.map(item => (
-          <SidebarItem key={item.codeName} pathname={pathname} item={item} classes={classes} />
-        ))}
+        {sidebarSection.items.map(item => {
+          const itemProps = {
+            key: item.codeName,
+            item,
+            classes
+          };
+
+          if (item.dynamicItemType === DYNAMIC_ITEM_TYPES.USER) {
+            return <SidebarDynamicUserItem {...itemProps} />;
+          }
+
+          return <SidebarItem {...itemProps} />;
+        })}
       </List>
       {shouldHaveDivider && <Divider className={classes.divider} />}
     </React.Fragment>

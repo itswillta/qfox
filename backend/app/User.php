@@ -70,7 +70,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function classes()
     {
-        return $this->belongsToMany('App\StudyClass', 'user_classes');
+        return $this->belongsToMany('App\StudyClass', 'user_classes', 'user_id', 'class_id');
     }
 
     /**
