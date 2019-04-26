@@ -15,7 +15,7 @@ cd backend
 sudo rm -rf ./vendor
 docker container run --rm -v $(pwd):/app composer install
 sudo chown -R $USER:$USER .
-cp .env.example .env
+sudo cp .env.example .env
 
 cd ../frontend
 
@@ -35,6 +35,9 @@ docker volume rm qfox_els-data
 
 docker-compose build --force-rm --no-cache
 docker-compose up -d
+
+sudo chown -R $USER:$USER ./backend
+sudo chown -R $USER:$USER ./frontend
 
 docker-compose exec app php artisan cache:clear
 docker-compose exec app php artisan route:clear

@@ -34,16 +34,15 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Set a mappingProperties property for mapping in Elasticsearch/Eloquent
      *
-     *
      */
     protected $mappingProperties = array(
         'name' => [
-            'type' => 'string',
-            "analyzer" => "standard"
+            'type' => 'text',
+            'analyzer' => 'standard'
         ],
         'username' => [
-            'type' => 'string',
-            "analyzer" => "standard"
+            'type' => 'text',
+            'analyzer' => 'standard'
         ],
     );
 

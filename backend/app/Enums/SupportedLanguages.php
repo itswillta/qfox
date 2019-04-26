@@ -9,5 +9,5 @@ final class SupportedLanguages extends Enum
     const EN = 'en';
     const VI = 'vi';
 
-    public static $type = [self::EN, self::VI];
+    public static $types = [self::EN, self::VI];
 }
