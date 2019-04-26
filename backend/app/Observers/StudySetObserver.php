@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Constants\CacheRemovalTags;
+use App\Services\StudySet\StudySetParticipantService;
 use App\StudySet;
 use Illuminate\Support\Facades\Cache;
 
@@ -11,32 +12,34 @@ class StudySetObserver
     /**
      * Handle the study set "created" event.
      *
-     * @param  StudySet  $studySet
+     * @param  StudySet  $study_set
      * @return void
      */
-    public function created(StudySet $studySet)
+    public function created(StudySet $study_set)
     {
         Cache::tags([CacheRemovalTags::STUDY_SET['SAVE']])->flush();
+        Cache::forget(StudySetParticipantService::getOwnerIdCacheKey($study_set->id));
     }
 
     /**
      * Handle the study set "updated" event.
      *
-     * @param  StudySet  $studySet
+     * @param  StudySet  $study_set
      * @return void
      */
-    public function updated(StudySet $studySet)
+    public function updated(StudySet $study_set)
     {
         Cache::tags([CacheRemovalTags::STUDY_SET['SAVE']])->flush();
+        Cache::forget(StudySetParticipantService::getOwnerIdCacheKey($study_set->id));
     }
 
     /**
      * Handle the study set "deleted" event.
      *
-     * @param  StudySet  $studySet
+     * @param  StudySet  $study_set
      * @return void
      */
-    public function deleted(StudySet $studySet)
+    public function deleted(StudySet $study_set)
     {
         Cache::tags([CacheRemovalTags::STUDY_SET['DELETE']])->flush();
     }

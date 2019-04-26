@@ -51,8 +51,6 @@ class StudySetController extends Controller
             }
         });
 
-        Cache::forget(StudySetParticipantService::getOwnerIdCacheKey($study_set->id));
-
         return response()->noContent(Response::HTTP_CREATED);
     }
 

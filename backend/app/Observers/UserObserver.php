@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Constants\CacheRemovalTags;
+use App\Services\User\UserManagementService;
 use App\User;
 use Illuminate\Support\Facades\Cache;
 
@@ -17,6 +18,8 @@ class UserObserver
     public function created(User $user)
     {
         Cache::tags([CacheRemovalTags::USER['SAVE']])->flush();
+        Cache::forget(UserManagementService::getUserCacheKey($user->id));
+        Cache::forget(UserManagementService::getPublicUserInfoCacheKey($user->id));
     }
 
     /**
@@ -28,6 +31,8 @@ class UserObserver
     public function updated(User $user)
     {
         Cache::tags([CacheRemovalTags::USER['SAVE']])->flush();
+        Cache::forget(UserManagementService::getUserCacheKey($user->id));
+        Cache::forget(UserManagementService::getPublicUserInfoCacheKey($user->id));
     }
 
     /**

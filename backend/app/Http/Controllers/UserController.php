@@ -5,16 +5,15 @@ namespace App\Http\Controllers;
 use App\Constants\FetchOptions;
 use App\Enums\SupportedLanguages;
 use App\Services\ResourceUpdater;
+use App\Services\User\UserManagementService;
 use App\Services\User\UserSearchService;
 use App\Services\User\UserStudySetsService;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Response;
 use Intervention\Image\Facades\Image;
 use Illuminate\Validation\Rule;
 use App\Services\RequestValidator;
-use DB;
 
 class UserController extends Controller
 {
@@ -27,7 +26,7 @@ class UserController extends Controller
             'language' => Rule::in(SupportedLanguages::$types)
         ]);
 
-        $user = User::findOrFail($user_id);
+        $user = UserManagementService::getUser($user_id);
 
         $is_anything_updated = false;
 
@@ -71,7 +70,7 @@ class UserController extends Controller
 
     public function getStudyClasses($user_id)
     {
-        $user = User::findOrFail($user_id);
+        $user = UserManagementService::getUser($user_id);
 
         return response()->json([
             'studyClasses' => $user->classes
