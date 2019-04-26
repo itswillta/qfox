@@ -2,6 +2,9 @@
 
 use Illuminate\Database\Seeder;
 
+use App\User;
+use Elasticsearch\Common\Exceptions\Missing404Exception;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -15,5 +18,23 @@ class DatabaseSeeder extends Seeder
         $this->call(StudyClassesTableSeeder::class);
         $this->call(StudySetsTableSeeder::class);
         $this->call(TermsTableSeeder::class);
+
+        $this->index();
+    }
+
+    /**
+     * Add all records to Elasticsearch index
+     */
+    public function index()
+    {
+        try {
+            User::deleteIndex();
+            User::createIndex();
+        } catch (Missing404Exception $exception) {
+            User::createIndex();
+        }
+
+        User::putMapping($ignoreConflicts = true);
+        User::addAllToIndex();
     }
 }

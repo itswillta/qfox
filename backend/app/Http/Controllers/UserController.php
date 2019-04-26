@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Constants\FetchOptions;
 use App\Enums\SupportedLanguages;
 use App\Services\ResourceUpdater;
+use App\Services\User\UserSearchService;
+use App\Services\User\UserStudySetsService;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -22,7 +24,7 @@ class UserController extends Controller
         RequestValidator::validateOrFail($request->all(), [
             'profile_picture_data' => 'image|mimes:jpeg,png,jpg,gif,svg',
             'name' => 'between:4,30',
-            'language' => Rule::in(SupportedLanguages::$type)
+            'language' => Rule::in(SupportedLanguages::$types)
         ]);
 
         $user = User::findOrFail($user_id);
@@ -57,36 +59,13 @@ class UserController extends Controller
         $order_by = $request->query('order_by') ?: FetchOptions::DEFAULT_ORDER_BY;
         $order_direction = $request->query('order_direction') ?: FetchOptions::DEFAULT_ORDER_DIRECTION;
 
-        $study_sets = DB::table('user_study_sets')
-            ->select('study_sets.id', 'role', 'title', 'view_permission', 'edit_permission', 'study_sets.created_at', 'study_sets.updated_at', DB::raw('count(terms.id) as total_terms'),
-                'user_id')
-            ->join('study_sets', 'study_sets.id', '=', 'user_study_sets.study_set_id')
-            ->leftJoin('terms', 'terms.study_set_id', '=', 'study_sets.id')
-            ->where('user_id', '=', $user_id)
-            ->groupBy('study_sets.id', 'user_id')
-            ->orderBy($order_by, $order_direction)
-            ->get();
+        $study_sets = UserStudySetsService::getAllStudySets($user_id, [
+            'order_by' => $order_by,
+            'order_direction' => $order_direction
+        ]);
 
         return response()->json([
             'studySets' => $study_sets
-        ]);
-    }
-
-    public function search(Request $request)
-    {
-        $users = User::complexSearch([
-            'body' => [
-                'query' => [
-                    'query_string' => [
-                        'fields' => ['name', 'username'],
-                        'quote_field_suffix' => '.exact',
-                        'query' => $request->query('query')]
-                ],
-            ],
-        ]);
-
-        return response()->json([
-            'users' => $users
         ]);
     }
 
@@ -96,6 +75,15 @@ class UserController extends Controller
 
         return response()->json([
             'studyClasses' => $user->classes
+        ]);
+    }
+
+    public function search(Request $request)
+    {
+        $users = UserSearchService::searchUserByQuery($request->query('query'));
+
+        return response()->json([
+            'users' => $users
         ]);
     }
 }

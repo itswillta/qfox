@@ -24,7 +24,7 @@ class ClassController extends Controller
             'description' => 'string',
             'permission' => [
                 'required',
-                Rule::in(ClassPermission::$type)
+                Rule::in(ClassPermission::$types)
             ]
         ]);
 
@@ -38,8 +38,6 @@ class ClassController extends Controller
             $class->users()->attach($user_id, ['role' => ClassRole::OWNER]);
         });
 
-        Cache::forget(ClassParticipantService::getOwnerIdCacheKey($class->id));
-
         return response()->noContent(Response::HTTP_CREATED);
     }
 
@@ -48,7 +46,7 @@ class ClassController extends Controller
         RequestValidator::validateOrFail($request->all(), [
             'name' => 'string',
             'description' => 'string',
-            'permission' => Rule::in(ClassPermission::$type)
+            'permission' => Rule::in(ClassPermission::$types)
         ]);
 
         $class = StudyClass::findOrFail($class_id);
@@ -84,11 +82,12 @@ class ClassController extends Controller
     {
         RequestValidator::validateOrFail($request->all(), [
             'userId' => 'required|integer',
+            'role' => Rule::in(ClassRole::$types)
         ]);
 
         $class = StudyClass::findOrFail($class_id);
 
-        $class->users()->attach($request->userId, ['role' => ClassRole::MEMBER]);
+        $class->users()->attach($request->userId, ['role' => $request->role ?: ClassRole::MEMBER]);
 
         return response()->noContent(Response::HTTP_CREATED);
     }
