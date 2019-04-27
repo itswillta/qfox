@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter } from 'react-router';
 
 import Hidden from '@material-ui/core/Hidden';
 
@@ -10,7 +9,7 @@ import sidebarSections from './sidebar/sidebarSections';
 
 let openSidebarFn;
 
-const Sidebar = ({ location: { pathname } }) => {
+const Sidebar = () => {
   const classes = useStyles();
 
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
@@ -29,7 +28,6 @@ const Sidebar = ({ location: { pathname } }) => {
         <SidebarSection
           classes={classes}
           sidebarSection={sidebarSection}
-          pathname={pathname}
           shouldHaveDivider={index < sidebarSections.length - 1}
           key={sidebarSection.sectionId}
         />
@@ -61,4 +59,4 @@ export const openSidebar = () => {
   openSidebarFn();
 };
 
-export default withRouter(Sidebar);
+export default Sidebar;

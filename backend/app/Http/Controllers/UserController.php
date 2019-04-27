@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\FetchOptions;
 use App\Enums\SupportedLanguages;
 use App\Services\ResourceUpdater;
-use App\User;
+use App\Services\User\UserManagementService;
+use App\Services\User\UserSearchService;
+use App\Services\User\UserStudySetsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Response;
 use Intervention\Image\Facades\Image;
 use Illuminate\Validation\Rule;
 use App\Services\RequestValidator;
-use DB;
 
 class UserController extends Controller
 {
@@ -21,10 +23,10 @@ class UserController extends Controller
         RequestValidator::validateOrFail($request->all(), [
             'profile_picture_data' => 'image|mimes:jpeg,png,jpg,gif,svg',
             'name' => 'between:4,30',
-            'language' => Rule::in(SupportedLanguages::$type)
+            'language' => Rule::in(SupportedLanguages::$types)
         ]);
 
-        $user = User::findOrFail($user_id);
+        $user = UserManagementService::getUser($user_id);
 
         $is_anything_updated = false;
 
@@ -53,42 +55,34 @@ class UserController extends Controller
 
     public function getStudySets(Request $request, $user_id)
     {
-        $type = $request->type;
+        $order_by = $request->query('order_by') ?: FetchOptions::DEFAULT_ORDER_BY;
+        $order_direction = $request->query('order_direction') ?: FetchOptions::DEFAULT_ORDER_DIRECTION;
 
-        if ($type === 'my') {
-            $user = User::findOrFail($user_id);
-
-            return response()->json([
-                'studySets' => $user->studySets
-            ]);
-        }
-
-        // FIXME: Need to normalize the response results
-        $study_sets = DB::table('user_study_sets')
-            ->select('id', 'role', 'title', 'view_permission', 'edit_permission', 'created_at', 'updated_at')
-            ->join('study_sets', 'study_set_id', '=', 'id')
-            ->where('user_id', '=', $user_id)->get()->toArray();
+        $study_sets = UserStudySetsService::getAllStudySets($user_id, [
+            'order_by' => $order_by,
+            'order_direction' => $order_direction
+        ]);
 
         return response()->json([
             'studySets' => $study_sets
         ]);
     }
 
-    public function search(Request $request)
+    public function getStudyClasses($user_id)
     {
-        $user = User::complexSearch([
-            'body' => [
-                'query' => [
-                    'query_string' => [
-                        'fields' => ['name', 'username'],
-                        'quote_field_suffix' => '.exact',
-                        'query' => $request->query('query')]
-                ],
-            ],
-        ]);
+        $user = UserManagementService::getUser($user_id);
 
         return response()->json([
-            'users' => $user
+            'studyClasses' => $user->classes
+        ]);
+    }
+
+    public function search(Request $request)
+    {
+        $users = UserSearchService::searchUserByQuery($request->query('query'));
+
+        return response()->json([
+            'users' => $users
         ]);
     }
 }

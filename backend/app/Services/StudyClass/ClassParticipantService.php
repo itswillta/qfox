@@ -2,6 +2,7 @@
 
 namespace App\Services\StudyClass;
 
+use App\Constants\CacheRemovalTags;
 use App\Enums\ClassRole;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +14,11 @@ class ClassParticipantService
     public static function getOwnerIdCacheKey($class_id)
     {
         return 'class_' . $class_id . '_owner_id';
+    }
+
+    public static function getAdminIdsCacheKey($class_id)
+    {
+        return 'class_' . $class_id . '_admin_ids';
     }
 
     public static function getOwnerId($class_id)
@@ -33,7 +39,7 @@ class ClassParticipantService
 
     public static function getAdminIds($class_id)
     {
-        return Cache::remember('class_' . $class_id . '_admin_ids', self::CACHE_TTL, function () use ($class_id) {
+        return Cache::remember(self::getAdminIdsCacheKey($class_id), self::CACHE_TTL, function () use ($class_id) {
             return array_map(function ($user_class_record) {
                 return $user_class_record->user_id;
             }, DB::table('user_classes')

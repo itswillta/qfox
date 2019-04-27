@@ -7,6 +7,7 @@ import StudySetsIcon from '@material-ui/icons/ViewAgenda';
 import CreateStudySetIcon from '@material-ui/icons/AddToPhotos';
 
 import appRoutes from '../../../routers/appRoutes';
+import { DYNAMIC_ITEM_TYPES } from './dynamicItemTypes';
 
 export default [
   {
@@ -33,6 +34,7 @@ export default [
     items: [
       {
         path: appRoutes.StudySets.url,
+        dynamicItemType: DYNAMIC_ITEM_TYPES.USER,
         codeName: 'studySets',
         displayName: 'Your Study Sets',
         icon: () => <StudySetsIcon />

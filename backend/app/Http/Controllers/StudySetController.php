@@ -24,11 +24,11 @@ class StudySetController extends Controller
             'title' => 'required|string',
             'viewPermission' => [
                 'required',
-                Rule::in(StudySetPermission::$view_permission)
+                Rule::in(StudySetPermission::$view_permission_types)
             ],
             'editPermission' => [
                 'required',
-                Rule::in(StudySetPermission::$edit_permission)
+                Rule::in(StudySetPermission::$edit_permission_types)
             ],
             'termList' => 'array|min:0',
         ]);
@@ -51,8 +51,6 @@ class StudySetController extends Controller
             }
         });
 
-        Cache::forget(StudySetParticipantService::getOwnerIdCacheKey($study_set->id));
-
         return response()->noContent(Response::HTTP_CREATED);
     }
 
@@ -62,10 +60,10 @@ class StudySetController extends Controller
         RequestValidator::validateOrFail($request->all(), [
             'title' => 'string',
             'viewPermission' => [
-                Rule::in(StudySetPermission::$view_permission)
+                Rule::in(StudySetPermission::$view_permission_types)
             ],
             'editPermission' => [
-                Rule::in(StudySetPermission::$edit_permission)
+                Rule::in(StudySetPermission::$edit_permission_types)
             ],
             'termList' => 'array|min:0',
         ]);

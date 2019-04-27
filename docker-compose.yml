@@ -1,6 +1,6 @@
 version: '3'
 services:
-  #PHP Service
+
   app:
     build:
       context: ./backend
@@ -24,8 +24,16 @@ services:
       - ./backend/config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     networks:
       - app-network
+  
+  redis:
+    image: redis:5.0.4-alpine
+    container_name: qfox_redis
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - '6379:6379'
+    networks:
+      - app-network
 
-  #Nginx Service
   webserver:
     image: nginx:alpine
     container_name: qfox_webserver
@@ -40,7 +48,6 @@ services:
     networks:
       - app-network
 
-  #MySQL Service
   db:
     build:
       context: ./backend
@@ -64,7 +71,6 @@ services:
     networks:
       - app-network
 
-  #Frontend (React) Service
   web:
     container_name: qfox_frontend_web
     build:
@@ -94,12 +100,10 @@ services:
     networks:
       - app-network
 
-#Docker Networks
 networks:
   app-network:
     driver: bridge
 
-#Volumes
 volumes:
   dbdata:
     driver: local

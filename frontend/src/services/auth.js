@@ -1,6 +1,7 @@
 import jwtDecode from 'jwt-decode';
 import authActions from '../states/auth/authActions';
 import { saveItemToStorage, getItemFromStorage, removeItemFromStorage } from './storage';
+import api from './restClient';
 
 const TOKEN_STORE_KEY = 'authToken';
 
@@ -8,10 +9,12 @@ const getUserProfileFromToken = authToken => jwtDecode(authToken).userProfile;
 
 const setUpToken = authToken => {
   saveItemToStorage(TOKEN_STORE_KEY, authToken);
+  api.header('Authorization', `Bearer ${authToken}`);
 };
 
 const cleanUpToken = () => {
   removeItemFromStorage(TOKEN_STORE_KEY);
+  api.header('Authorization', '');
 };
 
 const getExistingToken = () => getItemFromStorage(TOKEN_STORE_KEY);
@@ -26,6 +29,7 @@ const authenticateOnPageLoad = store => {
       return cleanUpToken();
     }
 
+    setUpToken(authToken);
     return store.dispatch(authActions.currentUser.set(getUserProfileFromToken(authToken)));
   }
 

@@ -5,8 +5,6 @@ use App\Http\Middleware\StudyClass\ValidateClassEditPermission;
 use App\Http\Middleware\StudySet\ValidateSetEditPermission;
 use App\Http\Middleware\Term\ValidateTermEditPermission;
 use App\Http\Middleware\StudySet\ValidateSetViewPermission;
-use App\User;
-use App\StudyClass;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +30,7 @@ Route::group(['middleware' => ['api', 'jwt.auth']], function () {
         Route::get('/search', 'UserController@search');
         Route::group(['middleware' => ValidateUserPermission::class], function () {
             Route::put('/{user_id}', 'UserController@update');
+            Route::get('/{user_id}/classes', 'UserController@getStudyClasses');
             Route::get('/{user_id}/study-sets', 'UserController@getStudySets');
         });
     });

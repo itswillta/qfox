@@ -34,16 +34,15 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Set a mappingProperties property for mapping in Elasticsearch/Eloquent
      *
-     *
      */
     protected $mappingProperties = array(
         'name' => [
-            'type' => 'string',
-            "analyzer" => "standard"
+            'type' => 'text',
+            'analyzer' => 'standard'
         ],
         'username' => [
-            'type' => 'string',
-            "analyzer" => "standard"
+            'type' => 'text',
+            'analyzer' => 'standard'
         ],
     );
 
@@ -53,7 +52,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $hidden = [
-        'password'
+        'google_id', 'facebook_id', 'password'
     ];
 
     /**
@@ -70,7 +69,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function classes()
     {
-        return $this->belongsToMany('App\StudyClass', 'user_classes');
+        return $this->belongsToMany('App\StudyClass', 'user_classes', 'user_id', 'class_id');
     }
 
     /**

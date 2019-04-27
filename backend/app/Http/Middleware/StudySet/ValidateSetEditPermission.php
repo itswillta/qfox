@@ -24,7 +24,7 @@ class ValidateSetEditPermission
         $user_id = (int)$request->route()->parameter('user_id');
         $study_set_id = (int)$request->route()->parameter('study_set_id');
 
-        $owner_id = StudySetParticipantService::getOwnerId($study_set_id);
+        $owner_id = (int)StudySetParticipantService::getOwnerId($study_set_id);
 
         if ($user_id !== $owner_id) {
             throw new RestResourceNotFoundException('Requested pair of user and study set does not exist.');
