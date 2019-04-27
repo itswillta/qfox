@@ -12,7 +12,6 @@ const usePublicDialog = (authState, toggleDialog, resetForm) => {
     if (authState.isAuthenticated) {
       toggleDialog(false)();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authState]);
 
   return {

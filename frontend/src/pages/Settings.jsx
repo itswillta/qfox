@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import useStyles from './settings/Settings.styles';
 
@@ -7,8 +7,10 @@ import UpdateProfilePicture from './settings/UpdateProfilePicture';
 import UpdateName from './settings/UpdateName';
 import UpdateLanguage from './settings/UpdateLanguage';
 
-const Settings = ({ authState }) => {
+const Settings = () => {
   const classes = useStyles();
+
+  const authState = useSelector(state => state.auth);
 
   return (
     <React.Fragment>
@@ -19,8 +21,4 @@ const Settings = ({ authState }) => {
   );
 };
 
-const mapStateToProps = state => ({
-  authState: state.auth
-});
-
-export default connect(mapStateToProps)(Settings);
+export default Settings;

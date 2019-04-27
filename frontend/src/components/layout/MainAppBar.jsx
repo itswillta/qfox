@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useRedux } from 'react-redux';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -14,8 +14,12 @@ import UserActionGroup from './mainAppBar/UserActionGroup';
 import CreateButton from './mainAppBar/CreateButton';
 import SearchBox from './mainAppBar/SearchBox';
 
-const MainAppBar = ({ authState, requestLogout }) => {
+const MainAppBar = () => {
   const classes = useStyles();
+
+  const [authState, { requestLogout }] = useRedux(state => state.auth, {
+    requestLogout: () => authActions.currentUser.logout()
+  });
 
   return (
     <div className={classes.root}>
@@ -35,15 +39,4 @@ const MainAppBar = ({ authState, requestLogout }) => {
   );
 };
 
-const mapStateToProps = state => ({
-  authState: state.auth
-});
-
-const mapDispatchToProps = dispatch => ({
-  requestLogout: () => dispatch(authActions.currentUser.logout())
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MainAppBar);
+export default MainAppBar;

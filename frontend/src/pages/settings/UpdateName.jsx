@@ -23,21 +23,13 @@ const UpdateName = ({ classes, authState }) => {
       <Grid container direction="row" spacing={1} className={classes.grid}>
         <Grid item xs={3} align="center">
           <Person color="action" className={classes.icon} />
-          <Typography
-            variant="h5"
-            color="textSecondary"
-            className={classes.title}
-          >
+          <Typography variant="h5" color="textSecondary" className={classes.title}>
             Name
           </Typography>
         </Grid>
         <Grid item xs={8}>
           <Paper className={classes.paper}>
-            <Typography
-              variant="h5"
-              color="textSecondary"
-              className={classes.title}
-            >
+            <Typography variant="h5" color="textSecondary" className={classes.title}>
               Input your name
             </Typography>
             <TextField

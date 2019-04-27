@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useRedux } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import Dialog from '@material-ui/core/Dialog';
@@ -12,8 +12,13 @@ import { authActions } from '../../states/auth';
 import useResponsiveDialog from '../../hooks/useResponsiveDialog';
 import usePublicDialog from '../../hooks/usePublicDialog';
 
-const LoginDialog = ({ isOpen, toggleDialog, authState, requestLogin, resetLoginForm }) => {
+const LoginDialog = ({ isOpen, toggleDialog }) => {
   const { t } = useTranslation();
+
+  const [authState, { requestLogin, resetLoginForm }] = useRedux(state => state.auth, {
+    requestLogin: loginData => authActions.login.pending(loginData),
+    resetLoginForm: () => authActions.loginForm.reset()
+  });
 
   const responsiveDialogProps = useResponsiveDialog();
   const publicDialogProps = usePublicDialog(authState, toggleDialog, resetLoginForm);
@@ -36,16 +41,4 @@ const LoginDialog = ({ isOpen, toggleDialog, authState, requestLogin, resetLogin
   );
 };
 
-const mapStateToProps = state => ({
-  authState: state.auth
-});
-
-const mapDispatchToProps = dispatch => ({
-  requestLogin: loginData => dispatch(authActions.login.pending(loginData)),
-  resetLoginForm: () => dispatch(authActions.loginForm.reset())
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LoginDialog);
+export default LoginDialog;

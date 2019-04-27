@@ -1,10 +1,12 @@
 import React, { useCallback } from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import SidebarItem from './SidebarItem';
 
 const SidebarDynamicUserItem = props => {
-  const { item, authState } = props;
+  const { item } = props;
+
+  const authState = useSelector(state => state.auth);
 
   const getUserItemPath = useCallback(path => path.replace(':userId', authState.userProfile.id), [
     authState
@@ -21,8 +23,4 @@ const SidebarDynamicUserItem = props => {
   return <SidebarItem {...newProps} />;
 };
 
-const mapStateToProps = state => ({
-  authState: state.auth
-});
-
-export default connect(mapStateToProps)(SidebarDynamicUserItem);
+export default SidebarDynamicUserItem;

@@ -40,25 +40,15 @@ const UpdateProfilePicture = ({ authState, classes }) => {
           <Avatar
             className={classes.icon}
             alt="Profile Picture"
-            src={
-              authState.userProfile.profilePictureUrl || defaultProfilePicture
-            }
+            src={authState.userProfile.profilePictureUrl || defaultProfilePicture}
           />
-          <Typography
-            variant="h5"
-            color="textSecondary"
-            className={classes.title}
-          >
+          <Typography variant="h5" color="textSecondary" className={classes.title}>
             Profile Picture
           </Typography>
         </Grid>
         <Grid item xs={8}>
           <Paper className={classes.paper}>
-            <Typography
-              variant="h5"
-              color="textSecondary"
-              className={classes.title}
-            >
+            <Typography variant="h5" color="textSecondary" className={classes.title}>
               Change your profile picture
             </Typography>
             <input

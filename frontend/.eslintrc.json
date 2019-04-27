@@ -24,7 +24,7 @@
     "import/prefer-default-export": 0,
     "comma-dangle": 0,
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
+    "react-hooks/exhaustive-deps": 0,
     "react/prop-types": 0,
     "object-curly-newline": 0,
     "implicit-arrow-linebreak": 0,

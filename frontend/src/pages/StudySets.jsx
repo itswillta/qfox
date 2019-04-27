@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
-import { compose } from 'recompose';
+import React, { useEffect, useCallback } from 'react';
 import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useRedux } from 'react-redux';
 
 import useStyles from './studySets/StudySets.styles';
 
@@ -9,12 +8,16 @@ import { studySetActions, studySetSelector } from '../states/studySets';
 import StudySetHeader from './studySets/StudySetHeader';
 import StudySetBody from './studySets/StudySetBody';
 
-const StudySets = ({ studySets, fetchStudySets, match }) => {
+const StudySets = ({ match }) => {
   const classes = useStyles();
+
+  const [studySets, { fetchStudySets }] = useRedux(state => studySetSelector(state.ormDB), {
+    fetchStudySets: userId => studySetActions.fetch.pending(userId)
+  });
 
   useEffect(() => {
     fetchStudySets(match.params.userId);
-  }, [fetchStudySets, match]);
+  }, []);
 
   return (
     <div className={classes.root}>
@@ -24,18 +27,4 @@ const StudySets = ({ studySets, fetchStudySets, match }) => {
   );
 };
 
-const mapStateToProps = state => ({
-  studySets: studySetSelector(state.ormDB)
-});
-
-const mapDispatchToProps = dispatch => ({
-  fetchStudySets: userId => dispatch(studySetActions.fetch.pending(userId))
-});
-
-export default compose(
-  withRouter,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )
-)(StudySets);
+export default withRouter(StudySets);

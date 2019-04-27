@@ -69,12 +69,7 @@ const ProfilePictureEditor = ({
           <Button onClick={handleClose} type="reset" color="primary">
             Cancle
           </Button>
-          <Button
-            type="submit"
-            color="primary"
-            variant="contained"
-            onClick={handleSubmit}
-          >
+          <Button type="submit" color="primary" variant="contained" onClick={handleSubmit}>
             Save
           </Button>
         </DialogActions>
