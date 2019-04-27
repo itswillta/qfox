@@ -53,7 +53,7 @@ export default [
     sectionDisplayName: 'YOUR CLASSES',
     items: [
       {
-        path: appRoutes.Class.url,
+        path: appRoutes.StudyClass.url,
         codeName: 'class',
         displayName: 'Class A',
         icon: () => <ClassIcon />
