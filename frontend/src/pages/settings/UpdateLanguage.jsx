@@ -34,26 +34,18 @@ const UpdateLanguage = ({ authState, classes }) => {
       <Grid container direction="row" spacing={1} className={classes.grid}>
         <Grid item xs={3} align="center">
           <Language color="action" className={classes.icon} />
-          <Typography
-            variant="h5"
-            color="textSecondary"
-            className={classes.title}
-          >
+          <Typography variant="h5" color="textSecondary" className={classes.title}>
             Language
           </Typography>
         </Grid>
         <Grid item xs={8}>
           <Paper className={classes.paper}>
-            <Typography
-              variant="h5"
-              color="textSecondary"
-              className={classes.title}
-            >
+            <Typography variant="h5" color="textSecondary" className={classes.title}>
               Choose your language
             </Typography>
             <Typography variant="subtitle1">
-              Adjust the language you see in menus, dialogues and instructions
-              and apply the corresponding date and time formats.
+              Adjust the language you see in menus, dialogues and instructions and apply the
+              corresponding date and time formats.
             </Typography>
             <TextField
               id="outlined-select-currency-native"

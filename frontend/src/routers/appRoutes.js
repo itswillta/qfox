@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable import/prefer-default-export */
 import LoadableRoute from './LoadableRoute';
 
@@ -50,10 +51,10 @@ const appRoutes = {
     pageTitle: 'Settings | QFox',
     private: true
   },
-  Class: {
+  StudyClass: {
     url: '/classes/:id',
     component: LoadableRoute({
-      loader: () => import('../pages/Class')
+      loader: () => import('../pages/StudyClass')
     }),
     pageTitle: 'Your Class | QFox',
     private: true

@@ -34,16 +34,10 @@ const Dialogs = () => {
   return (
     <React.Fragment>
       {isLoginDialogOpen && (
-        <LoadableLoginDialog
-          isOpen={isLoginDialogOpen}
-          toggleDialog={toggleLoginDialog}
-        />
+        <LoadableLoginDialog isOpen={isLoginDialogOpen} toggleDialog={toggleLoginDialog} />
       )}
       {isRegisterDialogOpen && (
-        <LoadableRegisterDialog
-          isOpen={isRegisterDialogOpen}
-          toggleDialog={toggleRegisterDialog}
-        />
+        <LoadableRegisterDialog isOpen={isRegisterDialogOpen} toggleDialog={toggleRegisterDialog} />
       )}
     </React.Fragment>
   );

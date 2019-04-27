@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
@@ -9,7 +9,8 @@ import Tab from '@material-ui/core/Tab';
 
 import defaultProfilePicture from '/images/profile-default.jpg';
 
-const StudySetHeader = ({ authState, classes }) => {
+const StudySetHeader = ({ classes }) => {
+  const authState = useSelector(state => state.auth);
   const [value, setValue] = React.useState(2);
 
   function handleChange(event, newValue) {
@@ -56,8 +57,4 @@ const StudySetHeader = ({ authState, classes }) => {
   );
 };
 
-const mapStateToProps = state => ({
-  authState: state.auth
-});
-
-export default connect(mapStateToProps)(StudySetHeader);
+export default StudySetHeader;

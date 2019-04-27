@@ -29,13 +29,14 @@ const SidebarItem = ({ item, location: { pathname }, classes }) => {
         <ListItemIcon className={classes.listItemIcon}>
           <ItemIcon />
         </ListItemIcon>
-        <ListItemText inset disableTypography>
-          <Typography
-            className={
-              item.specialText ? clsx(classes.listItemText, 'primary-text') : classes.listItemText
-            }
-            variant="body2"
-          >
+        <ListItemText
+          inset
+          disableTypography
+          className={
+            item.specialText ? clsx(classes.listItemText, 'primary-text') : classes.listItemText
+          }
+        >
+          <Typography color="inherit" variant="body2">
             {t(item.displayName)}
           </Typography>
         </ListItemText>

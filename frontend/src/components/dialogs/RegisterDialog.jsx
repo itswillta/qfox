@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { connect } from 'react-redux';
+import { useRedux, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import Dialog from '@material-ui/core/Dialog';
@@ -13,15 +13,17 @@ import { registerActions } from '../../states/register';
 import useResponsiveDialog from '../../hooks/useResponsiveDialog';
 import usePublicDialog from '../../hooks/usePublicDialog';
 
-const RegisterDialog = ({
-  isOpen,
-  toggleDialog,
-  authState,
-  resetRegisterForm,
-  registerState,
-  requestRegister
-}) => {
+const RegisterDialog = ({ isOpen, toggleDialog }) => {
   const { t } = useTranslation();
+
+  const [registerState, { requestRegister, resetRegisterForm }] = useRedux(
+    state => state.registration,
+    {
+      requestRegister: registerData => registerActions.register.pending(registerData),
+      resetRegisterForm: () => registerActions.registerForm.reset()
+    }
+  );
+  const authState = useSelector(state => state.auth);
 
   const responsiveDialogProps = useResponsiveDialog();
   const publicDialogProps = usePublicDialog(authState, toggleDialog, resetRegisterForm);
@@ -44,17 +46,4 @@ const RegisterDialog = ({
   );
 };
 
-const mapStateToProps = state => ({
-  registerState: state.registration,
-  authState: state.auth
-});
-
-const mapDispatchToProps = dispatch => ({
-  requestRegister: registerData => dispatch(registerActions.register.pending(registerData)),
-  resetRegisterForm: () => dispatch(registerActions.registerForm.reset())
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(RegisterDialog);
+export default RegisterDialog;

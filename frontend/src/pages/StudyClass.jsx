@@ -4,7 +4,7 @@ import useStyles from './dashboard/Dashboard.styles';
 
 import logoWithBg from '/images/logo-with-bg.svg';
 
-const Class = () => {
+const StudyClass = () => {
   const classes = useStyles();
 
   return (
@@ -14,4 +14,4 @@ const Class = () => {
   );
 };
 
-export default Class;
+export default StudyClass;
