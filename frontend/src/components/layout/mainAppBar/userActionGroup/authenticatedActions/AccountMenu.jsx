@@ -14,7 +14,6 @@ import LogoutIcon from '@material-ui/icons/PowerSettingsNew';
 
 import appRoutes from '../../../../../routers/appRoutes';
 
-import defaultProfilePicture from '/images/profile-default.jpg';
 import ActionDropdown from '../../../../ActionDropdown';
 
 const AccountMenu = ({ authState, requestLogout, classes }) => {
@@ -27,10 +26,7 @@ const AccountMenu = ({ authState, requestLogout, classes }) => {
   const buttonChildren = (
     <Grid container direction="row" alignItems="center" spacing={1}>
       <Grid item>
-        <Avatar
-          alt="Profile Picture"
-          src={authState.userProfile.profilePictureUrl || defaultProfilePicture}
-        />
+        <Avatar alt="Profile Picture" src={authState.userProfile.profilePictureUrl} />
       </Grid>
       <Grid item>
         <Typography variant="body1" color="inherit">
