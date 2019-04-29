@@ -52,4 +52,19 @@ class LoginController extends Controller
             'expiresIn' => $ttl
         ], Response::HTTP_OK);
     }
+
+    public function reLogin()
+    {
+        $user = User::findOrFail(auth()->id());
+
+        auth()->factory()->setTTL(self::TIME_TO_LIVE);
+        $token = auth()->login($user);
+        $ttl = auth()->factory()->getTTL() * 60;
+
+        return response()->json([
+            'authToken' => $token,
+            'type' => 'Bearer',
+            'expiresIn' => $ttl
+        ], Response::HTTP_OK);
+    }
 }

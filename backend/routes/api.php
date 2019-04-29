@@ -26,6 +26,8 @@ Route::group([
 });
 
 Route::group(['middleware' => ['api', 'jwt.auth']], function () {
+    Route::post('/auth/re-login', 'Auth\LoginController@reLogin');
+
     Route::group(['prefix' => 'users'], function () {
         Route::get('/search', 'UserController@search');
         Route::group(['middleware' => ValidateUserPermission::class], function () {
