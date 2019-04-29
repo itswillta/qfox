@@ -50,6 +50,7 @@ Route::group(['middleware' => ['api', 'jwt.auth']], function () {
 
     Route::group(['middleware' => ValidateUserPermission::class, 'prefix' => 'users/{user_id}/study-sets'], function () {
         Route::post('', 'StudySetController@create');
+        Route::get('/search', 'StudySetController@search');
         Route::group(['middleware' => ValidateSetEditPermission::class], function () {
             Route::put('/{study_set_id}', 'StudySetController@update');
             Route::delete('/{study_set_id}', 'StudySetController@delete');

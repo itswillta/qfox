@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 
 use App\User;
+use App\StudySet;
 use App\StudyClass;
 use Elasticsearch\Common\Exceptions\Missing404Exception;
 
@@ -37,8 +38,9 @@ class DatabaseSeeder extends Seeder
 
         User::putMapping($ignoreConflicts = true);
         User::addAllToIndex();
-
         StudyClass::putMapping($ignoreConflicts = true);
         StudyClass::addAllToIndex();
+        StudySet::putMapping($ignoreConflicts = true);
+        StudySet::addAllToIndex();
     }
 }
