@@ -33,11 +33,11 @@ class StudyClass extends Model
      */
     protected $mappingProperties = array(
         'name' => [
-            'type' => 'string',
+            'type' => 'text',
             "analyzer" => "standard"
         ],
         'description' => [
-            'type' => 'string',
+            'type' => 'text',
             "analyzer" => "standard"
         ]
     );

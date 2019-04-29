@@ -4,16 +4,18 @@ import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 
-import defaultProfilePicture from '/images/profile-default.jpg';
-
-const StudySetOwner = ({ classes }) => (
+const StudySetOwner = ({ owner, classes }) => (
   <Grid container spacing={1}>
     <Grid item>
-      <Avatar alt="Remy Sharp" src={defaultProfilePicture} className={classes.avatar} />
+      <Avatar
+        alt={`${owner.name}'s profile picture`}
+        src={owner.profilePictureUrl}
+        className={classes.avatar}
+      />
     </Grid>
     <Grid item>
       <Typography variant="subtitle2" color="primary">
-        John Doe
+        {owner.name}
       </Typography>
     </Grid>
   </Grid>

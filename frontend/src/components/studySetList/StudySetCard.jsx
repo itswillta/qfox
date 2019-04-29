@@ -10,6 +10,7 @@ import StudySetActions from './studySetCard/StudySetActions';
 
 const StudySetCard = ({ classes, studySet }) => (
   <Paper square className={classes.card}>
+    <div className={classes.clickableArea} />
     <Grid container alignItems="center" justify="space-between">
       <Grid item>
         <Grid container direction="column">
@@ -22,7 +23,7 @@ const StudySetCard = ({ classes, studySet }) => (
               </Grid>
               <VerticalDivider />
               <Grid item>
-                <StudySetOwner classes={classes} />
+                <StudySetOwner classes={classes} owner={studySet.owner} />
               </Grid>
             </Grid>
           </Grid>
@@ -34,7 +35,7 @@ const StudySetCard = ({ classes, studySet }) => (
         </Grid>
       </Grid>
       <Grid item>
-        <StudySetActions />
+        <StudySetActions classes={classes} />
       </Grid>
     </Grid>
   </Paper>

@@ -7,15 +7,15 @@ import Typography from '@material-ui/core/Typography';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
-import defaultProfilePicture from '/images/profile-default.jpg';
-
-const StudySetHeader = ({ classes }) => {
+const StudySetHeader = ({
+  classes,
+  allStudySetLength,
+  createdStudySetLength,
+  otherStudySetLength,
+  tabValue,
+  handleChangeTab
+}) => {
   const authState = useSelector(state => state.auth);
-  const [value, setValue] = React.useState(2);
-
-  function handleChange(event, newValue) {
-    setValue(newValue);
-  }
 
   return (
     <div className={classes.header}>
@@ -23,7 +23,7 @@ const StudySetHeader = ({ classes }) => {
         <Grid item className={classes.leftContainer}>
           <Avatar
             alt="Profile Picture"
-            src={authState.userProfile.profilePictureUrl || defaultProfilePicture}
+            src={authState.userProfile.profilePictureUrl}
             className={classes.headerAvatar}
           />
         </Grid>
@@ -32,22 +32,22 @@ const StudySetHeader = ({ classes }) => {
           <Tabs
             classes={{ indicator: classes.tabIndicator }}
             className={classes.tabs}
-            value={value}
-            onChange={handleChange}
+            value={tabValue}
+            onChange={handleChangeTab}
           >
             <Tab
               className={classes.tab}
-              label="All (24)"
+              label={`All (${allStudySetLength})`}
               classes={{ selected: classes.selectedTab }}
             />
             <Tab
               className={classes.tab}
-              label="Created (21)"
+              label={`Created (${createdStudySetLength})`}
               classes={{ selected: classes.selectedTab }}
             />
             <Tab
               className={classes.tab}
-              label="Others (3)"
+              label={`Others (${otherStudySetLength})`}
               classes={{ selected: classes.selectedTab }}
             />
           </Tabs>
