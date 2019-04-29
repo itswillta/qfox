@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useRedux } from 'react-redux';
 
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -7,13 +8,15 @@ import Language from '@material-ui/icons/Language';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
+import { userActions } from '../../states/users';
+
 const languageOptions = [
   {
     value: 'en',
     label: 'English'
   },
   {
-    value: 'vn',
+    value: 'vi',
     label: 'Tiếng Việt'
   }
 ];
@@ -21,12 +24,23 @@ const languageOptions = [
 const UpdateLanguage = ({ authState, classes }) => {
   const [language, setLanguage] = useState(authState.userProfile.language);
 
+  const [userAsyncStatus, { updateUser }] = useRedux(
+    state => state.userAsyncStatus,
+    {
+      updateUser: ({ userId, updateFields }) =>
+        userActions.updateUser.pending({ userId, updateFields })
+    }
+  );
+
   const handleLanguageSelected = e => {
     setLanguage(e.target.value);
   };
 
-  const handleSubmit = () => {
-    console.log(language);
+  const handleChangeLanguage = () => {
+    updateUser({
+      userId: authState.userProfile.id,
+      updateFields: { language }
+    });
   };
 
   return (
@@ -34,25 +48,33 @@ const UpdateLanguage = ({ authState, classes }) => {
       <Grid container direction="row" spacing={1} className={classes.grid}>
         <Grid item xs={3} align="center">
           <Language color="action" className={classes.icon} />
-          <Typography variant="h5" color="textSecondary" className={classes.title}>
+          <Typography
+            variant="h5"
+            color="textSecondary"
+            className={classes.title}
+          >
             Language
           </Typography>
         </Grid>
         <Grid item xs={8}>
           <Paper className={classes.paper}>
-            <Typography variant="h5" color="textSecondary" className={classes.title}>
+            <Typography
+              variant="h5"
+              color="textSecondary"
+              className={classes.title}
+            >
               Choose your language
             </Typography>
             <Typography variant="subtitle1">
-              Adjust the language you see in menus, dialogues and instructions and apply the
-              corresponding date and time formats.
+              Adjust the language you see in menus, dialogues and instructions
+              and apply the corresponding date and time formats.
             </Typography>
             <TextField
-              id="outlined-select-currency-native"
               select
               className={classes.textField}
               value={language}
               onChange={handleLanguageSelected}
+              disabled={userAsyncStatus.isLoading}
               SelectProps={{
                 native: true
               }}
@@ -69,9 +91,10 @@ const UpdateLanguage = ({ authState, classes }) => {
             <Button
               type="submit"
               color="primary"
+              disabled={userAsyncStatus.isLoading}
               variant="contained"
               className={classes.button}
-              onClick={handleSubmit}
+              onClick={handleChangeLanguage}
             >
               Change your language
             </Button>
