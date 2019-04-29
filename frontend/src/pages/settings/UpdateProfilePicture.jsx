@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-for */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
+import { useRedux } from 'react-redux';
 
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -12,10 +13,20 @@ import defaultProfilePicture from '/images/profile-default.jpg';
 
 import UpdateProfilePictureDiaglog from './updateProfilePicture/UpdateProfilePictureDialog';
 
+import { userActions } from '../../states/users';
+
 const UpdateProfilePicture = ({ authState, classes }) => {
   const [profilePictureData, setProfilePictureData] = useState('');
   const [fileInputValue, setFileInputValue] = useState('');
   const [isFileSelected, setIsFileSelected] = useState(false);
+
+  const [userAsyncStatus, { updateUser }] = useRedux(
+    state => state.userAsyncStatus,
+    {
+      updateUser: ({ userId, updateFields }) =>
+        userActions.updateUser.pending({ userId, updateFields })
+    }
+  );
 
   const handleFileSelected = e => {
     setIsFileSelected(true);
@@ -30,7 +41,10 @@ const UpdateProfilePicture = ({ authState, classes }) => {
   };
 
   const handleSubmitProfilePicture = value => {
-    console.log(value);
+    updateUser({
+      userId: authState.userProfile.id,
+      updateFields: { profile_picture_data: value }
+    });
   };
 
   return (
@@ -42,13 +56,21 @@ const UpdateProfilePicture = ({ authState, classes }) => {
             alt="Profile Picture"
             src={authState.userProfile.profilePictureUrl || defaultProfilePicture}
           />
-          <Typography variant="h5" color="textSecondary" className={classes.title}>
+          <Typography
+            variant="h5"
+            color="textSecondary"
+            className={classes.title}
+          >
             Profile Picture
           </Typography>
         </Grid>
         <Grid item xs={8}>
           <Paper className={classes.paper}>
-            <Typography variant="h5" color="textSecondary" className={classes.title}>
+            <Typography
+              variant="h5"
+              color="textSecondary"
+              className={classes.title}
+            >
               Change your profile picture
             </Typography>
             <input
@@ -56,6 +78,7 @@ const UpdateProfilePicture = ({ authState, classes }) => {
               className={classes.fileInput}
               id="contained-button-file"
               multiple
+              disabled={userAsyncStatus.isLoading}
               type="file"
               onChange={handleFileSelected}
               value={fileInputValue}
@@ -65,6 +88,7 @@ const UpdateProfilePicture = ({ authState, classes }) => {
                 variant="contained"
                 component="span"
                 color="primary"
+                disabled={userAsyncStatus.isLoading}
                 className={classes.button}
               >
                 Upload profile picture

@@ -19,9 +19,7 @@ class UserController extends Controller
 {
     public function update(Request $request, $user_id)
     {
-        // FIXME: Need to confirm with frontend
         RequestValidator::validateOrFail($request->all(), [
-            'profile_picture_data' => 'image|mimes:jpeg,png,jpg,gif,svg',
             'name' => 'between:4,30',
             'language' => Rule::in(SupportedLanguages::$types)
         ]);
@@ -42,6 +40,7 @@ class UserController extends Controller
 
             // TODO: Make an ENV variable for development mode and deployment mode
             $user->profile_picture_url = 'http://localhost/images/' . $filename;
+            $user->save();
         }
 
         $is_anything_updated = ResourceUpdater::update($request->only('name', 'language'), $user) || $is_anything_updated;
@@ -50,7 +49,7 @@ class UserController extends Controller
             $user->reindex();
         }
 
-        return response()->noContent($is_anything_updated ? Response::HTTP_OK : Response::HTTP_NOT_MODIFIED);
+        return response()->noContent($is_anything_updated ? Response::HTTP_OK : Response::HTTP_NO_CONTENT);
     }
 
     public function getStudySets(Request $request, $user_id)
