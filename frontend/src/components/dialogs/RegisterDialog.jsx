@@ -25,6 +25,10 @@ const RegisterDialog = ({ isOpen, toggleDialog }) => {
   );
   const authState = useSelector(state => state.auth);
 
+  const handleSubmitRegisterForm = values => {
+    requestRegister(values);
+  };
+
   const responsiveDialogProps = useResponsiveDialog();
   const publicDialogProps = usePublicDialog(authState, toggleDialog, resetRegisterForm);
 
@@ -37,7 +41,7 @@ const RegisterDialog = ({ isOpen, toggleDialog }) => {
     >
       <DialogTitle id="register-form-dialog-title">{t('Sign up')}</DialogTitle>
       <RegisterForm
-        requestRegister={requestRegister}
+        onSubmit={handleSubmitRegisterForm}
         registerState={registerState}
         closeDialog={publicDialogProps.onClose}
       />

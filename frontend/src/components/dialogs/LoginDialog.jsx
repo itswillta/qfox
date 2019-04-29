@@ -20,6 +20,10 @@ const LoginDialog = ({ isOpen, toggleDialog }) => {
     resetLoginForm: () => authActions.loginForm.reset()
   });
 
+  const handleSubmitLoginForm = values => {
+    requestLogin(values);
+  };
+
   const responsiveDialogProps = useResponsiveDialog();
   const publicDialogProps = usePublicDialog(authState, toggleDialog, resetLoginForm);
 
@@ -32,7 +36,7 @@ const LoginDialog = ({ isOpen, toggleDialog }) => {
     >
       <DialogTitle id="login-dialog-title">{t('Log in')}</DialogTitle>
       <LoginForm
-        requestLogin={requestLogin}
+        onSubmit={handleSubmitLoginForm}
         authState={authState}
         closeDialog={publicDialogProps.onClose}
       />
