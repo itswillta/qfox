@@ -8,11 +8,19 @@ import { getUserProfileFromToken, setUpToken, cleanUpToken } from '../../service
 import restApiWorkerSaga from '../../utils/redux/restApiWorkerSaga';
 
 function* loginUser(action) {
+  const handleResponse = responseBody => {
+    setUpToken(responseBody.authToken);
+    return getUserProfileFromToken(responseBody.authToken);
+  };
+
+  if (action.payload.isRelogin) {
+    yield call(restApiWorkerSaga, authRequests.requestReLogin, action.payload, authActions.login, {
+      handleResponse
+    });
+  }
+
   yield call(restApiWorkerSaga, authRequests.requestLogin, action.payload, authActions.login, {
-    handleResponse: responseBody => {
-      setUpToken(responseBody.authToken);
-      return getUserProfileFromToken(responseBody.authToken);
-    }
+    handleResponse
   });
 }
 
