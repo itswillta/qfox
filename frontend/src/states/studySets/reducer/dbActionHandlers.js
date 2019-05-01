@@ -10,4 +10,6 @@ const fetchStudySetsToDB = (dbState, action) => {
   return session.state;
 };
 
-export { fetchStudySetsToDB };
+const createStudySetInDB = () => {};
+
+export { fetchStudySetsToDB, createStudySetInDB };

@@ -7,7 +7,7 @@ export default makeStyles(theme => ({
     padding: theme.spacing(2),
     borderBottom: `${theme.spacing(0.8)}px solid white`,
     '&:hover': {
-      background: theme.palette.grey[100],
+      background: theme.palette.grey[50],
       transition: 'all 0.1s ease-in-out',
       borderBottom: `${theme.spacing(0.8)}px solid ${theme.palette.secondary.light}`
     }

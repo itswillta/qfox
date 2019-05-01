@@ -1,6 +1,5 @@
 import React from 'react';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
 
 import Layout from '../components/Layout';
 import NotFound from '../pages/NotFound';
@@ -9,8 +8,7 @@ import withHelmet from '../hocs/withHelmet';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 import appRoutes from './appRoutes';
-
-const history = createBrowserHistory();
+import { history } from '../services/history';
 
 const AppLayout = () => {
   const privateRoutes = Object.keys(appRoutes).filter(route => appRoutes[route].private);
@@ -58,7 +56,5 @@ const AppRouter = () => {
     </Router>
   );
 };
-
-export { history };
 
 export default AppRouter;

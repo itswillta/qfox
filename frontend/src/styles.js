@@ -18,6 +18,15 @@ export default makeStyles({
     },
     '.bold-text': {
       fontWeight: theme.typography.fontWeightMedium
+    },
+    '.flex-grow': {
+      flexGrow: 1
+    },
+    '.help-cursor': {
+      cursor: 'help'
+    },
+    '.no-padding': {
+      padding: '0 !important'
     }
   }
 });

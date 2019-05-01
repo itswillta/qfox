@@ -1,39 +1,68 @@
 import { updateObject } from '../../../utils/redux/utilityFunctions';
 
-const initialAsyncStatus = {
-  fetchStatus: {
-    isLoading: false,
-    error: {}
-  }
+const setUpAsyncStatusProp = propName => {
+  const initialAsyncStatus = {
+    [propName]: {
+      isLoading: false,
+      error: {}
+    }
+  };
+
+  const handleRequest = state =>
+    updateObject(state, {
+      [propName]: {
+        isLoading: true,
+        error: {}
+      }
+    });
+
+  const handleSuccess = state =>
+    updateObject(state, {
+      [propName]: {
+        isLoading: false,
+        isLastRequestSuccessful: true,
+        error: {}
+      }
+    });
+
+  const handleError = (state, action) =>
+    updateObject(state, {
+      [propName]: {
+        isLoading: false,
+        isLastRequestSuccessful: false,
+        error: action.payload
+      }
+    });
+
+  return {
+    initialAsyncStatus,
+    handleRequest,
+    handleSuccess,
+    handleError
+  };
 };
 
-const handleFetchStudySetRequest = state =>
-  updateObject(state, {
-    fetchStatus: {
-      isLoading: true,
-      error: {}
-    }
-  });
+const fetchStatusProps = setUpAsyncStatusProp('fetchStatus');
+const createStatusProps = setUpAsyncStatusProp('createStatus');
 
-const handleFetchStudySetSuccess = state =>
-  updateObject(state, {
-    fetchStatus: {
-      isLoading: false,
-      error: {}
-    }
-  });
+const initialAsyncStatus = {
+  ...fetchStatusProps.initialAsyncStatus,
+  ...createStatusProps.initialAsyncStatus
+};
 
-const handleFetchStudySetError = (state, action) =>
-  updateObject(state, {
-    fetchStatus: {
-      isLoading: false,
-      error: action.payload
-    }
-  });
+const handleFetchStudySetRequest = fetchStatusProps.handleRequest;
+const handleFetchStudySetSuccess = fetchStatusProps.handleSuccess;
+const handleFetchStudySetError = fetchStatusProps.handleError;
+const handleCreateStudySetRequest = createStatusProps.handleRequest;
+const handleCreateStudySetSuccess = createStatusProps.handleSuccess;
+const handleCreateStudySetError = createStatusProps.handleError;
 
 export {
   initialAsyncStatus,
   handleFetchStudySetRequest,
   handleFetchStudySetSuccess,
-  handleFetchStudySetError
+  handleFetchStudySetError,
+  handleCreateStudySetRequest,
+  handleCreateStudySetSuccess,
+  handleCreateStudySetError
 };
