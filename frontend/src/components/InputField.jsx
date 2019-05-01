@@ -1,50 +1,34 @@
 import React from 'react';
-import { Field } from 'redux-form';
 import { useTranslation } from 'react-i18next';
+import { Field } from 'react-final-form';
 
 import TextField from '@material-ui/core/TextField';
 
 const renderTextField = ({
   label,
   input,
+  variant = 'outlined',
   placeholder,
   serverError,
-  meta: { touched, invalid, error },
-  ...custom
+  meta: { touched, error },
+  ...rest
 }) => (
   <TextField
     label={label}
     placeholder={placeholder}
-    error={touched && (!!serverError || invalid)}
+    error={touched && (!!serverError || !!error)}
     helperText={touched && (serverError || error)}
+    variant={variant}
+    fullWidth
     {...input}
-    {...custom}
+    {...rest}
   />
 );
 
-const InputField = ({
-  label,
-  name,
-  onChange,
-  variant = 'outlined',
-  serverError,
-  placeholder = '',
-  ...props
-}) => {
+const InputField = ({ name, label, ...rest }) => {
   const { t } = useTranslation();
 
-  return (
-    <Field
-      name={name}
-      label={t(label)}
-      placeholder={t(placeholder)}
-      serverError={t(serverError)}
-      variant={variant}
-      component={renderTextField}
-      fullWidth
-      {...props}
-    />
-  );
+  return <Field name={name} label={t(label)} component={renderTextField} {...rest} />;
 };
 
 export default InputField;

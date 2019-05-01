@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
 import { all, fork } from 'redux-saga/effects';
-import { reducer as formReducer } from 'redux-form';
 
 import { authReducer, authSagas } from './auth';
 import { registerReducer, registerSagas } from './register';
@@ -11,8 +10,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   registration: registerReducer,
   studySetAsyncStatus: studySetAsyncStatusReducer,
-  ormDB: ormDBReducer,
-  form: formReducer
+  ormDB: ormDBReducer
 });
 
 function* rootSaga() {

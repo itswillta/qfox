@@ -20,7 +20,10 @@ export default makeStyles(theme => ({
     fontWeight: theme.typography.fontWeightMedium
   },
   basicFieldGroup: {
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(2)
+  },
+  buttonIcon: {
+    marginRight: theme.spacing(1)
   },
   headerCreateButton: {
     padding: theme.spacing(1.5, 3)
@@ -41,7 +44,7 @@ export default makeStyles(theme => ({
       }
     }
   },
-  termFieldDescription: {
+  fieldDescription: {
     color: theme.palette.grey[600],
     letterSpacing: '1.2px',
     fontWeight: theme.typography.fontWeightMedium
@@ -56,5 +59,8 @@ export default makeStyles(theme => ({
   },
   termDeleteButton: {
     display: 'none'
+  },
+  bodyCreateButton: {
+    padding: theme.spacing(2.5, 6)
   }
 }));

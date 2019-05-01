@@ -6,8 +6,8 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import ViewPermissionIcon from '@material-ui/icons/Visibility';
 import EditPermissionIcon from '@material-ui/icons/Edit';
 
-import InputField from '../InputField';
-import DropdownMenu from '../DropdownMenu';
+import InputField from '../../InputField';
+import DropdownMenu from '../../DropdownMenu';
 import { viewPermissions, editPermissions } from './studySetPermissions';
 
 const CreateStudySetBasicFields = ({ classes }) => (
@@ -18,7 +18,7 @@ const CreateStudySetBasicFields = ({ classes }) => (
         label="Title"
         name="title"
         variant="standard"
-        helperText="Subject, chapter, unit, etc"
+        placeholder="Subject, chapter, unit, etc"
       />
     </Grid>
     <Grid item md={6} xs={12}>
