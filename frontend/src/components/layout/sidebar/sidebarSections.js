@@ -5,6 +5,7 @@ import ClassIcon from '@material-ui/icons/Group';
 import SettingsIcon from '@material-ui/icons/Settings';
 import StudySetsIcon from '@material-ui/icons/ViewAgenda';
 import CreateStudySetIcon from '@material-ui/icons/AddToPhotos';
+import CreateStudyClassIcon from '@material-ui/icons/GroupAdd';
 
 import appRoutes from '../../../routers/appRoutes';
 import { DYNAMIC_ITEM_TYPES } from './dynamicItemTypes';
@@ -54,9 +55,17 @@ export default [
     items: [
       {
         path: appRoutes.StudyClass.url,
+        dynamicItemType: DYNAMIC_ITEM_TYPES.USER,
         codeName: 'class',
-        displayName: 'Class A',
+        displayName: 'Your Classes',
         icon: () => <ClassIcon />
+      },
+      {
+        path: appRoutes.CreateStudyClass.url,
+        codeName: 'createStudyClasses',
+        displayName: 'Join or create a study class',
+        icon: () => <CreateStudyClassIcon />,
+        specialText: true
       }
     ]
   }
