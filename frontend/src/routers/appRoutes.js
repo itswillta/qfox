@@ -52,9 +52,25 @@ const appRoutes = {
     private: true
   },
   StudyClass: {
-    url: '/classes/:id',
+    url: '/:userId/study-classes',
     component: LoadableRoute({
       loader: () => import('../pages/StudyClass')
+    }),
+    pageTitle: 'Your Class | QFox',
+    private: true
+  },
+  CreateStudyClass: {
+    url: '/study-classes/create',
+    component: LoadableRoute({
+      loader: () => import('../pages/JoinOrCreateStudyClass')
+    }),
+    pageTitle: 'Create a new study class | QFox',
+    private: true
+  },
+  StudyClassItem: {
+    url: '/study-classes/:id',
+    component: LoadableRoute({
+      loader: () => import('../pages/StudyClassItem')
     }),
     pageTitle: 'Your Class | QFox',
     private: true
