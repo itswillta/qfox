@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enums\StudySetRole;
-use App\Services\StudySet\StudySetParticipantService;
 use App\StudySet;
 use App\Enums\StudySetPermission;
 use App\Term;
@@ -12,7 +11,6 @@ use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 use App\Services\RequestValidator;
 use App\Services\ResourceUpdater;
-use Illuminate\Support\Facades\Cache;
 use App\Services\Term\TermManagementService;
 use DB;
 
@@ -30,7 +28,7 @@ class StudySetController extends Controller
                 'required',
                 Rule::in(StudySetPermission::$edit_permission_types)
             ],
-            'termList' => 'array|min:0',
+            'terms' => 'array|min:0',
         ]);
 
         $study_set = new StudySet();
@@ -38,16 +36,16 @@ class StudySetController extends Controller
         $study_set->view_permission = $request->viewPermission;
         $study_set->edit_permission = $request->editPermission;
 
-        $termList = $request->termList;
+        $terms = $request->terms;
 
-        DB::transaction(function () use ($termList, $study_set, $user_id) {
+        DB::transaction(function () use ($terms, $study_set, $user_id) {
             $study_set->save();
             $study_set->addToIndex();
             $study_set->users()->attach($user_id, ['role' => StudySetRole::OWNER]);
-            if ($termList) {
+            if ($terms) {
                 $study_set_id = $study_set->id;
-                foreach ($termList as $term_info) {
-                    TermManagementService::create($term_info, $study_set_id);
+                foreach ($terms as $term) {
+                    TermManagementService::create($term, $study_set_id);
                 }
             }
         });

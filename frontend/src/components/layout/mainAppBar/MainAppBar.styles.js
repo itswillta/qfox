@@ -3,7 +3,8 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 
 export default makeStyles(theme => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
+    zIndex: 1
   },
   grow: {
     flexGrow: 1

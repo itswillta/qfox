@@ -36,8 +36,11 @@ const authenticateOnPageLoad = store => {
   return false;
 };
 
+const getCurrentUserProfile = () => getUserProfileFromToken(getExistingToken());
+
 export {
   getUserProfileFromToken,
+  getCurrentUserProfile,
   setUpToken,
   getExistingToken,
   cleanUpToken,

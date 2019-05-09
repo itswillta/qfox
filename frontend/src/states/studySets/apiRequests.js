@@ -7,4 +7,10 @@ const fetch = userId =>
     .all(STUDY_SETS_RESOURCE_NAME)
     .getAll();
 
-export default { fetch };
+const create = ({ userId, studySetInfo }) =>
+  api
+    .one(USERS_RESOURCE_NAME, userId)
+    .all(STUDY_SETS_RESOURCE_NAME)
+    .post(studySetInfo);
+
+export default { fetch, create };
