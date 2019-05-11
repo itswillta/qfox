@@ -12,6 +12,9 @@ export default makeStyles(theme => ({
       borderBottom: `${theme.spacing(0.8)}px solid ${theme.palette.secondary.light}`
     }
   },
+  cardLink: {
+    textDecoration: 'none'
+  },
   clickableArea: {
     position: 'absolute',
     height: '100%',

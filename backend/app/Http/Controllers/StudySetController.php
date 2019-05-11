@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\StudySetRole;
+use App\Services\StudySet\StudySetManagementService;
 use App\StudySet;
 use App\Enums\StudySetPermission;
 use App\Term;
@@ -102,6 +103,13 @@ class StudySetController extends Controller
         $study_set->removeFromIndex();
 
         return response()->noContent(Response::HTTP_OK);
+    }
+
+    public function getOne($user_id, $study_set_id)
+    {
+        $study_set = StudySetManagementService::getFullStudySet($study_set_id);
+
+        return response()->json($study_set);
     }
 
     public function getAllTerms($user_id, $study_set_id)

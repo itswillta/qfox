@@ -1,4 +1,5 @@
 import React from 'react';
+
 import StudySetList from '../../components/StudySetList';
 
 const StudySetBody = ({ classes, studySets }) => (
