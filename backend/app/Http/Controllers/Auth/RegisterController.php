@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Helpers\ResponseFormatter;
+use App\Services\ResponseFormatter;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Services\RequestValidator;
 
 class RegisterController extends Controller
 {
@@ -34,7 +35,7 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(),
+        RequestValidator::validateOrFail($request->all(),
             [
                 'username' => 'unique:users|required|string|between:6,15',
                 'name' => 'required|string|between:4,30',
@@ -45,18 +46,6 @@ class RegisterController extends Controller
             ]
         );
 
-        if ($validator->fails()) {
-            $details = ResponseFormatter::flattenValidatorErrors($validator);
-
-            return response()->json([
-                'error' => [
-                    "code" => Response::HTTP_BAD_REQUEST,
-                    "message" => 'Registration failed. Please check your registration information.',
-                    "details" => (object)$details
-                ]
-            ], Response::HTTP_BAD_REQUEST);
-        }
-
         $user = new User();
         $user->username = $request->username;
         $user->name = $request->name;
@@ -64,6 +53,7 @@ class RegisterController extends Controller
         $user->profile_picture_url = "";
         $user->language = "en";
         $user->save();
+        $user->addToIndex();
 
         return response()->noContent(Response::HTTP_CREATED);
     }

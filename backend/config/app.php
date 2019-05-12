@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => env('APP_TIMEZONE', 'Asia/Ho_Chi_Minh'),
 
     /*
     |--------------------------------------------------------------------------
@@ -180,6 +180,8 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
 
+        Elasticquent\ElasticquentServiceProvider::class,
+
     ],
 
     /*
@@ -235,6 +237,7 @@ return [
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 
 
+        'Es' => Elasticquent\ElasticquentElasticsearchFacade::class
     ],
 
 ];

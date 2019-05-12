@@ -1,5 +1,6 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable import/prefer-default-export */
-import LoadableRoute from '../hocs/LoadableRoute';
+import LoadableRoute from './LoadableRoute';
 
 const appRoutes = {
   Welcome: {
@@ -27,11 +28,35 @@ const appRoutes = {
     private: true
   },
   StudySets: {
-    url: '/study-sets',
+    url: '/:userId/study-sets',
     component: LoadableRoute({
       loader: () => import('../pages/StudySets')
     }),
     pageTitle: 'Study Sets | QFox',
+    private: true
+  },
+  StudySet: {
+    url: '/:userId/study-sets/:studySetId',
+    component: LoadableRoute({
+      loader: () => import('../pages/StudySet')
+    }),
+    pageTitle: 'Learn Study Set | QFox',
+    private: true
+  },
+  EditStudySet: {
+    url: '/:userId/study-sets/:studySetId/edit',
+    component: LoadableRoute({
+      loader: () => import('../pages/EditStudySet')
+    }),
+    pageTitle: 'Edit Study Set | QFox',
+    private: true
+  },
+  CreateStudySet: {
+    url: '/study-sets/create',
+    component: LoadableRoute({
+      loader: () => import('../pages/CreateStudySet')
+    }),
+    pageTitle: 'Create Study Set | QFox',
     private: true
   },
   Settings: {
@@ -42,12 +67,36 @@ const appRoutes = {
     pageTitle: 'Settings | QFox',
     private: true
   },
-  Class: {
-    url: '/classes/:id',
+  StudyClass: {
+    url: '/:userId/study-classes',
     component: LoadableRoute({
-      loader: () => import('../pages/Class')
+      loader: () => import('../pages/StudyClass')
     }),
     pageTitle: 'Your Class | QFox',
+    private: true
+  },
+  CreateStudyClass: {
+    url: '/study-classes/create',
+    component: LoadableRoute({
+      loader: () => import('../pages/JoinOrCreateStudyClass')
+    }),
+    pageTitle: 'Create a new study class | QFox',
+    private: true
+  },
+  StudyClassItem: {
+    url: '/study-classes/:id',
+    component: LoadableRoute({
+      loader: () => import('../pages/StudyClassItem')
+    }),
+    pageTitle: 'Your Class | QFox',
+    private: true
+  },
+  Flashcards: {
+    url: '/:studySetId/flashcards',
+    component: LoadableRoute({
+      loader: () => import('../pages/Flashcards')
+    }),
+    pageTitle: 'Flashcards | QFox',
     private: true
   }
 };

@@ -5,10 +5,22 @@ namespace App;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Elasticquent\ElasticquentTrait;
 
+/**
+ * Class User
+ * @package App
+ * @property int $id
+ * @property string $username
+ * @property string $name
+ * @property string $password
+ * @property string $profile_picture_url
+ * @property \App\Enums\SupportedLanguages $language
+ */
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
+    use ElasticquentTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -20,12 +32,27 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     /**
+     * Set a mappingProperties property for mapping in Elasticsearch/Eloquent
+     *
+     */
+    protected $mappingProperties = array(
+        'name' => [
+            'type' => 'text',
+            'analyzer' => 'standard'
+        ],
+        'username' => [
+            'type' => 'text',
+            'analyzer' => 'standard'
+        ],
+    );
+
+    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
     protected $hidden = [
-        'password'
+        'google_id', 'facebook_id', 'password'
     ];
 
     /**
@@ -34,7 +61,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function studySets()
     {
-        return $this->belongsToMany('App\Term', 'user_study_sets');
+        return $this->belongsToMany('App\StudySet', 'user_study_sets');
     }
 
     /**
@@ -42,7 +69,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function classes()
     {
-        return $this->belongsToMany('App\StudyClass', 'user_classes');
+        return $this->belongsToMany('App\StudyClass', 'user_classes', 'user_id', 'class_id');
     }
 
     /**
@@ -86,6 +113,13 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getJWTCustomClaims()
     {
-        return [];
+        $userProfile = [
+            'id' => $this->id,
+            'name' => $this->name,
+            'language' => $this->language,
+            'profilePictureUrl' => $this->profile_picture_url
+        ];
+
+        return ['userProfile' => $userProfile];
     }
 }

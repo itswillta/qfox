@@ -15,6 +15,27 @@ export default makeStyles({
       [theme.breakpoints.down('sm')]: {
         width: '100%'
       }
+    },
+    '.bold-text': {
+      fontWeight: theme.typography.fontWeightMedium
+    },
+    '.flex-grow': {
+      flexGrow: 1
+    },
+    '.help-cursor': {
+      cursor: 'help'
+    },
+    '.no-padding': {
+      padding: '0 !important'
+    },
+    '.no-underline': {
+      textDecoration: 'none'
+    },
+    '.uppercased-text': {
+      textTransform: 'uppercase'
+    },
+    '.margin-bottom': {
+      marginBottom: theme.spacing(1)
     }
   }
 });

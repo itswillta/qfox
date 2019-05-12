@@ -4,38 +4,29 @@ namespace App\Http\Controllers;
 
 use App\Enums\ClassPermission;
 use App\Enums\ClassRole;
-use App\Helpers\ResponseFormatter;
+use App\Http\ApiErrorResponse;
+use App\Services\RequestValidator;
+use App\Services\ResourceUpdater;
+use App\Services\StudyClass\ClassParticipantService;
 use App\StudyClass;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
-use DB;
 
 class ClassController extends Controller
 {
     public function create(Request $request, $user_id)
     {
-        $validator = Validator::make($request->all(), [
+        RequestValidator::validateOrFail($request->all(), [
             'name' => 'required|string',
             'description' => 'string',
             'permission' => [
                 'required',
-                Rule::in(ClassPermission::$type)
+                Rule::in(ClassPermission::$types)
             ]
         ]);
-
-        if ($validator->fails()) {
-            $details = ResponseFormatter::flattenValidatorErrors($validator);
-
-            return response()->json([
-                'error' => [
-                    'code' => Response::HTTP_BAD_REQUEST,
-                    'message' => 'Failed to create class. Please check your class information.',
-                    'details' => (object)$details
-                ]
-            ], Response::HTTP_BAD_REQUEST);
-        }
 
         $class = new StudyClass();
         $class->name = $request->name;
@@ -44,62 +35,129 @@ class ClassController extends Controller
 
         DB::transaction(function () use ($class, $user_id) {
             $class->save();
+            $class->addToIndex();
             $class->users()->attach($user_id, ['role' => ClassRole::OWNER]);
         });
 
-        return response()->json([
-            'message' => 'Successfully created class.',
-            'details' => $class
-        ], Response::HTTP_CREATED);
+        return response()->noContent(Response::HTTP_CREATED);
     }
 
-    public function update(Request $request, $class_id)
+    public function update(Request $request, $user_id, $class_id)
     {
-        $validator = Validator::make($request->all(), [
+        RequestValidator::validateOrFail($request->all(), [
             'name' => 'string',
             'description' => 'string',
-            'permission' => Rule::in(ClassPermission::$type)
+            'permission' => Rule::in(ClassPermission::$types)
         ]);
-
-        if ($validator->fails()) {
-            $details = ResponseFormatter::flattenValidatorErrors($validator);
-
-            return response()->json([
-                'error' => [
-                    'code' => Response::HTTP_BAD_REQUEST,
-                    'message' => 'Failed to edit class. Please check your class information.',
-                    'details' => (object)$details
-                ]
-            ], Response::HTTP_BAD_REQUEST);
-        }
 
         $class = StudyClass::findOrFail($class_id);
 
-        $is_anything_updated = false;
-
-        if ($request->name) {
-            $is_anything_updated = true;
-            $class->name = $request->name;
-        }
-
-        if ($request->description) {
-            $is_anything_updated = true;
-            $class->description = $request->description;
-        }
-
-        if ($request->permission) {
-            $is_anything_updated = true;
-            $class->permission = $request->permission;
-        }
+        $is_anything_updated = ResourceUpdater::update($request->all(), $class);
 
         if ($is_anything_updated) {
-            $class->save();
+            $class->reindex();
         }
 
-        return response()->json([
-            'message' => $is_anything_updated ? 'Successfully edited class.' : 'There is nothing to update.',
-            "details" => $class
+        return response()->noContent($is_anything_updated ? Response::HTTP_OK : Response::HTTP_NOT_MODIFIED);
+    }
+
+    public function addStudySet(Request $request, $user_id, $class_id)
+    {
+        RequestValidator::validateOrFail($request->all(), [
+            'studySetId' => 'required|integer',
         ]);
 
+        $class = StudyClass::findOrFail($class_id);
+
+        $class->studySets()->attach($request->studySetId);
+
+        return response()->noContent(Response::HTTP_CREATED);
+    }
+
+    public function delete($user_id, $class_id)
+    {
+        $class = StudyClass::findOrFail($class_id);
+
+        $class->delete();
+        $class->removeFromIndex();
+
+        return response()->noContent(Response::HTTP_OK);
+    }
+
+    public function addMember(Request $request, $user_id, $class_id)
+    {
+        RequestValidator::validateOrFail($request->all(), [
+            'userId' => 'required|integer',
+            'role' => Rule::in(ClassRole::$types)
+        ]);
+
+        $class = StudyClass::findOrFail($class_id);
+
+        $class->users()->attach($request->userId, ['role' => $request->role ?: ClassRole::MEMBER]);
+
+        return response()->noContent(Response::HTTP_CREATED);
+    }
+
+    public function removeMembers(Request $request, $user_id, $class_id)
+    {
+        RequestValidator::validateOrFail($request->all(), [
+            'userIds' => 'required|array',
+            'userIds.*' => 'integer'
+        ]);
+
+        $class_owner_id = ClassParticipantService::getOwnerId($class_id);
+
+        foreach ($request->userIds as $user_id_to_delete) {
+            if ($class_owner_id === $user_id_to_delete) {
+                return response()->json(ApiErrorResponse::generate(
+                    Response::HTTP_BAD_REQUEST,
+                    'Failed to remove members from class. Please check your member information.',
+                    [
+                        'userId' => 'User with id ' . $user_id_to_delete . ' is the owner.'
+                    ]
+                ), Response::HTTP_BAD_REQUEST);
+            }
+        }
+
+        $class = StudyClass::findOrFail($class_id);
+        $class->users()->detach($request->userIds);
+
+        return response()->noContent(Response::HTTP_OK);
+    }
+
+    public function removeStudySets(Request $request, $user_id, $class_id)
+    {
+        RequestValidator::validateOrFail($request->all(), [
+            'studySetIds' => 'required|array',
+            'studySetIds.*' => 'integer'
+        ]);
+
+        $class = StudyClass::findOrFail($class_id);
+        $class->studySets()->detach($request->studySetIds);
+
+        return response()->noContent(Response::HTTP_OK);
+    }
+
+    public function search(Request $request)
+    {
+        $classes = StudyClass::complexSearch([
+            'body' => [
+                'query' => [
+                    'bool' => [
+                        'must' => [
+                            'multi_match' => [
+                                'query' => $request->query('query'),
+                                'fields' => ['name', 'description'],
+                                'fuzziness' => 'AUTO',
+                            ]
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        return response()->json([
+            'classes' => $classes
+        ]);
     }
 }

@@ -21,9 +21,9 @@ class CreateLiveSessionDetailsTable extends Migration
             $table->string('user_answer', 1); // user_answer: varchar(1)
             $table->integer('answer_time'); // answer_time: int(11)
 
-            $table->foreign('session_id')->references('id')->on('live_sessions');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('term_id')->references('id')->on('terms');
+            $table->foreign('session_id')->references('id')->on('live_sessions')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('term_id')->references('id')->on('terms')->onDelete('cascade');
         });
     }
 

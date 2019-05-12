@@ -18,8 +18,8 @@ class CreateStudySetClassesTable extends Migration
             $table->unsignedBigInteger('study_set_id'); // study_set_id: bigint(20)
             $table->unsignedBigInteger('class_id'); // class_id: bigint(20)
 
-            $table->foreign('study_set_id')->references('id')->on('study_sets');
-            $table->foreign('class_id')->references('id')->on('study_classes');
+            $table->foreign('study_set_id')->references('id')->on('study_sets')->onDelete('cascade');
+            $table->foreign('class_id')->references('id')->on('study_classes')->onDelete('cascade');
         });
     }
 

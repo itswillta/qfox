@@ -2,58 +2,69 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\ApiErrorResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Services\RequestValidator;
 
 class LoginController extends Controller
 {
+    const TIME_TO_LIVE = 1440; // 1440 minutes = 1 day
+
     public function login(Request $request)
     {
-        $username = $request->input('username');
-        $password = $request->input('password');
+        RequestValidator::validateOrFail($request->all(), [
+            'username' => 'required|string',
+            'password' => 'required|string'
+        ]);
+
+        $username = $request->username;
+        $password = $request->password;
 
         $user = User::where('username', '=', $username)->first();
 
         if (!$user) {
-            return response()->json([
-                "error" => [
-                    "code" => Response::HTTP_BAD_REQUEST,
-                    "message" => 'Authentication failed. Please check your credentials.',
-                    "details" => [
-                        "username" => "Username doesn't exist."
-                    ]
-                ]
-            ], Response::HTTP_BAD_REQUEST);
+            return response()->json(ApiErrorResponse::generate(
+                Response::HTTP_BAD_REQUEST,
+                'Authentication failed. Please check your credentials.',
+                ['username' => "Username doesn't exist."]
+            ), Response::HTTP_BAD_REQUEST);
         }
 
         if (!Hash::check($password, $user->password)) {
-            return response()->json([
-                "error" => [
-                    "code" => Response::HTTP_BAD_REQUEST,
-                    "message" => 'Authentication failed. Please check your credentials.',
-                    "details" => [
-                        "password" => "Password incorrect."
-                    ]
-                ]
-            ], Response::HTTP_BAD_REQUEST);
+            return response()->json(ApiErrorResponse::generate(
+                Response::HTTP_BAD_REQUEST,
+                'Authentication failed. Please check your credentials.',
+                ['password' => 'Password incorrect.']
+            ), Response::HTTP_BAD_REQUEST);
         }
 
-        $userProfile = [
-            'id' => $user->id,
-            'name' => $user->name,
-            'language' => $user->language,
-            'profilePictureUrl' => $user->profile_picture_url
-        ];
-
-        $token = auth()->claims(['userProfile' => $userProfile])->login($user);
+        auth()->factory()->setTTL(self::TIME_TO_LIVE);
+        $token = auth()->login($user);
         $ttl = auth()->factory()->getTTL() * 60;
 
         return response()->json([
             'authToken' => $token,
-            'expires' => $ttl
+            'type' => 'Bearer',
+            'expiresIn' => $ttl
+        ], Response::HTTP_OK);
+    }
+
+    public function reLogin()
+    {
+        $user = User::findOrFail(auth()->id());
+
+        auth()->factory()->setTTL(self::TIME_TO_LIVE);
+        $token = auth()->login($user);
+        $ttl = auth()->factory()->getTTL() * 60;
+
+        return response()->json([
+            'authToken' => $token,
+            'type' => 'Bearer',
+            'expiresIn' => $ttl
         ], Response::HTTP_OK);
     }
 
