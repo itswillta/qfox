@@ -25,7 +25,8 @@ class SocialAuthController
 
         $userProvider = Socialite::driver($social)->user();
 
-        $user = User::where('facebook_id', '=', $userProvider->getId())->first();
+
+        $user = User::where($social.'_id', '=', $userProvider->getId())->first();
 
         if($user){
             return response()->json([
@@ -37,7 +38,12 @@ class SocialAuthController
             $user = new User();
             $user->username = $userProvider->getEmail();
             $user->name = $userProvider->getName();
-            $user->facebook_id = $userProvider->getId();
+            if($social === 'facebook') {
+                $user->facebook_id = $userProvider->getId();
+            }
+            else if($social === 'google'){
+                $user->google_id = $userProvider->getId();
+            }
             $user->profile_picture_url = $userProvider->getAvatar();
             $user->language = "en";
             $user->save();
