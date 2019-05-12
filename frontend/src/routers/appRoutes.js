@@ -35,12 +35,20 @@ const appRoutes = {
     pageTitle: 'Study Sets | QFox',
     private: true
   },
+  StudySet: {
+    url: '/:userId/study-sets/:studySetId',
+    component: LoadableRoute({
+      loader: () => import('../pages/StudySet')
+    }),
+    pageTitle: 'Learn Study Set | QFox',
+    private: true
+  },
   CreateStudySet: {
     url: '/study-sets/create',
     component: LoadableRoute({
       loader: () => import('../pages/CreateStudySet')
     }),
-    pageTitle: 'Create a new study set | QFox',
+    pageTitle: 'Create Study Set | QFox',
     private: true
   },
   Settings: {

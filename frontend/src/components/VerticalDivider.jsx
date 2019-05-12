@@ -11,6 +11,7 @@ const useStyles = makeStyles(theme => ({
   },
   verticalDivider: {
     height: '70%',
+    minHeight: 16,
     margin: theme.spacing(0, 1.5),
     borderRight: `2px solid ${theme.palette.grey[300]}`
   }

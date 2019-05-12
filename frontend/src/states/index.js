@@ -4,6 +4,7 @@ import { all, fork } from 'redux-saga/effects';
 import { authReducer, authSagas } from './auth';
 import { registerReducer, registerSagas } from './register';
 import { studySetAsyncStatusReducer, studySetSagas } from './studySets';
+import { fullStudySetReducer, fullStudySetSagas } from './fullStudySet';
 import { ormDBReducer } from './ormDB';
 import { userAsyncStatusReducer, userSagas } from './users';
 
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   registration: registerReducer,
   studySetAsyncStatus: studySetAsyncStatusReducer,
   userAsyncStatus: userAsyncStatusReducer,
+  currentStudySet: fullStudySetReducer,
   ormDB: ormDBReducer
 });
 
@@ -20,7 +22,8 @@ function* rootSaga() {
     fork(authSagas),
     fork(registerSagas),
     fork(studySetSagas),
-    fork(userSagas)
+    fork(userSagas),
+    fork(fullStudySetSagas)
   ]);
 }
 

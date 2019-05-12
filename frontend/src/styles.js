@@ -27,6 +27,9 @@ export default makeStyles({
     },
     '.no-padding': {
       padding: '0 !important'
+    },
+    '.uppercased-text': {
+      textTransform: 'uppercase'
     }
   }
 });

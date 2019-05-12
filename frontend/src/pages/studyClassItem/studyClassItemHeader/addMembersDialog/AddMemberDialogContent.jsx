@@ -16,8 +16,7 @@ const AddMemberDialogContent = () => {
     <DialogContent>
       <Grid className={classes.grid}>
         <Typography variant="subtitle1">
-          Invite people to this class by entering their Quizlet username or
-          email address.
+          Invite people to this class by entering their Quizlet username or email address.
         </Typography>
       </Grid>
       <Grid container direction="row" justify="space-between">

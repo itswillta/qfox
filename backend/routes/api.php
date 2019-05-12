@@ -68,6 +68,7 @@ Route::group(['middleware' => ['api', 'jwt.auth']], function () {
     });
 });
 
-Route::group(['middleware' => ValidateSetViewPermission::class, 'prefix' => 'users/{user_id}/study-sets/{study_set_id}/terms'], function () {
-    Route::get('', 'StudySetController@getAllTerms');
+Route::group(['middleware' => ValidateSetViewPermission::class, 'prefix' => 'users/{user_id}/study-sets/{study_set_id}'], function () {
+    Route::get('', 'StudySetController@getOne');
+    Route::get('/terms', 'StudySetController@getAllTerms');
 });
