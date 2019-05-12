@@ -23,6 +23,7 @@
     "object-set": "^1.0.1",
     "react": "^16.8.6",
     "react-avatar-editor": "11.0.7",
+    "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "16.8.4",
     "react-final-form": "4.1.0",
     "react-final-form-arrays": "^2.0.3",

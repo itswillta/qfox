@@ -5,15 +5,16 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 
-import VerticalDivider from './studySetCard/VerticalDivider';
+import VerticalDivider from '../VerticalDivider';
 import OwnerInfo from '../OwnerInfo';
 import StudySetActions from './studySetCard/StudySetActions';
 import appRoutes from '../../routers/appRoutes';
 
 const StudySetCard = ({ classes, studySet }) => {
-  const getStudySetPath = useCallback(path => path.replace(':studySetId', studySet.id), [
-    studySet.id
-  ]);
+  const getStudySetPath = useCallback(
+    path => path.replace(':userId', studySet.owner.id).replace(':studySetId', studySet.id),
+    [studySet.id, studySet.owner.id]
+  );
 
   return (
     <Link className={classes.cardLink} to={getStudySetPath(appRoutes.StudySet.url)}>
