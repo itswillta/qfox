@@ -28,8 +28,14 @@ export default makeStyles({
     '.no-padding': {
       padding: '0 !important'
     },
+    '.no-underline': {
+      textDecoration: 'none'
+    },
     '.uppercased-text': {
       textTransform: 'uppercase'
+    },
+    '.margin-bottom': {
+      marginBottom: theme.spacing(1)
     }
   }
 });

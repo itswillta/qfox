@@ -43,6 +43,14 @@ const appRoutes = {
     pageTitle: 'Learn Study Set | QFox',
     private: true
   },
+  EditStudySet: {
+    url: '/:userId/study-sets/:studySetId/edit',
+    component: LoadableRoute({
+      loader: () => import('../pages/EditStudySet')
+    }),
+    pageTitle: 'Edit Study Set | QFox',
+    private: true
+  },
   CreateStudySet: {
     url: '/study-sets/create',
     component: LoadableRoute({

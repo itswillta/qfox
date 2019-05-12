@@ -9,7 +9,7 @@ class ResourceUpdater
         $is_anything_updated = false;
 
         foreach ($fields_to_update as $property => $newValue) {
-            if ($resource->$property !== $newValue) {
+            if ($property !== 'id' && $property !== 'updatedAt' && $property !== 'createdAt' && $resource->$property !== $newValue) {
                 $is_anything_updated = true;
                 $resource->$property = $newValue;
             }

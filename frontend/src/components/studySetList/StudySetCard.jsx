@@ -9,6 +9,8 @@ import VerticalDivider from '../VerticalDivider';
 import OwnerInfo from '../OwnerInfo';
 import StudySetActions from './studySetCard/StudySetActions';
 import appRoutes from '../../routers/appRoutes';
+import { openDialog } from '../Dialogs';
+import { redirectTo } from '../../services/history';
 
 const StudySetCard = ({ classes, studySet }) => {
   const getStudySetPath = useCallback(
@@ -16,39 +18,49 @@ const StudySetCard = ({ classes, studySet }) => {
     [studySet.id, studySet.owner.id]
   );
 
+  const studySetPath = getStudySetPath(appRoutes.StudySet.url);
+
+  const handleEdit = () => {
+    redirectTo(`${studySetPath}/edit`);
+  };
+
+  const handleDelete = () => {
+    openDialog('deleteStudySet', studySet);
+  };
+
   return (
-    <Link className={classes.cardLink} to={getStudySetPath(appRoutes.StudySet.url)}>
-      <Paper square className={classes.card}>
+    <Paper square className={classes.card}>
+      <Link className={classes.cardLink} to={studySetPath}>
         <div className={classes.clickableArea} />
-        <Grid container alignItems="center" justify="space-between">
-          <Grid item>
-            <Grid container direction="column">
-              <Grid item>
-                <Grid container>
-                  <Grid item>
-                    <Typography variant="subtitle2">
-                      {studySet.totalTerms} {studySet.totalTerms > 1 ? 'terms' : 'term'}
-                    </Typography>
-                  </Grid>
-                  <VerticalDivider />
-                  <Grid item>
-                    <OwnerInfo classes={classes} owner={studySet.owner} />
-                  </Grid>
+      </Link>
+      <Grid className={classes.contentArea} container alignItems="center" justify="space-between">
+        <Grid item>
+          <Grid container direction="column">
+            <Grid item>
+              <Grid container>
+                <Grid item>
+                  <Typography variant="subtitle2">
+                    {studySet.totalTerms} {studySet.totalTerms > 1 ? 'terms' : 'term'}
+                  </Typography>
+                </Grid>
+                <VerticalDivider />
+                <Grid item className={classes.higherZIndex}>
+                  <OwnerInfo classes={classes} owner={studySet.owner} />
                 </Grid>
               </Grid>
-              <Grid item>
-                <Typography variant="h5" className="bold-text">
-                  {studySet.title}
-                </Typography>
-              </Grid>
+            </Grid>
+            <Grid item>
+              <Typography variant="h5" className="bold-text">
+                {studySet.title}
+              </Typography>
             </Grid>
           </Grid>
-          <Grid item>
-            <StudySetActions classes={classes} />
-          </Grid>
         </Grid>
-      </Paper>
-    </Link>
+        <Grid item className={classes.higherZIndex}>
+          <StudySetActions classes={classes} handleDelete={handleDelete} handleEdit={handleEdit} />
+        </Grid>
+      </Grid>
+    </Paper>
   );
 };
 

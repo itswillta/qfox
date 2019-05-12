@@ -2,9 +2,9 @@ import React from 'react';
 
 import StudySetList from '../../components/StudySetList';
 
-const StudySetBody = ({ classes, studySets }) => (
+const StudySetBody = ({ classes, studySets, listTitle }) => (
   <div className={classes.body}>
-    <StudySetList studySets={studySets} />
+    <StudySetList studySets={studySets} listTitle={listTitle} />
   </div>
 );
 

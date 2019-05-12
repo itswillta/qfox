@@ -35,18 +35,22 @@ const StudySets = ({ match }) => {
   }, []);
 
   let studySetsToDisplay;
+  let listTitle;
 
   switch (tabValue) {
     case 0: {
       studySetsToDisplay = allStudySets;
+      listTitle = 'All your study sets';
       break;
     }
     case 1: {
       studySetsToDisplay = createdStudySets;
+      listTitle = 'Your created study sets';
       break;
     }
     case 2: {
       studySetsToDisplay = otherStudySets;
+      listTitle = 'Study sets from others';
       break;
     }
     default:
@@ -63,7 +67,7 @@ const StudySets = ({ match }) => {
         tabValue={tabValue}
         handleChangeTab={handleChangeTab}
       />
-      <StudySetBody classes={classes} studySets={studySetsToDisplay} />
+      <StudySetBody classes={classes} listTitle={listTitle} studySets={studySetsToDisplay} />
     </div>
   );
 };
