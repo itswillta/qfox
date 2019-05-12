@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRedux } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -22,6 +23,7 @@ const languageOptions = [
 ];
 
 const UpdateLanguage = ({ authState, classes }) => {
+  const { t } = useTranslation();
   const [language, setLanguage] = useState(authState.userProfile.language);
 
   const [userAsyncStatus, { updateUser }] = useRedux(
@@ -53,7 +55,7 @@ const UpdateLanguage = ({ authState, classes }) => {
             color="textSecondary"
             className={classes.title}
           >
-            Language
+            {t('Language')}
           </Typography>
         </Grid>
         <Grid item xs={8}>
@@ -63,11 +65,12 @@ const UpdateLanguage = ({ authState, classes }) => {
               color="textSecondary"
               className={classes.title}
             >
-              Choose your language
+              {t('Choose your language')}
             </Typography>
             <Typography variant="subtitle1">
-              Adjust the language you see in menus, dialogues and instructions
-              and apply the corresponding date and time formats.
+              {t(
+                'Adjust the language you see in menus, dialogues and instructions and apply the corresponding date and time formats.'
+              )}
             </Typography>
             <TextField
               select
@@ -96,7 +99,7 @@ const UpdateLanguage = ({ authState, classes }) => {
               className={classes.button}
               onClick={handleChangeLanguage}
             >
-              Change your language
+              {t('Change your language')}
             </Button>
           </Paper>
         </Grid>
