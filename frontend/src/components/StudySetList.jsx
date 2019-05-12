@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import TextField from '@material-ui/core/TextField';
+
+import SearchIcon from '@material-ui/icons/Search';
 
 import StudySetCard from './studySetList/StudySetCard';
 import useStyles from './studySetList/StudySetList.styles';
 import { getGroupedByTimeStudySets } from '../utils/groupByTime/studySets';
+import { fuseFilterStudySets } from './studySetList/fuseSearch';
 
 const StudySetGroup = ({ classes, groupTitle, studySets }) => (
   <React.Fragment>
@@ -26,13 +32,53 @@ const StudySetGroup = ({ classes, groupTitle, studySets }) => (
   </React.Fragment>
 );
 
-const StudySetList = ({ studySets }) => {
+const StudySetList = ({ studySets, listTitle = 'Your study sets' }) => {
   const classes = useStyles();
+  const { t } = useTranslation();
 
-  const groupedByTimeStudySets = getGroupedByTimeStudySets(studySets);
+  const [filterInput, setFilterInput] = useState('');
+
+  const handleFilterInputChange = e => {
+    setFilterInput(e.target.value);
+  };
+
+  let filteredStudySets = studySets;
+
+  if (filterInput.length > 1) {
+    filteredStudySets = fuseFilterStudySets(studySets, filterInput);
+  }
+
+  const groupedByTimeStudySets = getGroupedByTimeStudySets(filteredStudySets);
 
   return (
     <Grid container direction="column" spacing={2}>
+      <Grid item>
+        <Grid container alignItems="center">
+          <Grid item>
+            <Typography variant="h5" className="bold-text">
+              {t(listTitle)}
+            </Typography>
+          </Grid>
+          <Grid item className="flex-grow">
+            <Grid container justify="flex-end">
+              <Grid item>
+                <TextField
+                  value={filterInput}
+                  onChange={handleFilterInputChange}
+                  placeholder={t('Filter')}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchIcon />
+                      </InputAdornment>
+                    )
+                  }}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
       {groupedByTimeStudySets.thisWeek.length > 0 && (
         <StudySetGroup
           classes={classes}

@@ -13,4 +13,16 @@ const create = ({ userId, studySetInfo }) =>
     .all(STUDY_SETS_RESOURCE_NAME)
     .post(studySetInfo);
 
-export default { fetch, create };
+const update = ({ userId, studySetId, updateFields }) =>
+  api
+    .one(USERS_RESOURCE_NAME, userId)
+    .one(STUDY_SETS_RESOURCE_NAME, studySetId)
+    .put(updateFields);
+
+const deleteForever = ({ userId, studySetId }) =>
+  api
+    .one(USERS_RESOURCE_NAME, userId)
+    .one(STUDY_SETS_RESOURCE_NAME, studySetId)
+    .delete();
+
+export default { fetch, create, update, deleteForever };

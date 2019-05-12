@@ -10,6 +10,18 @@ const fetchStudySetsToDB = (dbState, action) => {
   return session.state;
 };
 
-const createStudySetInDB = () => {};
+const deleteStudySetFromDB = (dbState, action) => {
+  const session = orm.session(dbState);
 
-export { fetchStudySetsToDB, createStudySetInDB };
+  const { StudySet } = session;
+
+  const foundStudySet = StudySet.withId(action.payload.studySetId);
+
+  if (foundStudySet) {
+    foundStudySet.delete();
+  }
+
+  return session.state;
+};
+
+export { fetchStudySetsToDB, deleteStudySetFromDB };

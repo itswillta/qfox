@@ -10,24 +10,34 @@ export default makeStyles(theme => ({
       background: theme.palette.grey[50],
       transition: 'all 0.1s ease-in-out',
       borderBottom: `${theme.spacing(0.8)}px solid ${theme.palette.secondary.light}`
-    }
+    },
+    minHeight: 90
   },
   cardLink: {
     textDecoration: 'none'
   },
+  contentArea: {
+    zIndex: 2
+  },
+  higherZIndex: {
+    zIndex: 2
+  },
   clickableArea: {
+    left: 0,
+    top: 0,
     position: 'absolute',
     height: '100%',
     width: '100%',
     '&:hover': {
       cursor: 'pointer'
-    }
+    },
+    zIndex: 1
   },
   listItemIcon: {
-    color: theme.palette.secondary.main,
     marginRight: 0
   },
-  listItemText: {
+  listItemText: {},
+  deleteColor: {
     color: `${theme.palette.secondary.main} !important`
   },
   groupTitle: {

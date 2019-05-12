@@ -25,7 +25,7 @@ const StudySetHeader = ({ classes, studySet }) => (
             <Grid item className="flex-grow">
               <Grid container justify="flex-end">
                 <Grid item>
-                  <StudySetHeaderButtons classes={classes} />
+                  <StudySetHeaderButtons classes={classes} studySet={studySet} />
                 </Grid>
               </Grid>
             </Grid>

@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Services\Term\TermManagementService;
+use App\Services\StudySet\StudySetManagementService;
 use App\Term;
 use Illuminate\Support\Facades\Cache;
 
@@ -17,6 +18,7 @@ class TermObserver
     public function created(Term $term)
     {
         Cache::forget(TermManagementService::getStudySetTermsCacheKey($term->study_set_id));
+        Cache::forget(StudySetManagementService::getFullStudySetCacheKey($term->study_set_id));
     }
 
     /**
@@ -28,6 +30,7 @@ class TermObserver
     public function updated(Term $term)
     {
         Cache::forget(TermManagementService::getStudySetTermsCacheKey($term->study_set_id));
+        Cache::forget(StudySetManagementService::getFullStudySetCacheKey($term->study_set_id));
     }
 
     /**
@@ -39,6 +42,7 @@ class TermObserver
     public function deleted(Term $term)
     {
         Cache::forget(TermManagementService::getStudySetTermsCacheKey($term->study_set_id));
+        Cache::forget(StudySetManagementService::getFullStudySetCacheKey($term->study_set_id));
     }
 
     /**

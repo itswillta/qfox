@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
@@ -10,15 +11,23 @@ import EditIcon from '@material-ui/icons/Edit';
 import ShareIcon from '@material-ui/icons/Share';
 import AddIcon from '@material-ui/icons/GroupAdd';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { redirectTo } from '../../../services/history';
+import { openDialog } from '../../../components/Dialogs';
 
-const StudySetHeaderButtons = ({ classes }) => {
+const StudySetHeaderButtons = ({ location: { pathname }, classes, studySet }) => {
   const { t } = useTranslation();
+
+  const deleteStudySet = () => {
+    openDialog('deleteStudySet', studySet);
+  };
+
+  const navigateToEditPage = () => redirectTo(`${pathname}/edit`);
 
   return (
     <Grid container spacing={1}>
       <Grid item>
         <Tooltip title={t('Edit study set')}>
-          <Fab color="primary" className={classes.fab} size="small">
+          <Fab color="primary" className={classes.fab} size="small" onClick={navigateToEditPage}>
             <EditIcon />
           </Fab>
         </Tooltip>
@@ -41,7 +50,7 @@ const StudySetHeaderButtons = ({ classes }) => {
       </Grid>
       <Grid item>
         <Tooltip title={t('Delete study set')}>
-          <Fab color="secondary" className={classes.fab} size="small">
+          <Fab color="secondary" className={classes.fab} size="small" onClick={deleteStudySet}>
             <DeleteIcon />
           </Fab>
         </Tooltip>
@@ -50,4 +59,4 @@ const StudySetHeaderButtons = ({ classes }) => {
   );
 };
 
-export default StudySetHeaderButtons;
+export default withRouter(StudySetHeaderButtons);

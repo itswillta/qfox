@@ -65,18 +65,18 @@ class StudySetController extends Controller
             'editPermission' => [
                 Rule::in(StudySetPermission::$edit_permission_types)
             ],
-            'termList' => 'array|min:0',
+            'terms' => 'array|min:0',
         ]);
 
         $study_set = StudySet::findOrFail($study_set_id);
-        $termList = $request->termList;
+        $terms = $request->terms;
         $is_anything_updated = ResourceUpdater::update([
             'title' => $request->title,
             'view_permission' => $request->viewPermission,
             'edit_permission' => $request->editPermission
         ], $study_set);
 
-        foreach ($termList as $term) {
+        foreach ($terms as $term) {
             if (array_key_exists('id', $term)) {
                 $term_in_database = Term::findOrFail($term['id']);
                 if (array_key_exists('willBeDeleted', $term) && $term['willBeDeleted']) {
@@ -93,7 +93,7 @@ class StudySetController extends Controller
             $study_set->reindex();
         }
 
-        return response()->noContent($is_anything_updated ? Response::HTTP_OK : Response::HTTP_NOT_MODIFIED);
+        return response()->noContent($is_anything_updated ? Response::HTTP_OK : Response::HTTP_NO_CONTENT);
     }
 
     public function delete($user_id, $study_set_id)

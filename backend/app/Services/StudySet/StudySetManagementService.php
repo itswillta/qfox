@@ -19,8 +19,7 @@ class StudySetManagementService
 
     public static function getFullStudySet($study_set_id)
     {
-        return Cache::tags([CacheRemovalTags::STUDY_SET['SAVE'], CacheRemovalTags::STUDY_SET['DELETE']])
-            ->rememberForever(self::getFullStudySetCacheKey($study_set_id), function () use ($study_set_id) {
+        return Cache::rememberForever(self::getFullStudySetCacheKey($study_set_id), function () use ($study_set_id) {
                 $study_set = DB::table('user_study_sets')
                     ->select('study_sets.id', 'title', 'role', 'view_permission', 'edit_permission', 'study_sets.created_at', 'study_sets.updated_at')
                     ->join('study_sets', 'study_sets.id', '=', 'user_study_sets.study_set_id')

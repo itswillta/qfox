@@ -2,14 +2,10 @@ import React, { useEffect } from 'react';
 import { useRedux } from 'react-redux';
 import { withRouter } from 'react-router';
 
-import useStyles from './studySet/StudySet.styles';
-import StudySetHeader from './studySet/StudySetHeader';
-import StudySetBody from './studySet/StudySetBody';
+import StudySetEditor from '../components/StudySetEditor';
 import { fullStudySetActions } from '../states/fullStudySet';
 
-const StudySet = ({ match }) => {
-  const classes = useStyles();
-
+const EditStudySet = ({ match }) => {
   const { userId, studySetId } = match.params;
 
   const [studySet, { fetchStudySet }] = useRedux(state => state.currentStudySet.studySet, {
@@ -20,12 +16,7 @@ const StudySet = ({ match }) => {
     fetchStudySet();
   }, []);
 
-  return (
-    <React.Fragment>
-      <StudySetHeader classes={classes} studySet={studySet} />
-      <StudySetBody classes={classes} studySet={studySet} />
-    </React.Fragment>
-  );
+  return studySet && <StudySetEditor mode="edit" studySet={studySet} />;
 };
 
-export default withRouter(StudySet);
+export default withRouter(EditStudySet);
