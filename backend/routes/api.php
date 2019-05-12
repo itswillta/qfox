@@ -25,6 +25,11 @@ Route::group([
 ], function () {
     Route::post('login', 'Auth\LoginController@login');
     Route::post('register', 'Auth\RegisterController@register');
+    Route::group(['middleware' => 'web'], function() {
+        Route::get('{social}', 'Auth\SocialAuthController@redirect')->name('{social}.login');
+        Route::get('{social}/callback', 'Auth\SocialAuthController@callback');
+    });
+    
 });
 
 Route::group([

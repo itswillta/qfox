@@ -56,4 +56,5 @@ class LoginController extends Controller
             'expires' => $ttl
         ], Response::HTTP_OK);
     }
+
 }
