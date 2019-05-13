@@ -87,24 +87,26 @@ const StudySetList = ({
               {t(listTitle)}
             </Typography>
           </Grid>
-          <Grid item className="flex-grow">
-            <Grid container justify="flex-end">
-              <Grid item>
-                <TextField
-                  value={filterInput}
-                  onChange={handleFilterInputChange}
-                  placeholder={t('Filter')}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <SearchIcon />
-                      </InputAdornment>
-                    )
-                  }}
-                />
+          {type !== 'search' && (
+            <Grid item className="flex-grow">
+              <Grid container justify="flex-end">
+                <Grid item>
+                  <TextField
+                    value={filterInput}
+                    onChange={handleFilterInputChange}
+                    placeholder={t('Filter')}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <SearchIcon />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
+          )}
         </Grid>
       </Grid>
       {noGrouping && (

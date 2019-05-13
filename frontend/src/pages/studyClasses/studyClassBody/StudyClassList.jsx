@@ -12,7 +12,7 @@ import useStyles from './studyClassList/StudyClassList.styles';
 import StudyClassCard from './studyClassList/StudyClassCard';
 import { fuseFilterStudyClasses } from './studyClassList/fuseSearch';
 
-const StudyClassList = ({ studyClasses, listTitle = 'Your study classes' }) => {
+const StudyClassList = ({ studyClasses, listTitle = 'Your study classes', type = '' }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -37,24 +37,26 @@ const StudyClassList = ({ studyClasses, listTitle = 'Your study classes' }) => {
               {t(listTitle)}
             </Typography>
           </Grid>
-          <Grid item className="flex-grow">
-            <Grid container justify="flex-end">
-              <Grid item>
-                <TextField
-                  value={filterInput}
-                  onChange={handleFilterInputChange}
-                  placeholder={t('Filter')}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <SearchIcon />
-                      </InputAdornment>
-                    )
-                  }}
-                />
+          {type !== 'search' && (
+            <Grid item className="flex-grow">
+              <Grid container justify="flex-end">
+                <Grid item>
+                  <TextField
+                    value={filterInput}
+                    onChange={handleFilterInputChange}
+                    placeholder={t('Filter')}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <SearchIcon />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
+          )}
         </Grid>
       </Grid>
       {filteredStudyClasses.map(studyClass => (

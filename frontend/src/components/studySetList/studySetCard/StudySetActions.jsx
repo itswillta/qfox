@@ -82,29 +82,32 @@ const StudySetActions = ({
             </ListItemText>
           </React.Fragment>
         )
-      },
-      {
-        key: type === 'classSets' ? 'remove' : 'delete',
-        onClick: type === 'classSets' ? removeFromClass : handleDelete,
-        children: (
-          <React.Fragment>
-            <ListItemIcon className={classnames(classes.listItemIcon, classes.deleteColor)}>
-              <DeleteIcon />
-            </ListItemIcon>
-            <ListItemText
-              className={classnames(classes.listItemText, classes.deleteColor)}
-              inset
-              disableTypography
-            >
-              <Typography color="inherit" variant="body1">
-                {t(type === 'classSets' ? 'Remove from class' : 'Delete set')}
-              </Typography>
-            </ListItemText>
-          </React.Fragment>
-        )
       }
     ]
   };
+
+  if (type !== 'search') {
+    dropdownDetails.dropdownItems.push({
+      key: type === 'classSets' ? 'remove' : 'delete',
+      onClick: type === 'classSets' ? removeFromClass : handleDelete,
+      children: (
+        <React.Fragment>
+          <ListItemIcon className={classnames(classes.listItemIcon, classes.deleteColor)}>
+            <DeleteIcon />
+          </ListItemIcon>
+          <ListItemText
+            className={classnames(classes.listItemText, classes.deleteColor)}
+            inset
+            disableTypography
+          >
+            <Typography color="inherit" variant="body1">
+              {t(type === 'classSets' ? 'Remove from class' : 'Delete set')}
+            </Typography>
+          </ListItemText>
+        </React.Fragment>
+      )
+    });
+  }
 
   return <ActionDropdown dropdownDetails={dropdownDetails} isIconButton />;
 };

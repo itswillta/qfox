@@ -106,6 +106,30 @@ const appRoutes = {
     }),
     pageTitle: 'Game | QFox',
     private: true
+  },
+  SearchStudySet: {
+    url: '/study-sets/search',
+    component: LoadableRoute({
+      loader: () => import('../pages/StudySetSearch')
+    }),
+    pageTitle: 'Search | QFox',
+    private: true
+  },
+  SearchUser: {
+    url: '/users/search',
+    component: LoadableRoute({
+      loader: () => import('../pages/UserSearch')
+    }),
+    pageTitle: 'Search | QFox',
+    private: true
+  },
+  SearchStudyClass: {
+    url: '/study-classes/search',
+    component: LoadableRoute({
+      loader: () => import('../pages/StudyClassSearch')
+    }),
+    pageTitle: 'Search | QFox',
+    private: true
   }
 };
 

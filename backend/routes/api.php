@@ -46,9 +46,12 @@ Route::group(['middleware' => ['api', 'jwt.auth']], function () {
         Route::get('/search', 'StudySetController@search');
     });
 
+    Route::group(['prefix' => 'study-classes'], function() {
+        Route::get('/search', 'ClassController@search');
+    });
+
     Route::group(['middleware' => ValidateUserPermission::class, 'prefix' => 'users/{user_id}/classes'], function () {
         Route::post('', 'ClassController@create');
-        Route::get('/search', 'ClassController@search');
         Route::get('/{class_id}', 'ClassController@getOne');
         Route::group(['middleware' => ValidateClassEditPermission::class], function () {
             Route::put('/{class_id}', 'ClassController@update');

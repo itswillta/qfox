@@ -7,10 +7,12 @@ use App\Enums\ClassRole;
 use App\Http\ApiErrorResponse;
 use App\Services\RequestValidator;
 use App\Services\ResourceUpdater;
+use App\Services\StudyClass\ClassMemberService;
 use App\Services\StudyClass\ClassParticipantService;
 use App\Services\StudyClass\ClassManagementService;
 use App\Services\StudyClass\ClassStudySetService;
 use App\Services\StudySet\StudySetManagementService;
+use App\Services\User\UserManagementService;
 use App\StudyClass;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -151,21 +153,19 @@ class ClassController extends Controller
 
     public function search(Request $request)
     {
-        $classes = StudyClass::complexSearch([
-            'body' => [
-                'query' => [
-                    'bool' => [
-                        'must' => [
-                            'multi_match' => [
-                                'query' => $request->query('query'),
-                                'fields' => ['name', 'description'],
-                                'fuzziness' => 'AUTO',
-                            ]
-                        ],
-                    ],
-                ],
-            ],
+        $classes = StudyClass::searchByQuery([
+            'multi_match' => [
+                'query' => $request->query('query'),
+                'fields' => ['name', 'description'],
+                'fuzziness' => 'AUTO'
+            ]
         ]);
+
+        foreach($classes as $study_class) {
+            $study_class->owner = UserManagementService::getPublicUserInfo(ClassParticipantService::getOwnerId($study_class->id));
+            $study_class->totalStudySets = count(ClassStudySetService::getAllStudySets($study_class->id));
+            $study_class->totalMembers = count(ClassMemberService::getAllMembers($study_class->id));
+        }
 
         return response()->json([
             'classes' => $classes
