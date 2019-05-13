@@ -7,7 +7,12 @@ use App\Enums\ClassRole;
 use App\Http\ApiErrorResponse;
 use App\Services\RequestValidator;
 use App\Services\ResourceUpdater;
+use App\Services\StudyClass\ClassMemberService;
 use App\Services\StudyClass\ClassParticipantService;
+use App\Services\StudyClass\ClassManagementService;
+use App\Services\StudyClass\ClassStudySetService;
+use App\Services\StudySet\StudySetManagementService;
+use App\Services\User\UserManagementService;
 use App\StudyClass;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -21,7 +26,6 @@ class ClassController extends Controller
     {
         RequestValidator::validateOrFail($request->all(), [
             'name' => 'required|string',
-            'description' => 'string',
             'permission' => [
                 'required',
                 Rule::in(ClassPermission::$types)
@@ -46,7 +50,6 @@ class ClassController extends Controller
     {
         RequestValidator::validateOrFail($request->all(), [
             'name' => 'string',
-            'description' => 'string',
             'permission' => Rule::in(ClassPermission::$types)
         ]);
 
@@ -58,7 +61,7 @@ class ClassController extends Controller
             $class->reindex();
         }
 
-        return response()->noContent($is_anything_updated ? Response::HTTP_OK : Response::HTTP_NOT_MODIFIED);
+        return response()->noContent($is_anything_updated ? Response::HTTP_OK : Response::HTTP_NO_CONTENT);
     }
 
     public function addStudySet(Request $request, $user_id, $class_id)
@@ -135,26 +138,34 @@ class ClassController extends Controller
         $class = StudyClass::findOrFail($class_id);
         $class->studySets()->detach($request->studySetIds);
 
+        Cache::forget(ClassStudySetService::getAllStudySetsCacheKey($class_id));
+        Cache::forget(ClassManagementService::getFullStudyClassCacheKey($class_id));
+
         return response()->noContent(Response::HTTP_OK);
+    }
+
+    public function getOne($user_id, $study_class_id)
+    {
+        $study_class = ClassManagementService::getFullStudyClass($study_class_id);
+
+        return response()->json($study_class);
     }
 
     public function search(Request $request)
     {
-        $classes = StudyClass::complexSearch([
-            'body' => [
-                'query' => [
-                    'bool' => [
-                        'must' => [
-                            'multi_match' => [
-                                'query' => $request->query('query'),
-                                'fields' => ['name', 'description'],
-                                'fuzziness' => 'AUTO',
-                            ]
-                        ],
-                    ],
-                ],
-            ],
+        $classes = StudyClass::searchByQuery([
+            'multi_match' => [
+                'query' => $request->query('query'),
+                'fields' => ['name', 'description'],
+                'fuzziness' => 'AUTO'
+            ]
         ]);
+
+        foreach($classes as $study_class) {
+            $study_class->owner = UserManagementService::getPublicUserInfo(ClassParticipantService::getOwnerId($study_class->id));
+            $study_class->totalStudySets = count(ClassStudySetService::getAllStudySets($study_class->id));
+            $study_class->totalMembers = count(ClassMemberService::getAllMembers($study_class->id));
+        }
 
         return response()->json([
             'classes' => $classes

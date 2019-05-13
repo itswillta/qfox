@@ -5,13 +5,19 @@ import { Route, Redirect } from 'react-router-dom';
 import appRoutes from './appRoutes';
 
 const PublicRoute = ({ component: Component, ...rest }) => {
-  const isAuthenticated = useSelector(state => state.auth.isAuthenticated || false);
+  const authState = useSelector(state => state.auth);
+
+  const isAuthenticated = authState.isAuthenticated || false;
 
   return (
     <Route
       {...rest}
       render={props =>
-        isAuthenticated ? <Redirect to={appRoutes.Dashboard.url} /> : <Component {...props} />
+        isAuthenticated ? (
+          <Redirect to={appRoutes.StudySets.url.replace(':userId', authState.userProfile.id)} />
+        ) : (
+          <Component {...props} />
+        )
       }
     />
   );

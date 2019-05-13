@@ -18,13 +18,32 @@ const LoadableDeleteStudySetDialog = Loadable({
   loading: Loading
 });
 
+const LoadableUpsertClassDialog = Loadable({
+  loader: () => import('./dialogs/UpsertClassDialog'),
+  loading: Loading
+});
+
+const LoadableDeleteClassDialog = Loadable({
+  loader: () => import('./dialogs/DeleteClassDialog'),
+  loading: Loading
+});
+
 const openDialogFn = {};
 
 const Dialogs = () => {
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
+
   const [isRegisterDialogOpen, setIsRegisterDialogOpen] = useState(false);
+
   const [isDeleteStudySetDialogOpen, setIsDeleteStudySetDialogOpen] = useState(false);
   const [studySetToDelete, setStudySetToDelete] = useState({});
+
+  const [isUpsertClassDialogOpen, setIsUpsertClassDialogOpen] = useState(false);
+  const [studyClassToEdit, setStudyClassToEdit] = useState({});
+  const [upsertClassMode, setUpsertClassMode] = useState('edit');
+
+  const [isDeleteClassDialogOpen, setIsDeleteClassDialogOpen] = useState(false);
+  const [studyClassToDelete, setStudyClassToDelete] = useState({});
 
   const toggleLoginDialog = shouldOpen => () => {
     setIsLoginDialogOpen(shouldOpen);
@@ -43,10 +62,42 @@ const Dialogs = () => {
     }
   };
 
+  const toggleUpsertClassDialog = shouldOpen => params => {
+    setIsUpsertClassDialogOpen(shouldOpen);
+
+    if (!shouldOpen) {
+      return;
+    }
+
+    const mode = params[0];
+
+    if (mode === 'create') {
+      setUpsertClassMode('create');
+
+      return;
+    }
+
+    const studyClass = params[1];
+
+    setStudyClassToEdit(studyClass);
+    setUpsertClassMode('edit');
+  };
+
+  const toggleDeleteClassDialog = shouldOpen => params => {
+    setIsDeleteClassDialogOpen(shouldOpen);
+
+    if (shouldOpen) {
+      const [studyClass] = params;
+      setStudyClassToDelete(studyClass);
+    }
+  };
+
   useEffect(() => {
     openDialogFn.login = toggleLoginDialog(true);
     openDialogFn.register = toggleRegisterDialog(true);
     openDialogFn.deleteStudySet = toggleDeleteStudySetDialog(true);
+    openDialogFn.upsertClass = toggleUpsertClassDialog(true);
+    openDialogFn.deleteClass = toggleDeleteClassDialog(true);
   }, []);
 
   return (
@@ -62,6 +113,21 @@ const Dialogs = () => {
           isOpen={isDeleteStudySetDialogOpen}
           toggleDialog={toggleDeleteStudySetDialog}
           studySet={studySetToDelete}
+        />
+      )}
+      {isUpsertClassDialogOpen && (
+        <LoadableUpsertClassDialog
+          isOpen={isUpsertClassDialogOpen}
+          toggleDialog={toggleUpsertClassDialog}
+          studyClass={studyClassToEdit}
+          mode={upsertClassMode}
+        />
+      )}
+      {isDeleteClassDialogOpen && (
+        <LoadableDeleteClassDialog
+          isOpen={isDeleteClassDialogOpen}
+          toggleDialog={toggleDeleteClassDialog}
+          studyClass={studyClassToDelete}
         />
       )}
     </React.Fragment>

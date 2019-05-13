@@ -35,41 +35,49 @@ Route::group(['middleware' => ['api', 'jwt.auth']], function () {
 
     Route::group(['prefix' => 'users'], function () {
         Route::get('/search', 'UserController@search');
-        Route::group(['middleware' => ValidateUserPermission::class], function () {
-            Route::put('/{user_id}', 'UserController@update');
-            Route::get('/{user_id}/classes', 'UserController@getStudyClasses');
-            Route::get('/{user_id}/study-sets', 'UserController@getStudySets');
-        });
+        // Route::group(['middleware' => ValidateUserPermission::class], function () {
+        Route::put('/{user_id}', 'UserController@update');
+        Route::get('/{user_id}', 'UserController@getOne');
+        Route::get('/{user_id}/classes', 'UserController@getStudyClasses');
+        Route::get('/{user_id}/study-sets', 'UserController@getStudySets');
+        // });
     });
 
-    Route::group(['middleware' => ValidateUserPermission::class, 'prefix' => 'users/{user_id}/classes'], function () {
-        Route::post('', 'ClassController@create');
+    Route::group(['prefix' => 'study-sets'], function () {
+        Route::get('/search', 'StudySetController@search');
+    });
+
+    Route::group(['prefix' => 'study-classes'], function () {
         Route::get('/search', 'ClassController@search');
-        Route::group(['middleware' => ValidateClassEditPermission::class], function () {
-            Route::put('/{class_id}', 'ClassController@update');
-            Route::post('/{class_id}/study-sets', 'ClassController@addStudySet');
-            Route::delete('/{class_id}', 'ClassController@delete');
-            Route::post('/{class_id}/members', 'ClassController@addMember');
-            Route::delete('/{class_id}/members', 'ClassController@removeMembers');
-            Route::delete('/{class_id}/study-sets', 'ClassController@removeStudySets');
-        });
+    });
+
+    Route::group(['prefix' => 'users/{user_id}/classes'], function () {
+        Route::post('', 'ClassController@create');
+        Route::get('/{class_id}', 'ClassController@getOne');
+        // Route::group(['middleware' => ValidateClassEditPermission::class], function () {
+        Route::put('/{class_id}', 'ClassController@update');
+        Route::post('/{class_id}/study-sets', 'ClassController@addStudySet');
+        Route::delete('/{class_id}', 'ClassController@delete');
+        Route::post('/{class_id}/members', 'ClassController@addMember');
+        Route::delete('/{class_id}/members', 'ClassController@removeMembers');
+        Route::delete('/{class_id}/study-sets', 'ClassController@removeStudySets');
+        // });
     });
 
     Route::group(['middleware' => ValidateUserPermission::class, 'prefix' => 'users/{user_id}/study-sets'], function () {
         Route::post('', 'StudySetController@create');
-        Route::get('/search', 'StudySetController@search');
-        Route::group(['middleware' => ValidateSetEditPermission::class], function () {
-            Route::put('/{study_set_id}', 'StudySetController@update');
-            Route::delete('/{study_set_id}', 'StudySetController@delete');
-        });
+        // Route::group(['middleware' => ValidateSetEditPermission::class], function () {
+        Route::put('/{study_set_id}', 'StudySetController@update');
+        Route::delete('/{study_set_id}', 'StudySetController@delete');
+        // });
     });
 
     Route::group(['middleware' => ValidateSetEditPermission::class, 'prefix' => 'users/{user_id}/study-sets/{study_set_id}/terms'], function () {
         Route::post('', 'TermController@create');
-        Route::group(['middleware' => ValidateTermEditPermission::class], function () {
-            Route::put('/{term_id}', 'TermController@update');
-            Route::delete('/{term_id}', 'TermController@delete');
-        });
+        // Route::group(['middleware' => ValidateTermEditPermission::class], function () {
+        Route::put('/{term_id}', 'TermController@update');
+        Route::delete('/{term_id}', 'TermController@delete');
+        // });
     });
 });
 

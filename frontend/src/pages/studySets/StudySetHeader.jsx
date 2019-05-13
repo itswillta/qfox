@@ -13,22 +13,25 @@ const StudySetHeader = ({
   createdStudySetLength,
   otherStudySetLength,
   tabValue,
+  owner,
   handleChangeTab
 }) => {
-  const authState = useSelector(state => state.auth);
+  // const authState = useSelector(state => state.auth);
 
   return (
     <div className={classes.header}>
       <Grid container>
         <Grid item className={classes.leftContainer}>
-          <Avatar
-            alt="Profile Picture"
-            src={authState.userProfile.profilePictureUrl}
-            className={classes.headerAvatar}
-          />
+          {owner && (
+            <Avatar
+              alt="Profile Picture"
+              src={owner.profilePictureUrl}
+              className={classes.headerAvatar}
+            />
+          )}
         </Grid>
         <Grid item className={classes.rightContainer}>
-          <Typography variant="h4">{authState.userProfile.name}</Typography>
+          {owner && <Typography variant="h4">{owner.name}</Typography>}
           <Tabs
             classes={{ indicator: classes.tabIndicator }}
             className={classes.tabs}

@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/styles';
 
 export default makeStyles(theme => ({
   popper: {
-    zIndex: 1,
+    zIndex: 3,
     '& $arrow': {
       top: 0,
       left: 0,

@@ -1,3 +1,10 @@
-import { studySetDBReducer } from '../studySets/reducer';
+import { initialDBState } from '../orm';
+import { createReducer } from '../../utils/redux/utilityFunctions';
 
-export default studySetDBReducer;
+import { studySetDBActionHandlers } from '../studySets/reducer';
+import { studyClassDBActionHandlers } from '../studyClasses/reducer';
+
+export default createReducer(initialDBState, {
+  ...studySetDBActionHandlers,
+  ...studyClassDBActionHandlers
+});

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Enums\StudySetRole;
 use App\Services\StudySet\StudySetManagementService;
+use App\Services\StudySet\StudySetParticipantService;
+use App\Services\User\UserManagementService;
 use App\StudySet;
 use App\Enums\StudySetPermission;
 use App\Term;
@@ -133,6 +135,11 @@ class StudySetController extends Controller
                 ]
             ]
         ]);
+
+        foreach ($study_sets as $study_set) {
+            $study_set->owner = UserManagementService::getPublicUserInfo(StudySetParticipantService::getOwnerId($study_set->id));
+            $study_set->totalTerms = count(TermManagementService::getStudySetTerms($study_set->id));
+        }
 
         return response()->json([
             'study_sets' => $study_sets

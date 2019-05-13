@@ -5,14 +5,12 @@ export default makeStyles(theme => ({
     position: 'relative',
     boxSizing: 'border-box',
     padding: theme.spacing(2),
-    margin: theme.spacing(2),
+    marginTop: theme.spacing(2),
     borderBottom: `${theme.spacing(0.8)}px solid white`,
     '&:hover': {
       background: theme.palette.grey[100],
       transition: 'all 0.1s ease-in-out',
-      borderBottom: `${theme.spacing(0.8)}px solid ${
-        theme.palette.secondary.light
-      }`
+      borderBottom: `${theme.spacing(0.8)}px solid ${theme.palette.secondary.light}`
     }
   },
   clickableArea: {
@@ -21,14 +19,17 @@ export default makeStyles(theme => ({
     width: '100%',
     '&:hover': {
       cursor: 'pointer'
-    }
+    },
+    zIndex: 1
   },
-  listItemIcon: {
-    color: theme.palette.secondary.main,
-    marginRight: 0
+  higherZIndex: {
+    zIndex: 2
   },
-  listItemText: {
-    color: `${theme.palette.secondary.main} !important`
+  infoSection: {
+    marginTop: theme.spacing(0.5)
+  },
+  cardIcon: {
+    paddingBottom: theme.spacing(1)
   },
   groupTitle: {
     padding: theme.spacing(0, 1),

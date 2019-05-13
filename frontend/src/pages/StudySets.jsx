@@ -12,6 +12,7 @@ import {
 } from '../states/studySets';
 import StudySetHeader from './studySets/StudySetHeader';
 import StudySetBody from './studySets/StudySetBody';
+import api from '../services/restClient';
 
 const StudySets = ({ match }) => {
   const classes = useStyles();
@@ -25,14 +26,22 @@ const StudySets = ({ match }) => {
   });
 
   const [tabValue, setTabValue] = React.useState(0);
+  const [user, setUser] = React.useState(null);
 
   const handleChangeTab = (event, newTabValue) => {
     setTabValue(newTabValue);
   };
 
   useEffect(() => {
+    const getUser = async () => {
+      const response = await api.custom(`users/${match.params.userId}`).get();
+
+      setUser(response.body().data());
+    };
+
+    getUser();
     fetchStudySets(match.params.userId);
-  }, []);
+  }, [match.params]);
 
   let studySetsToDisplay;
   let listTitle;
@@ -40,12 +49,12 @@ const StudySets = ({ match }) => {
   switch (tabValue) {
     case 0: {
       studySetsToDisplay = allStudySets;
-      listTitle = 'All your study sets';
+      listTitle = 'All study sets';
       break;
     }
     case 1: {
       studySetsToDisplay = createdStudySets;
-      listTitle = 'Your created study sets';
+      listTitle = 'Created study sets';
       break;
     }
     case 2: {
@@ -66,6 +75,7 @@ const StudySets = ({ match }) => {
         otherStudySetLength={otherStudySets.length}
         tabValue={tabValue}
         handleChangeTab={handleChangeTab}
+        owner={user}
       />
       <StudySetBody classes={classes} listTitle={listTitle} studySets={studySetsToDisplay} />
     </div>

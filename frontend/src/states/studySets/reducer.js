@@ -5,7 +5,6 @@ import {
   DELETE_STUDY_SET_ASYNC
 } from './actionTypes';
 import { createReducer } from '../../utils/redux/utilityFunctions';
-import { initialDBState } from '../orm';
 import {
   handleFetchStudySetRequest,
   handleFetchStudySetSuccess,
@@ -38,9 +37,9 @@ const studySetAsyncStatusReducer = createReducer(initialAsyncStatus, {
   [DELETE_STUDY_SET_ASYNC.ERROR]: handleDeleteStudySetError
 });
 
-const studySetDBReducer = createReducer(initialDBState, {
+const studySetDBActionHandlers = {
   [FETCH_STUDY_SETS_ASYNC.SUCCESS]: fetchStudySetsToDB,
   [DELETE_STUDY_SET_ASYNC.SUCCESS]: deleteStudySetFromDB
-});
+};
 
-export { studySetAsyncStatusReducer, studySetDBReducer };
+export { studySetAsyncStatusReducer, studySetDBActionHandlers };
