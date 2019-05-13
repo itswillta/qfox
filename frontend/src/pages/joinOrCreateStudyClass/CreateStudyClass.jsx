@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-wrap-multilines */
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -10,6 +11,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
 const CreateStudyClass = ({ classes }) => {
+  const { t } = useTranslation();
   const [permission, setPermission] = useState(true);
 
   const handleChangePermission = e => {
@@ -20,7 +22,7 @@ const CreateStudyClass = ({ classes }) => {
     <Paper className={classes.paper}>
       <Grid container direction="column">
         <Grid item className={classes.gridItem}>
-          <Typography variant="h3">Create a new class</Typography>
+          <Typography variant="h3">{t('Create a new class')}</Typography>
         </Grid>
         <Grid item className={classes.gridItem}>
           <TextField placeholder="Enter a class name" helperText="CLASS NAME" />
@@ -45,7 +47,7 @@ const CreateStudyClass = ({ classes }) => {
         </Grid>
         <Grid item className={classes.gridItem}>
           <Button variant="contained" color="primary">
-            Create class
+            {t('Create class')}
           </Button>
         </Grid>
       </Grid>

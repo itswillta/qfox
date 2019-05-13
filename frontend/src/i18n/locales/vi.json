@@ -27,6 +27,8 @@
   "Change your profile picture": "Thay đổi ảnh đại diện",
   "Upload profile picture": "Tải ảnh đại diện",
   "Create a new study set": "Tạo một tập từ vựng mới",
+  "Create a new class": "Tạo một lớp học mới",
+  "Create class": "Tạo lớp học",
   "Create": "Tạo",
   "All": "Tất cả",
   "Your Study Sets": "Học phần của bạn",
@@ -52,6 +54,7 @@
   "STUDY SETS": "TẬP TỪ VỰNG",
   "YOUR CLASSES": "LỚP CỦA BẠN",
   "ALL": "TẤT CẢ",
+  "CREATE": "TẠO",
   "CREATED": "ĐÃ TẠO",
   "OTHERS": "KHÁC",
   "term": "thuật ngữ",
@@ -61,5 +64,15 @@
   "Just me": "Chỉ mình tôi",
   "Logged-in users": "Người dùng đã đăng nhập",
   "Editable by": "Chỉnh sửa bởi",
-  "Search": "Tìm kiếm"
+  "Search": "Tìm kiếm",
+  "Join a class": "Tham gia lớp học",
+  "Request to join": "Yêu cầu tham gia",
+  "Enter a class": "Nhập một lớp học ",
+  "CLASS NAME": "TÊN LỚP HỌC",
+  "DESCRIPTION": "MÔ TẢ",
+  "Your Classes": "Lớp học của bạn",
+  "Enter a term": "Nhập một thuật ngữ",
+  "Enter a class name": "Nhập tên lớp học",
+  "Enter a description (optional)": "Enter a description (optional)",
+  "Enter one or more definitions": "Enter one or more definitions"
 }
