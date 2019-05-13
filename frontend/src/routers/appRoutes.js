@@ -84,7 +84,7 @@ const appRoutes = {
     private: true
   },
   Flashcards: {
-    url: '/:studySetId/flashcards',
+    url: '/:userId/study-sets/:studySetId/flashcards',
     component: LoadableRoute({
       loader: () => import('../pages/Flashcards')
     }),
@@ -92,7 +92,7 @@ const appRoutes = {
     private: true
   },
   Tests: {
-    url: '/:studySetId/tests',
+    url: '/:userId/study-sets/:studySetId/test',
     component: LoadableRoute({
       loader: () => import('../pages/Tests')
     }),
@@ -129,6 +129,14 @@ const appRoutes = {
       loader: () => import('../pages/StudyClassSearch')
     }),
     pageTitle: 'Search | QFox',
+    private: true
+  },
+  Learn: {
+    url: '/:userId/study-sets/:studySetId/learn',
+    component: LoadableRoute({
+      loader: () => import('../pages/Learn')
+    }),
+    pageTitle: 'Learn | QFox',
     private: true
   }
 };

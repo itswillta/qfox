@@ -9,6 +9,7 @@ import { fullStudySetReducer, fullStudySetSagas } from './fullStudySet';
 import { fullStudyClassReducer, fullStudyClassSagas } from './fullStudyClass';
 import { ormDBReducer } from './ormDB';
 import { userAsyncStatusReducer, userSagas } from './users';
+import { userTermAsyncStatusReducer, userTermSagas } from './userTerm';
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   userAsyncStatus: userAsyncStatusReducer,
   currentStudySet: fullStudySetReducer,
   currentStudyClass: fullStudyClassReducer,
+  userTermAsyncStatus: userTermAsyncStatusReducer,
   ormDB: ormDBReducer
 });
 
@@ -29,7 +31,8 @@ function* rootSaga() {
     fork(studyClassSagas),
     fork(userSagas),
     fork(fullStudySetSagas),
-    fork(fullStudyClassSagas)
+    fork(fullStudyClassSagas),
+    fork(userTermSagas)
   ]);
 }
 

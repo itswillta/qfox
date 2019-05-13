@@ -10,7 +10,7 @@ import FlashcardItemAutoPlay from './flashcardsContent/FlashcardItemAutoPlay';
 
 const FlashcardsContent = ({
   classes,
-  termsFake,
+  terms,
   maxSteps,
   activeStep,
   handleNext,
@@ -29,7 +29,7 @@ const FlashcardsContent = ({
         <FlashcardItemAutoPlay
           activeStep={activeStep}
           handleChangeStep={handleChangeStep}
-          termsFake={termsFake}
+          terms={terms}
           classes={classes}
           isFlipped={isFlipped}
           handleClickFlipped={handleClickFlipped}
@@ -39,7 +39,7 @@ const FlashcardsContent = ({
           classes={classes}
           isFlipped={isFlipped}
           handleClickFlipped={handleClickFlipped}
-          termsFake={termsFake}
+          terms={terms}
           activeStep={activeStep}
           answer={answer}
         />
