@@ -98,6 +98,14 @@ const appRoutes = {
     }),
     pageTitle: 'Flashcards | QFox',
     private: true
+  },
+  Tests: {
+    url: '/:studySetId/tests',
+    component: LoadableRoute({
+      loader: () => import('../pages/Tests')
+    }),
+    pageTitle: 'Tests | QFox',
+    private: true
   }
 };
 
