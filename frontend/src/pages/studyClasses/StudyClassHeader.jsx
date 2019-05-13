@@ -9,9 +9,9 @@ import Tab from '@material-ui/core/Tab';
 
 const StudyClassHeader = ({
   classes,
-  allStudyClassLenght,
+  allStudyClassLength,
   createdStudyClassesLength,
-  otherStudyClassesLenght,
+  otherStudyClassesLength,
   tabValue,
   handleChangeTab
 }) => {
@@ -37,7 +37,7 @@ const StudyClassHeader = ({
           >
             <Tab
               className={classes.tab}
-              label={`All (${allStudyClassLenght})`}
+              label={`All (${allStudyClassLength})`}
               classes={{ selected: classes.selectedTab }}
             />
             <Tab
@@ -47,7 +47,7 @@ const StudyClassHeader = ({
             />
             <Tab
               className={classes.tab}
-              label={`Others (${otherStudyClassesLenght})`}
+              label={`Others (${otherStudyClassesLength})`}
               classes={{ selected: classes.selectedTab }}
             />
           </Tabs>

@@ -9,6 +9,7 @@ import CreateStudyClassIcon from '@material-ui/icons/GroupAdd';
 
 import appRoutes from '../../../routers/appRoutes';
 import { DYNAMIC_ITEM_TYPES } from './dynamicItemTypes';
+import { openDialog } from '../../Dialogs';
 
 export default [
   {
@@ -54,16 +55,16 @@ export default [
     sectionDisplayName: 'YOUR CLASSES',
     items: [
       {
-        path: appRoutes.StudyClass.url,
+        path: appRoutes.StudyClasses.url,
         dynamicItemType: DYNAMIC_ITEM_TYPES.USER,
         codeName: 'class',
         displayName: 'Your Classes',
         icon: () => <ClassIcon />
       },
       {
-        path: appRoutes.CreateStudyClass.url,
-        codeName: 'createStudyClasses',
-        displayName: 'Join or create a study class',
+        onClick: () => openDialog('upsertClass', 'create'),
+        codeName: 'createStudyClass',
+        displayName: 'Create a new class',
         icon: () => <CreateStudyClassIcon />,
         specialText: true
       }

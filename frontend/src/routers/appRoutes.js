@@ -67,28 +67,20 @@ const appRoutes = {
     pageTitle: 'Settings | QFox',
     private: true
   },
-  StudyClass: {
+  StudyClasses: {
     url: '/:userId/study-classes',
+    component: LoadableRoute({
+      loader: () => import('../pages/StudyClasses')
+    }),
+    pageTitle: 'Classes | QFox',
+    private: true
+  },
+  StudyClass: {
+    url: '/:userId/study-classes/:studyClassId',
     component: LoadableRoute({
       loader: () => import('../pages/StudyClass')
     }),
-    pageTitle: 'Your Class | QFox',
-    private: true
-  },
-  CreateStudyClass: {
-    url: '/study-classes/create',
-    component: LoadableRoute({
-      loader: () => import('../pages/JoinOrCreateStudyClass')
-    }),
-    pageTitle: 'Create a new study class | QFox',
-    private: true
-  },
-  StudyClassItem: {
-    url: '/study-classes/:id',
-    component: LoadableRoute({
-      loader: () => import('../pages/StudyClassItem')
-    }),
-    pageTitle: 'Your Class | QFox',
+    pageTitle: 'A Specific Class | QFox',
     private: true
   },
   Flashcards: {

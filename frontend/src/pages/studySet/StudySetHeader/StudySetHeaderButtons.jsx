@@ -9,7 +9,6 @@ import Grid from '@material-ui/core/Grid';
 
 import EditIcon from '@material-ui/icons/Edit';
 import ShareIcon from '@material-ui/icons/Share';
-import AddIcon from '@material-ui/icons/GroupAdd';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { redirectTo } from '../../../services/history';
 import { openDialog } from '../../../components/Dialogs';
@@ -38,13 +37,6 @@ const StudySetHeaderButtons = ({ location: { pathname }, classes, studySet }) =>
             <CopyToClipboard text={window.location.href}>
               <ShareIcon />
             </CopyToClipboard>
-          </Fab>
-        </Tooltip>
-      </Grid>
-      <Grid item>
-        <Tooltip title={t('Add this study set to a class')}>
-          <Fab color="primary" className={classes.fab} size="small">
-            <AddIcon />
           </Fab>
         </Tooltip>
       </Grid>

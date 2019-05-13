@@ -10,8 +10,7 @@ export default makeStyles(theme => ({
       background: theme.palette.grey[50],
       transition: 'all 0.1s ease-in-out',
       borderBottom: `${theme.spacing(0.8)}px solid ${theme.palette.secondary.light}`
-    },
-    minHeight: 90
+    }
   },
   cardLink: {
     textDecoration: 'none'
@@ -21,6 +20,10 @@ export default makeStyles(theme => ({
   },
   higherZIndex: {
     zIndex: 2
+  },
+  flexItem: {
+    width: '100%',
+    display: 'flex'
   },
   clickableArea: {
     left: 0,

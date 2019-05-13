@@ -52,7 +52,7 @@ class StudySet extends Model
      */
     public function classes()
     {
-        return $this->belongsToMany('App\StudyClass', 'study_set_classes');
+        return $this->belongsToMany('App\StudyClass', 'study_set_classes', 'class_id', 'study_set_id');
     }
 
     /**

@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 
 import Grid from '@material-ui/core/Grid';
 
@@ -12,17 +13,23 @@ const useStyles = makeStyles(theme => ({
   verticalDivider: {
     height: '70%',
     minHeight: 16,
-    margin: theme.spacing(0, 1.5),
     borderRight: `2px solid ${theme.palette.grey[300]}`
+  },
+  margin: {
+    margin: theme.spacing(0, 1.5)
   }
 }));
 
-const VerticalDivider = () => {
+const VerticalDivider = ({ compact }) => {
   const classes = useStyles();
 
   return (
     <Grid item className={classes.verticalDividerContainer}>
-      <div className={classes.verticalDivider} />
+      <div
+        className={
+          compact ? classes.verticalDivider : classnames(classes.verticalDivider, classes.margin)
+        }
+      />
     </Grid>
   );
 };

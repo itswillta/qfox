@@ -34,7 +34,7 @@ const RegisterForm = ({ registerState, requestRegister, closeDialog }) => {
       render={({ handleSubmit, form }) => (
         <form name="registerForm" onSubmit={handleSubmit}>
           <DialogContent>
-            <Grid container direction="column">
+            <Grid container direction="column" spacing={2}>
               <Grid item xs={12}>
                 <InputField
                   required

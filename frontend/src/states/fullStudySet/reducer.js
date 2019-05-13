@@ -26,10 +26,10 @@ const initialState = {
   studySet: {}
 };
 
-const userAsyncStatusReducer = createReducer(initialState, {
+const fullStudySetAsyncStatusReducer = createReducer(initialState, {
   [FETCH_STUDY_SET_ASYNC.PENDING]: handleFetchStudySetRequest,
   [FETCH_STUDY_SET_ASYNC.SUCCESS]: handleFetchStudySetSuccess,
   [FETCH_STUDY_SET_ASYNC.ERROR]: handleFetchStudySetError
 });
 
-export default userAsyncStatusReducer;
+export default fullStudySetAsyncStatusReducer;

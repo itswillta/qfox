@@ -12,7 +12,14 @@ import appRoutes from '../../routers/appRoutes';
 import { openDialog } from '../Dialogs';
 import { redirectTo } from '../../services/history';
 
-const StudySetCard = ({ classes, studySet }) => {
+const StudySetCard = ({
+  classes,
+  studySet,
+  type,
+  handleRemoveFromClass,
+  handleAddToClass,
+  isInClass
+}) => {
   const getStudySetPath = useCallback(
     path => path.replace(':userId', studySet.owner.id).replace(':studySetId', studySet.id),
     [studySet.id, studySet.owner.id]
@@ -45,7 +52,7 @@ const StudySetCard = ({ classes, studySet }) => {
                 </Grid>
                 <VerticalDivider />
                 <Grid item className={classes.higherZIndex}>
-                  <OwnerInfo classes={classes} owner={studySet.owner} />
+                  <OwnerInfo owner={studySet.owner} />
                 </Grid>
               </Grid>
             </Grid>
@@ -57,7 +64,17 @@ const StudySetCard = ({ classes, studySet }) => {
           </Grid>
         </Grid>
         <Grid item className={classes.higherZIndex}>
-          <StudySetActions classes={classes} handleDelete={handleDelete} handleEdit={handleEdit} />
+          <StudySetActions
+            classes={classes}
+            handleDelete={handleDelete}
+            handleRemoveFromClass={handleRemoveFromClass}
+            handleAddToClass={handleAddToClass}
+            isInClass={isInClass}
+            handleEdit={handleEdit}
+            studySetPath={studySetPath}
+            studySetId={studySet.id}
+            type={type}
+          />
         </Grid>
       </Grid>
     </Paper>

@@ -1,5 +1,17 @@
-import studyClassActions from './studyClasses/studyClassActions';
-import studyClassReducer from './studyClasses/studyClassReducer';
-import studyClassSagas from './studyClasses/studyClassSagas';
+import studyClassActions from './studyClasses/actions';
+import { studyClassAsyncStatusReducer } from './studyClasses/reducer';
+import studyClassSagas from './studyClasses/sagas';
+import {
+  allStudyClassSelector,
+  createdStudyClassSelector,
+  otherStudyClassSelector
+} from './studyClasses/selectors';
 
-export { studyClassActions, studyClassReducer, studyClassSagas };
+export {
+  studyClassActions,
+  studyClassAsyncStatusReducer,
+  studyClassSagas,
+  allStudyClassSelector,
+  createdStudyClassSelector,
+  otherStudyClassSelector
+};

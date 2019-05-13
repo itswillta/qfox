@@ -14,6 +14,18 @@ const SidebarItem = ({ item, location: { pathname }, classes }) => {
 
   const ItemIcon = item.icon;
 
+  let itemProps = {
+    component: !(item.path === pathname) ? Link : null,
+    to: item.path,
+    selected: item.path === pathname
+  };
+
+  if (item.onClick && !item.path) {
+    itemProps = {
+      onClick: item.onClick
+    };
+  }
+
   return (
     <React.Fragment>
       <ListItem
@@ -22,9 +34,7 @@ const SidebarItem = ({ item, location: { pathname }, classes }) => {
         classes={{
           selected: classes.selected
         }}
-        component={!(item.path === pathname) ? Link : null}
-        to={item.path}
-        selected={item.path === pathname}
+        {...itemProps}
       >
         <ListItemIcon className={classes.listItemIcon}>
           <ItemIcon />

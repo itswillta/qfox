@@ -1,117 +1,62 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { withRouter } from 'react-router';
+import { useRedux } from 'react-redux';
 
-import useStyles from './studyClasses/StudyClasses.styles';
+import useStyles from './studyClass/StudyClassItem.styles';
 
-import StudyClassHeader from './studyClasses/StudyClassHeader';
-import StudyClassBody from './studyClasses/StudyClassBody';
+import StudyClassItemHeader from './studyClass/StudyClassItemHeader';
+import StudyClassBody from './studyClass/StudyClassBody';
+import { fullStudyClassActions } from '../states/fullStudyClass';
 
-const createdStudyClassesList = [
-  {
-    id: 1,
-    title: 'English grammar',
-    description:
-      'This grammar course helps you master a lot of grammar points in English.',
-    permission: 'allow',
-    owner: {
-      name: 'Peter',
-      profilePictureUrl: '/images/profile-default.jpg'
-    },
-    members: [
-      {
-        name: 'Harry',
-        profilePictureUrl: '/images/profile-default.jpg'
-      }
-    ],
-    studySets: []
-  },
-  {
-    id: 2,
-    title: 'Flower',
-    description: 'Flowers and more flowers come join the flower club',
-    permission: 'not_allow',
-    owner: {
-      name: 'Tom',
-      profilePictureUrl: '/images/profile-default.jpg'
-    },
-    members: [],
-    studySets: [
-      {
-        title: 'rose'
-      },
-      {
-        title: 'tulip'
-      }
-    ]
-  }
-];
-
-const otherStudyClassesList = [
-  {
-    id: 3,
-    title: 'Food',
-    description: 'Flowers and more flowers come join the flower club',
-    permission: 'allow',
-    owner: {
-      name: 'Harry',
-      profilePictureUrl: '/images/profile-default.jpg'
-    },
-    members: [],
-    studySets: [
-      {
-        title: 'rose'
-      },
-      {
-        title: 'tulip'
-      }
-    ]
-  }
-];
-
-const StudyClass = () => {
+const StudyClass = ({ match }) => {
   const classes = useStyles();
 
-  const [tabValue, setTabValue] = React.useState(0);
+  const [tabValue, setTabValue] = useState(0);
+
+  const { userId, studyClassId } = match.params;
+
+  const [studyClass, { fetchStudyClass }] = useRedux(state => state.currentStudyClass.studyClass, {
+    fetchStudyClass: () => fullStudyClassActions.fetchStudyClass.pending({ userId, studyClassId })
+  });
+
+  useEffect(() => {
+    fetchStudyClass();
+  }, []);
 
   const handleChangeTab = (event, newTabValue) => {
     setTabValue(newTabValue);
   };
 
-  let studyClassesToDisplay;
+  let whichOneToShow;
 
   switch (tabValue) {
     case 0: {
-      studyClassesToDisplay = createdStudyClassesList.concat(
-        otherStudyClassesList
-      );
+      whichOneToShow = 'studySets';
       break;
     }
     case 1: {
-      studyClassesToDisplay = createdStudyClassesList;
-      break;
-    }
-    case 2: {
-      studyClassesToDisplay = otherStudyClassesList;
+      whichOneToShow = 'members';
       break;
     }
     default:
-      studyClassesToDisplay = [];
+      whichOneToShow = 'studySets';
   }
 
   return (
     <React.Fragment>
-      <StudyClassHeader
+      <StudyClassItemHeader
         classes={classes}
-        allStudyClassLenght={
-          createdStudyClassesList.length + otherStudyClassesList.length
-        }
-        createdStudyClassesLength={createdStudyClassesList.length}
-        otherStudyClassesLenght={otherStudyClassesList.length}
+        studyClass={studyClass}
         tabValue={tabValue}
         handleChangeTab={handleChangeTab}
       />
-      <StudyClassBody classes={classes} studyClasses={studyClassesToDisplay} />
+      <StudyClassBody
+        classes={classes}
+        studyClass={studyClass}
+        whichOneIsShowing={whichOneToShow}
+      />
     </React.Fragment>
   );
 };
 
-export default StudyClass;
+export default withRouter(StudyClass);

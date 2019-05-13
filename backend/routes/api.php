@@ -42,9 +42,14 @@ Route::group(['middleware' => ['api', 'jwt.auth']], function () {
         });
     });
 
+    Route::group(['prefix' => 'study-sets'], function() {
+        Route::get('/search', 'StudySetController@search');
+    });
+
     Route::group(['middleware' => ValidateUserPermission::class, 'prefix' => 'users/{user_id}/classes'], function () {
         Route::post('', 'ClassController@create');
         Route::get('/search', 'ClassController@search');
+        Route::get('/{class_id}', 'ClassController@getOne');
         Route::group(['middleware' => ValidateClassEditPermission::class], function () {
             Route::put('/{class_id}', 'ClassController@update');
             Route::post('/{class_id}/study-sets', 'ClassController@addStudySet');
@@ -57,7 +62,6 @@ Route::group(['middleware' => ['api', 'jwt.auth']], function () {
 
     Route::group(['middleware' => ValidateUserPermission::class, 'prefix' => 'users/{user_id}/study-sets'], function () {
         Route::post('', 'StudySetController@create');
-        Route::get('/search', 'StudySetController@search');
         Route::group(['middleware' => ValidateSetEditPermission::class], function () {
             Route::put('/{study_set_id}', 'StudySetController@update');
             Route::delete('/{study_set_id}', 'StudySetController@delete');

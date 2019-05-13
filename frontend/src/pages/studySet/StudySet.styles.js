@@ -40,5 +40,12 @@ export default makeStyles(theme => ({
   alwaysCorrectColor: {
     color: '#2e7d32'
   },
-  noAnswersYetColor: {}
+  noAnswersYetColor: {},
+  classLink: {
+    '&:hover': {
+      color: `${theme.palette.secondary.light} !important`,
+      transition: 'color 0.2s ease-in-out',
+      cursor: 'pointer'
+    }
+  }
 }));

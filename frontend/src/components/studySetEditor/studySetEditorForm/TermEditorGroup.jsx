@@ -15,6 +15,7 @@ import { scrollToBottomOfElement } from '../../../services/scroll';
 
 const TermEditorGroup = ({ classes }) => {
   const { t } = useTranslation();
+
   const addTermSectionRef = useRef(null);
 
   return (
@@ -25,10 +26,7 @@ const TermEditorGroup = ({ classes }) => {
         const addNewTerm = () => {
           fields.push({ ...termDefaultObject });
 
-          setTimeout(
-            () => scrollToBottomOfElement(addTermSectionRef.current, 8),
-            0
-          );
+          setTimeout(() => scrollToBottomOfElement(addTermSectionRef.current, 8), 0);
         };
 
         const removeTerm = index => () => fields.remove(index);

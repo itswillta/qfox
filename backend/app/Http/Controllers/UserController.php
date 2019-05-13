@@ -8,6 +8,7 @@ use App\Http\ApiErrorResponse;
 use App\Services\ResourceUpdater;
 use App\Services\User\UserManagementService;
 use App\Services\User\UserSearchService;
+use App\Services\User\UserStudyClassesService;
 use App\Services\User\UserStudySetsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -92,12 +93,18 @@ class UserController extends Controller
         ]);
     }
 
-    public function getStudyClasses($user_id)
+    public function getStudyClasses(Request $request, $user_id)
     {
-        $user = UserManagementService::getUser($user_id);
+        $order_by = $request->query('order_by') ?: FetchOptions::DEFAULT_ORDER_BY;
+        $order_direction = $request->query('order_direction') ?: FetchOptions::DEFAULT_ORDER_DIRECTION;
+
+        $study_classes = UserStudyClassesService::getAllStudyClasses($user_id, [
+            'order_by' => $order_by,
+            'order_direction' => $order_direction
+        ]);
 
         return response()->json([
-            'studyClasses' => $user->classes
+            'studyClasses' => $study_classes
         ]);
     }
 
