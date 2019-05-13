@@ -26,36 +26,29 @@ class SocialAuthController
         $userProvider = Socialite::driver($social)->user();
 
 
-        $user = User::where($social.'_id', '=', $userProvider->getId())->first();
+        $user = User::where($social . '_id', '=', $userProvider->getId())->first();
 
-        if($user){
-            return response()->json([
-                'authToken' => $userProvider->token,
-                'expires' => $userProvider->expiresIn
-            ], Response::HTTP_OK);
-        }
-        else{
+        if (!$user) {
             $user = new User();
             $user->username = $userProvider->getEmail();
             $user->name = $userProvider->getName();
-            if($social === 'facebook') {
+            if ($social === 'facebook') {
                 $user->facebook_id = $userProvider->getId();
-            }
-            else if($social === 'google'){
+            } else if ($social === 'google') {
                 $user->google_id = $userProvider->getId();
             }
             $user->profile_picture_url = $userProvider->getAvatar();
             $user->language = "en";
             $user->save();
 
-            $token = auth()->claims(['userProfile' => $user])->login($user);
-            $ttl = auth()->factory()->getTTL() * 60;
-
-            return response()->json([
-                'authToken' => $token,
-                'expires' => $ttl
-            ], Response::HTTP_OK);
         }
 
+        $token = auth()->claims(['userProfile' => $user])->login($user);
+        $ttl = auth()->factory()->getTTL() * 60;
+
+        return response()->json([
+            'authToken' => $token,
+            'expires' => $ttl
+        ], Response::HTTP_OK);
     }
 }
