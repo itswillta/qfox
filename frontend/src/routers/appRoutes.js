@@ -106,6 +106,14 @@ const appRoutes = {
     }),
     pageTitle: 'Tests | QFox',
     private: true
+  },
+  GameMatching: {
+    url: '/matching',
+    component: LoadableRoute({
+      loader: () => import('../pages/GameMatching')
+    }),
+    pageTitle: 'Game | QFox',
+    private: true
   }
 };
 

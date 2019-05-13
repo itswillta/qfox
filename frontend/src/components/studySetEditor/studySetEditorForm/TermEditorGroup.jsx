@@ -1,5 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FieldArray } from 'react-final-form-arrays';
 
 import Paper from '@material-ui/core/Paper';
@@ -13,6 +14,7 @@ import TermCard from './termEditorGroup/TermCard';
 import { scrollToBottomOfElement } from '../../../services/scroll';
 
 const TermEditorGroup = ({ classes }) => {
+  const { t } = useTranslation();
   const addTermSectionRef = useRef(null);
 
   return (
@@ -23,7 +25,10 @@ const TermEditorGroup = ({ classes }) => {
         const addNewTerm = () => {
           fields.push({ ...termDefaultObject });
 
-          setTimeout(() => scrollToBottomOfElement(addTermSectionRef.current, 8), 0);
+          setTimeout(
+            () => scrollToBottomOfElement(addTermSectionRef.current, 8),
+            0
+          );
         };
 
         const removeTerm = index => () => fields.remove(index);
@@ -45,7 +50,7 @@ const TermEditorGroup = ({ classes }) => {
                 <Grid item>
                   <Button color="primary" variant="text" onClick={addNewTerm}>
                     <AddTermButtonIcon className={classes.buttonIcon} />
-                    Add a new term card
+                    {t('Add a new term card')}
                   </Button>
                 </Grid>
               </Grid>

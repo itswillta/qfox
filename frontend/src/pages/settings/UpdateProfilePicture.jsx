@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-for */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useRedux } from 'react-redux';
 
 import Typography from '@material-ui/core/Typography';
@@ -16,6 +17,8 @@ import UpdateProfilePictureDiaglog from './updateProfilePicture/UpdateProfilePic
 import { userActions } from '../../states/users';
 
 const UpdateProfilePicture = ({ authState, classes }) => {
+  const { t } = useTranslation();
+
   const [profilePictureData, setProfilePictureData] = useState('');
   const [fileInputValue, setFileInputValue] = useState('');
   const [isFileSelected, setIsFileSelected] = useState(false);
@@ -54,14 +57,16 @@ const UpdateProfilePicture = ({ authState, classes }) => {
           <Avatar
             className={classes.icon}
             alt="Profile Picture"
-            src={authState.userProfile.profilePictureUrl || defaultProfilePicture}
+            src={
+              authState.userProfile.profilePictureUrl || defaultProfilePicture
+            }
           />
           <Typography
             variant="h5"
             color="textSecondary"
             className={classes.title}
           >
-            Profile Picture
+            {t('Profile Picture')}
           </Typography>
         </Grid>
         <Grid item xs={8}>
@@ -71,7 +76,7 @@ const UpdateProfilePicture = ({ authState, classes }) => {
               color="textSecondary"
               className={classes.title}
             >
-              Change your profile picture
+              {t('Change your profile picture')}
             </Typography>
             <input
               accept="image/*"
@@ -91,7 +96,7 @@ const UpdateProfilePicture = ({ authState, classes }) => {
                 disabled={userAsyncStatus.isLoading}
                 className={classes.button}
               >
-                Upload profile picture
+                {t('Upload profile picture')}
               </Button>
             </label>
             {isFileSelected && (
