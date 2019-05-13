@@ -1,17 +1,12 @@
-/* eslint-disable operator-linebreak */
-/* eslint-disable no-shadow */
-import React from 'react';
+import React, { useState } from 'react';
 
 import MobileStepper from '@material-ui/core/MobileStepper';
 import Button from '@material-ui/core/Button';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import Grid from '@material-ui/core/Grid';
 
-import SwipeableViews from 'react-swipeable-views';
-import { autoPlay } from 'react-swipeable-views-utils';
-
-const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+import FlashcardItem from './flashcardsContent/FlashCardItem';
+import FlashcardItemAutoPlay from './flashcardsContent/FlashcardItemAutoPlay';
 
 const FlashcardsContent = ({
   classes,
@@ -24,44 +19,31 @@ const FlashcardsContent = ({
   handleChangeStep,
   autoPlay
 }) => {
-  const BothDisplay = () => (
-    <Grid
-      container
-      direction="column"
-      justify="space-around"
-      className={classes.gridContainerBoth}
-    >
-      <Grid item>{termsFake[activeStep].term}</Grid>
-      <hr className={classes.hr} />
-      <Grid item>{termsFake[activeStep].definition}</Grid>
-    </Grid>
-  );
+  const [isFlipped, setIsFlipped] = useState(false);
 
-  const FlashcardItem = () => (
-    <div className={classes.flashcardItem}>
-      {(answer === 'en' && termsFake[activeStep].term) ||
-        (answer === 'vi' && termsFake[activeStep].definition) ||
-        (answer === 'both' && <BothDisplay />)}
-    </div>
-  );
-
-  const FlashcardItemAutoPlay = () => (
-    <AutoPlaySwipeableViews
-      index={activeStep}
-      onChangeIndex={handleChangeStep}
-      enableMouseEvents
-    >
-      {termsFake.map((step, index) => (
-        <div key={step.label}>
-          {Math.abs(activeStep - index) <= 2 ? <FlashcardItem /> : null}
-        </div>
-      ))}
-    </AutoPlaySwipeableViews>
-  );
+  const handleClickFlipped = () => setIsFlipped(!isFlipped);
 
   return (
     <div className={classes.flashcards}>
-      {autoPlay ? <FlashcardItemAutoPlay /> : <FlashcardItem />}
+      {autoPlay ? (
+        <FlashcardItemAutoPlay
+          activeStep={activeStep}
+          handleChangeStep={handleChangeStep}
+          termsFake={termsFake}
+          classes={classes}
+          isFlipped={isFlipped}
+          handleClickFlipped={handleClickFlipped}
+        />
+      ) : (
+        <FlashcardItem
+          classes={classes}
+          isFlipped={isFlipped}
+          handleClickFlipped={handleClickFlipped}
+          termsFake={termsFake}
+          activeStep={activeStep}
+          answer={answer}
+        />
+      )}
 
       <MobileStepper
         steps={maxSteps}

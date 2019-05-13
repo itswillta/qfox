@@ -25,6 +25,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-avatar-editor": "11.0.7",
+    "react-card-flip": "^0.7.1",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "16.8.4",
     "react-elastic-carousel": "^0.3.0",

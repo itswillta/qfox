@@ -24,7 +24,7 @@ const Flashcards = () => {
   const classes = useStyles();
 
   const [activeStep, setActiveStep] = useState(0);
-  const [answer, setAnswer] = useState('en');
+  const [answer, setAnswer] = useState('both');
   const [autoPlay, setAutoPlay] = useState(false);
 
   const maxSteps = termsFake.length;
