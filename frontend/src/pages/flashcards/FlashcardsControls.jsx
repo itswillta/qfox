@@ -2,7 +2,6 @@ import React from 'react';
 
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import ArrowLeft from '@material-ui/icons/ArrowLeft';
 import FilterNone from '@material-ui/icons/FilterNone';
 import Typography from '@material-ui/core/Typography';
 import MobileStepper from '@material-ui/core/MobileStepper';
@@ -11,12 +10,8 @@ import TextField from '@material-ui/core/TextField';
 
 const displayOptions = [
   {
-    value: 'vi',
-    label: 'Vietnamese'
-  },
-  {
-    value: 'en',
-    label: 'English'
+    value: 'term',
+    label: 'Term'
   },
   {
     value: 'both',
@@ -37,12 +32,6 @@ const FlashcardsControls = ({
   return (
     <div className={classes.flashcardsControls}>
       <Grid container direction="column">
-        <Grid item className={classes.girdItemBack}>
-          <Button fullWidth>
-            <ArrowLeft color="primary" />
-            Back
-          </Button>
-        </Grid>
         <Grid item className={classes.gridItem}>
           <Grid container direction="row" justify="center">
             <Grid item className={classes.gridItem}>
@@ -86,7 +75,7 @@ const FlashcardsControls = ({
           </Button>
         </Grid>
         <Grid item className={classes.gridItem}>
-          <Typography variant="h6">ANSWER WITH</Typography>
+          <Typography variant="h6">FLASHCARD TYPE</Typography>
           <TextField
             fullWidth
             select
