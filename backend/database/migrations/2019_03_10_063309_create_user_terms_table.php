@@ -17,8 +17,8 @@ class CreateUserTermsTable extends Migration
             $table->primary(['user_id', 'term_id']);
             $table->unsignedBigInteger('user_id'); // user_id: bigint(20)
             $table->unsignedBigInteger('term_id'); // term_id: bigint(20)
-            $table->integer('correct')->nullable(); // correct: int(11)
-            $table->integer('missed')->nullable(); // missed: int(11)
+            $table->integer('correct')->default(0); // correct: int(11)
+            $table->integer('missed')->default(0); // missed: int(11)
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('term_id')->references('id')->on('terms')->onDelete('cascade');

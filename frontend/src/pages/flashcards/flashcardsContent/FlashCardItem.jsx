@@ -10,7 +10,7 @@ const FlashCardItem = ({
   classes,
   isFlipped,
   handleClickFlipped,
-  termsFake,
+  terms,
   activeStep,
   answer
 }) => (
@@ -23,9 +23,9 @@ const FlashCardItem = ({
           justify="space-around"
           className={classes.gridContainerBoth}
         >
-          <Grid item>{termsFake[activeStep].term}</Grid>
+          <Grid item>{terms[activeStep].term}</Grid>
           <hr className={classes.hr} />
-          <Grid item>{termsFake[activeStep].definition}</Grid>
+          <Grid item>{terms[activeStep].definition}</Grid>
         </Grid>
       </div>
     ) : (
@@ -35,14 +35,14 @@ const FlashCardItem = ({
           className={classes.flashcardItem}
           onClick={handleClickFlipped}
         >
-          {termsFake[activeStep].term}
+          {terms[activeStep].term}
         </div>
         <div
           key="back"
           className={classes.flashcardItem}
           onClick={handleClickFlipped}
         >
-          {termsFake[activeStep].definition}
+          {terms[activeStep].definition}
         </div>
       </ReactCardFlip>
     )}

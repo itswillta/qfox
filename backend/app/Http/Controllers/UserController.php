@@ -12,6 +12,7 @@ use App\Services\User\UserSearchService;
 use App\Services\User\UserStudyClassesService;
 use App\Services\User\UserStudySetsService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -123,5 +124,85 @@ class UserController extends Controller
         return response()->json([
             'users' => $users
         ]);
+    }
+
+    public function getUserTerm($user_id)
+    {
+        $user_term = DB::table('user_terms')
+            ->where('user_id', '=', $user_id)
+            ->get()
+            ->toArray();
+
+        return response()->json(['userTerm' => $user_term]);
+    }
+
+    public function addTermCorrect($user_id, $term_id)
+    {
+        $user_term = DB::table('user_terms')
+            ->where('user_id', '=', $user_id)
+            ->where('term_id', '=', $term_id)
+            ->increment('correct');
+
+        return response()->json(['userTerm' => $user_term]);
+    }
+
+    public function addTermMissed($user_id, $term_id)
+    {
+        $user_term = DB::table('user_terms')
+            ->where('user_id', '=', $user_id)
+            ->where('term_id', '=', $term_id)
+            ->increment('missed');
+
+        return response()->json(['userTerm' => $user_term]);
+    }
+
+    public function addUserTerm($user_id, $term_id)
+    {
+        $user_term = DB::table('user_terms')
+            ->insert(['user_id' => $user_id, 'term_id' => $term_id]);
+
+        return response()->json(['userTerm' => $user_term]);
+    }
+
+    public function updateUserTerm(Request $request, $user_id, $term_id)
+    {
+        if (($request->correct && $request->missed)) {
+            return response()->json(ApiErrorResponse::generate(
+                Response::HTTP_BAD_REQUEST, 'Just one request',
+                ['requset' => 'Request incorrect']
+            ), Response::HTTP_BAD_REQUEST);
+        }
+
+        if ($request->correct) {
+            $user_term = DB::table('user_terms')
+                ->where('user_id', '=', $user_id)
+                ->where('term_id', '=', $term_id)
+                ->increment('correct');
+            return response()->json(['userTerm' => $user_term]);
+        }
+
+        if ($request->missed) {
+            $user_term = DB::table('user_terms')
+                ->where('user_id', '=', $user_id)
+                ->where('term_id', '=', $term_id)
+                ->increment('missed');
+
+            return response()->json(['userTerm' => $user_term]);
+        }
+
+        if ($request->reset) {
+            $user_term = DB::table('user_terms')
+                ->where('user_id', '=', $user_id)
+                ->where('term_id', '=', $term_id)
+                ->update(['correct' => 0]);
+
+            DB::table('user_terms')
+                ->where('user_id', '=', $user_id)
+                ->where('term_id', '=', $term_id)
+                ->update(['missed' => 0]);
+
+            return response()->json(['userTerm' => $user_term]);
+        }
+
     }
 }

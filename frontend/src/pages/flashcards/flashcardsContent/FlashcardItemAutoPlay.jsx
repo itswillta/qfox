@@ -10,7 +10,7 @@ const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 const FlashcardItemAutoPlay = ({
   activeStep,
   handleChangeStep,
-  termsFake,
+  terms,
   classes,
   isFlipped,
   handleClickFlipped
@@ -20,14 +20,14 @@ const FlashcardItemAutoPlay = ({
     onChangeIndex={handleChangeStep}
     enableMouseEvents
   >
-    {termsFake.map((step, index) => (
+    {terms.map((step, index) => (
       <div key={step.label}>
         {Math.abs(activeStep - index) <= 2 ? (
           <FlashcardItem
             classes={classes}
             isFlipped={isFlipped}
             handleClickFlipped={handleClickFlipped}
-            termsFake={termsFake}
+            terms={terms}
             activeStep={activeStep}
           />
         ) : null}

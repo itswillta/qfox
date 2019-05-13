@@ -2,16 +2,47 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import FilterNone from '@material-ui/icons/FilterNone';
+import AutoRenew from '@material-ui/icons/Autorenew';
+import Note from '@material-ui/icons/Note';
 
 import VerticalDivider from '../../components/VerticalDivider';
 import OwnerInfo from '../../components/OwnerInfo';
 import StudySetHeaderButtons from './StudySetHeader/StudySetHeaderButtons';
 
-const StudySetHeader = ({ classes, studySet }) => {
+const StudySetHeader = ({ history, classes, studySet }) => {
   const { t } = useTranslation();
+
+  const handleClickFlashcards = () => {
+    if (studySet.id) {
+      history.push(
+        `/${studySet.owner.id}/study-sets/${studySet.id}/flashcards`
+      );
+    }
+  };
+
+  const handleClickLearn = () => {
+    if (studySet.id) {
+      history.push(`/${studySet.owner.id}/study-sets/${studySet.id}/learn`);
+    }
+  };
+
+  const handleClickTest = () => {
+    if (studySet.id) {
+      history.push(`/${studySet.owner.id}/study-sets/${studySet.id}/test`);
+    }
+  };
+
+  const handleClickGame = () => {
+    if (studySet.id) {
+      history.push(`/${studySet.owner.id}/study-sets/${studySet.id}/test`);
+    }
+  };
 
   return (
     <div className={classes.header}>
@@ -78,9 +109,47 @@ const StudySetHeader = ({ classes, studySet }) => {
             </Grid>
           )}
         </Grid>
+        <Grid item>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={handleClickFlashcards}
+            className={classes.buttonMovePage}
+          >
+            <FilterNone fontSize="large" className={classes.iconMovePage} />
+            Flashcards
+          </Button>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={handleClickLearn}
+            className={classes.buttonMovePage}
+          >
+            <AutoRenew fontSize="large" className={classes.iconMovePage} />
+            Learn
+          </Button>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={handleClickTest}
+            className={classes.buttonMovePage}
+          >
+            <Note fontSize="large" className={classes.iconMovePage} />
+            Test
+          </Button>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={handleClickGame}
+            className={classes.buttonMovePage}
+          >
+            <Note fontSize="large" className={classes.iconMovePage} />
+            Game
+          </Button>
+        </Grid>
       </Grid>
     </div>
   );
 };
 
-export default StudySetHeader;
+export default withRouter(StudySetHeader);

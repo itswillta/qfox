@@ -23,11 +23,11 @@ Route::group([
 ], function () {
     Route::post('login', 'Auth\LoginController@login');
     Route::post('register', 'Auth\RegisterController@register');
-    Route::group(['middleware' => 'web'], function() {
+    Route::group(['middleware' => 'web'], function () {
         Route::get('{social}', 'Auth\SocialAuthController@redirect')->name('{social}.login');
         Route::get('{social}/callback', 'Auth\SocialAuthController@callback');
     });
-    
+
 });
 
 Route::group(['middleware' => ['api', 'jwt.auth']], function () {
@@ -84,4 +84,15 @@ Route::group(['middleware' => ['api', 'jwt.auth']], function () {
 Route::group(['middleware' => ValidateSetViewPermission::class, 'prefix' => 'users/{user_id}/study-sets/{study_set_id}'], function () {
     Route::get('', 'StudySetController@getOne');
     Route::get('/terms', 'StudySetController@getAllTerms');
+});
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'users'
+], function () {
+    Route::get('/{user_id}/terms', 'UserController@getUserTerm');
+    Route::put('/{user_id}/terms/{term_id}/correct', 'UserController@addTermCorrect');
+    Route::put('/{user_id}/terms/{term_id}/missed', 'UserController@addTermMissed');
+    Route::put('/{user_id}/terms/{term_id}', 'UserController@updateUserTerm');
+    Route::post('/{user_id}/terms/{term_id}', 'UserController@addUserTerm');
 });

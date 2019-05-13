@@ -47,5 +47,14 @@ export default makeStyles(theme => ({
       transition: 'color 0.2s ease-in-out',
       cursor: 'pointer'
     }
+  },
+  buttonMovePage: {
+    padding: theme.spacing(2),
+    margin: theme.spacing(2),
+    textAlign: 'center',
+    width: '170px'
+  },
+  iconMovePage: {
+    marginRight: theme.spacing(2)
   }
 }));
