@@ -40,6 +40,7 @@ const StudyClassHeader = ({
         />
         <RightStudyClassItemHeader
           classes={classes}
+          studyClass={studyClass}
           handleOpenDialogAddSet={handleOpenDialogAddSet}
           handleOpenEditDialog={handleOpenEditDialog}
           handleDelete={handleDelete}

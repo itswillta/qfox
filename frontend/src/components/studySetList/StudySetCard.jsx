@@ -73,6 +73,7 @@ const StudySetCard = ({
             handleEdit={handleEdit}
             studySetPath={studySetPath}
             studySetId={studySet.id}
+            ownerId={studySet.owner.id}
             type={type}
           />
         </Grid>

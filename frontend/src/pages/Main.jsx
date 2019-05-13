@@ -10,7 +10,7 @@ const Main = () => {
 
   return (
     <React.Fragment>
-      <MainAppBar />
+      <MainAppBar withoutSearchBar />
       <div className={classes.root}>
         <img src={logoWithBg} alt="logo" width="30%" height="auto" />
       </div>

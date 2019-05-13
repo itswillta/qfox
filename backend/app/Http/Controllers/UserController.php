@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Constants\FetchOptions;
 use App\Enums\SupportedLanguages;
 use App\Http\ApiErrorResponse;
@@ -91,6 +92,13 @@ class UserController extends Controller
         return response()->json([
             'studySets' => $study_sets
         ]);
+    }
+
+    public function getOne($user_id)
+    {
+        $found_user = User::findOrFail($user_id);
+
+        return response()->json($found_user);
     }
 
     public function getStudyClasses(Request $request, $user_id)

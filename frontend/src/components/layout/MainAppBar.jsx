@@ -14,7 +14,7 @@ import UserActionGroup from './mainAppBar/UserActionGroup';
 import CreateButton from './mainAppBar/CreateButton';
 import SearchBox from './mainAppBar/SearchBox';
 
-const MainAppBar = () => {
+const MainAppBar = ({ withoutSearchBar }) => {
   const classes = useStyles();
 
   const [authState, { requestLogout }] = useRedux(state => state.auth, {
@@ -29,7 +29,7 @@ const MainAppBar = () => {
           <Hidden smDown>
             {authState.isAuthenticated && <CreateButton classes={classes} />}
             <div className={classes.grow} />
-            <SearchBox classes={classes} />
+            {!withoutSearchBar && <SearchBox classes={classes} />}
           </Hidden>
           <div className={classes.grow} />
           <UserActionGroup authState={authState} requestLogout={requestLogout} classes={classes} />

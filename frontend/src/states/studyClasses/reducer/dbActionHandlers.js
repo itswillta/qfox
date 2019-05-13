@@ -5,7 +5,9 @@ const fetchStudyClassesToDB = (dbState, action) => {
 
   const { StudyClass } = session;
 
-  action.payload.forEach(studyClass => StudyClass.upsert(studyClass));
+  StudyClass.delete();
+
+  action.payload.forEach(studyClass => StudyClass.create(studyClass));
 
   return session.state;
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -26,9 +27,12 @@ const StudySetActions = ({
   isInClass,
   studySetPath,
   studySetId,
-  type
+  type,
+  ownerId
 }) => {
   const { t } = useTranslation();
+
+  const authState = useSelector(state => state.auth);
 
   const removeFromClass = () => {
     handleRemoveFromClass(studySetId);
@@ -68,45 +72,48 @@ const StudySetActions = ({
             </span>
           </CopyToClipboard>
         )
-      },
-      {
-        key: 'edit',
-        onClick: handleEdit,
-        children: (
-          <React.Fragment>
-            <ListItemIcon className={classes.listItemIcon}>
-              <EditIcon />
-            </ListItemIcon>
-            <ListItemText className={classes.listItemText} inset disableTypography>
-              <Typography variant="body1">{t('Edit set')}</Typography>
-            </ListItemText>
-          </React.Fragment>
-        )
       }
     ]
   };
 
-  if (type !== 'search') {
+  if (authState.userProfile.id === ownerId) {
     dropdownDetails.dropdownItems.push({
-      key: type === 'classSets' ? 'remove' : 'delete',
-      onClick: type === 'classSets' ? removeFromClass : handleDelete,
+      key: 'edit',
+      onClick: handleEdit,
       children: (
         <React.Fragment>
-          <ListItemIcon className={classnames(classes.listItemIcon, classes.deleteColor)}>
-            <DeleteIcon />
+          <ListItemIcon className={classes.listItemIcon}>
+            <EditIcon />
           </ListItemIcon>
-          <ListItemText
-            className={classnames(classes.listItemText, classes.deleteColor)}
-            inset
-            disableTypography
-          >
-            <Typography color="inherit" variant="body1">
-              {t(type === 'classSets' ? 'Remove from class' : 'Delete set')}
-            </Typography>
+          <ListItemText className={classes.listItemText} inset disableTypography>
+            <Typography variant="body1">{t('Edit set')}</Typography>
           </ListItemText>
         </React.Fragment>
       )
     });
+
+    if (type !== 'search') {
+      dropdownDetails.dropdownItems.push({
+        key: type === 'classSets' ? 'remove' : 'delete',
+        onClick: type === 'classSets' ? removeFromClass : handleDelete,
+        children: (
+          <React.Fragment>
+            <ListItemIcon className={classnames(classes.listItemIcon, classes.deleteColor)}>
+              <DeleteIcon />
+            </ListItemIcon>
+            <ListItemText
+              className={classnames(classes.listItemText, classes.deleteColor)}
+              inset
+              disableTypography
+            >
+              <Typography color="inherit" variant="body1">
+                {t(type === 'classSets' ? 'Remove from class' : 'Delete set')}
+              </Typography>
+            </ListItemText>
+          </React.Fragment>
+        )
+      });
+    }
   }
 
   return <ActionDropdown dropdownDetails={dropdownDetails} isIconButton />;

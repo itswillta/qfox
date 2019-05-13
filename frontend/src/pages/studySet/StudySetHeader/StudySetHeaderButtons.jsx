@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { withRouter } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -16,21 +17,27 @@ import { openDialog } from '../../../components/Dialogs';
 const StudySetHeaderButtons = ({ location: { pathname }, classes, studySet }) => {
   const { t } = useTranslation();
 
+  const authState = useSelector(state => state.auth);
+
   const deleteStudySet = () => {
     openDialog('deleteStudySet', studySet);
   };
+
+  const isOwner = authState.userProfile.id === studySet.owner.id;
 
   const navigateToEditPage = () => redirectTo(`${pathname}/edit`);
 
   return (
     <Grid container spacing={1}>
-      <Grid item>
-        <Tooltip title={t('Edit study set')}>
-          <Fab color="primary" className={classes.fab} size="small" onClick={navigateToEditPage}>
-            <EditIcon />
-          </Fab>
-        </Tooltip>
-      </Grid>
+      {isOwner && (
+        <Grid item>
+          <Tooltip title={t('Edit study set')}>
+            <Fab color="primary" className={classes.fab} size="small" onClick={navigateToEditPage}>
+              <EditIcon />
+            </Fab>
+          </Tooltip>
+        </Grid>
+      )}
       <Grid item>
         <Tooltip title={t('Copy shareable link')}>
           <Fab color="primary" className={classes.fab} size="small">
@@ -40,13 +47,15 @@ const StudySetHeaderButtons = ({ location: { pathname }, classes, studySet }) =>
           </Fab>
         </Tooltip>
       </Grid>
-      <Grid item>
-        <Tooltip title={t('Delete study set')}>
-          <Fab color="secondary" className={classes.fab} size="small" onClick={deleteStudySet}>
-            <DeleteIcon />
-          </Fab>
-        </Tooltip>
-      </Grid>
+      {isOwner && (
+        <Grid item>
+          <Tooltip title={t('Delete study set')}>
+            <Fab color="secondary" className={classes.fab} size="small" onClick={deleteStudySet}>
+              <DeleteIcon />
+            </Fab>
+          </Tooltip>
+        </Grid>
+      )}
     </Grid>
   );
 };
