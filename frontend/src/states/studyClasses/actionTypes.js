@@ -1,0 +1,13 @@
+import { createAsyncTypes } from '../../utils/redux/utilityFunctions';
+
+const FETCH_STUDY_CLASSES_ASYNC = createAsyncTypes('FETCH_STUDY_CLASSES');
+const CREATE_STUDY_CLASS_ASYNC = createAsyncTypes('CREATE_STUDY_CLASS');
+const UPDATE_STUDY_CLASS_ASYNC = createAsyncTypes('UPDATE_STUDY_CLASS');
+const DELETE_STUDY_CLASS_ASYNC = createAsyncTypes('DELETE_STUDY_CLASS');
+
+export {
+  FETCH_STUDY_CLASSES_ASYNC,
+  CREATE_STUDY_CLASS_ASYNC,
+  UPDATE_STUDY_CLASS_ASYNC,
+  DELETE_STUDY_CLASS_ASYNC
+};

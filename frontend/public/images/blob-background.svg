@@ -1,0 +1,12 @@
+<svg id="visual" viewBox="0 0 1920 1080" width="1920" height="1080" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+	<rect x="0" y="0" width="1920" height="1080" fill="#fff">
+	</rect>
+	<g transform="translate(1920, 1080)">
+		<path d="M-702 0C-648.4 -76 -594.9 -151.9 -562.6 -233.1C-530.4 -314.2 -519.4 -400.5 -475.2 -475.2C-430.9 -549.8 -353.4 -612.7 -268.6 -648.6C-183.9 -684.4 -91.9 -693.2 0 -702L0 0Z" fill="#6A49B7">
+		</path>
+	</g>
+	<g transform="translate(0, 0)">
+		<path d="M702 0C647.8 82.2 593.6 164.5 540.5 223.9C487.4 283.2 435.4 319.8 396.7 396.7C358 473.6 332.5 590.9 268.6 648.6C204.7 706.2 102.4 704.1 0 702L0 0Z" fill="#6A49B7">
+		</path>
+	</g>
+</svg>
