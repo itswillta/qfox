@@ -19,7 +19,7 @@
     "i18next-browser-languagedetector": "3.0.1",
     "images": "^3.0.2",
     "jwt-decode": "2.2.0",
-    "lodash": "4.17.11",
+    "lodash": "4.17.21",
     "material-ui-pickers": "2.2.4",
     "moment": "2.24.0",
     "object-set": "^1.0.1",
